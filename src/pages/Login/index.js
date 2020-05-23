@@ -4,14 +4,21 @@ import {Feather} from '@expo/vector-icons'
 import logoImg from '../../assests/logo.png';
 import styles from './styles';
 import {useNavigation,useRoute} from '@react-navigation/native'
-
+import api from '../../services/api.js'
 
 
 export default function Incidents(){
+
     const navegation = useNavigation();
     const route = useRoute();
 
-    const incident = route.params.incident;
+    const [user, setUser] = useState("");
+    const [password,setPassword] = useState("");
+
+    async function login(){
+        const res = await api.get("users/login");       
+    }
+
     function navigateToIncidentList(){
         navegation.navigate('Incidents');
     }
