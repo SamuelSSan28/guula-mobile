@@ -5,7 +5,7 @@
 Esse projeto foi desenvolvido utilizando:
 
 - [React Native](https://reactnative.dev/)
-
+- [Expo](https://expo.io/)
 
 ## 💻 Projeto
 
