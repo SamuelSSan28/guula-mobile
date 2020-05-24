@@ -1,9 +1,9 @@
 import {StyleSheet} from 'react-native';
 import Constants from 'expo-constants';
-
-
+import { Dimensions} from 'react-native';
 
 export default StyleSheet.create({
+
     container:{
         flex: 1,
         paddingHorizontal: 24,
@@ -13,7 +13,8 @@ export default StyleSheet.create({
     header:{
         flexDirection:'row',
         justifyContent: 'space-between',
-        alignItems:'center'
+        alignItems:'center',
+        backgroundColor: '#ff914d'
     },   
 
     titulo:{
@@ -90,7 +91,22 @@ export default StyleSheet.create({
         fontSize:15,
         fontWeight: 'bold',
         textAlign: 'center'
-    }
+    },
+    photo: {
+        flex: 1,
+        resizeMode: 'cover',
+    },
+    content: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        padding: 4,
+    },
+    item: {
+        height: Dimensions.get('window').width / 2,
+        width: '50%',
+        padding: 4,
+      }
+
     
 
 });
