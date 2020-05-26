@@ -1,8 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
-import Home from './pages/Home';
-import BottomMenu from './pages/Componentes/BottomNavigation';
+import Base from './pages/Base';
 
 
 
@@ -12,7 +11,7 @@ export default function Routes(){
     return(
         <NavigationContainer>
             <AppStack.Navigator screenOptions={{headerShown:false}}>
-                <AppStack.Screen name ="Home" component={BottomMenu}/>
+                <AppStack.Screen name ="Home" component={Base}/>
             </AppStack.Navigator>
         </NavigationContainer>
 

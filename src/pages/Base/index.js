@@ -4,7 +4,7 @@ import HomeScreen from '../Home';
 import logoImg from '../assets/logo.png';
 import styles from './styles';
 import { Appbar } from 'react-native-paper';
-import Menu_header from './Menu';
+import Menu_header from '../Componentes/Menu';
 import {
     ScrollView,
     View,
@@ -24,7 +24,7 @@ const SearchRoute = () => <Text>Search</Text>;
 
 const FavoriteRoute = () => <Text>Favorite</Text>;
 
-export default class BottomMenu extends React.Component {
+export default class Base extends React.Component {
   state = {
     index: 0,
     routes: [
