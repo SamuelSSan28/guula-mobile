@@ -6,6 +6,4 @@
 Rota do Login debe esportar o id
 
 ## 3: Apresentar para o usuario as receitas que ele salvou
-No repositorio do Omnistack (Incidents) mostra como listar as coisas e preecher com o resultado
-
-## 4: teste uhuuul
+Na rota Home tem um modelo de como fazer

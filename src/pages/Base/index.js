@@ -4,7 +4,7 @@ import HomeScreen from '../Home';
 import logoImg from '../assets/logo.png';
 import styles from './styles';
 import { Appbar } from 'react-native-paper';
-import Menu_header from '../Componentes/Menu';
+import Header from '../Componentes/Header';
 import {
     ScrollView,
     View,
@@ -49,7 +49,8 @@ export default class Base extends React.Component {
        <Appbar.Header style={styles.header}>
                 <Image source={logoImg}/>
                 <Menu_header/> 
-            </Appbar.Header>
+        </Appbar.Header>
+		
         <BottomNavigation
           navigationState={this.state}
           onIndexChange={this._handleIndexChange}

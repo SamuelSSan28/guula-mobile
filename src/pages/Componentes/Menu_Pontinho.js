@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Button, Paragraph, Menu, Divider, Provider } from 'react-native-paper';
 import { Appbar } from 'react-native-paper';
 
-export default class Menu_header extends React.Component {
+export default class Menu_Pontinho extends React.Component {
   state = {
     visible: false,
   };
