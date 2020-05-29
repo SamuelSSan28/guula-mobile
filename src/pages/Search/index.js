@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { View, ScrollView, StyleSheet, Image } from 'react-native';
 import { Chip, List, useTheme, Snackbar } from 'react-native-paper';
-import color from 'color';
-
+import Header_Search from '../Componentes/Header_Search';
 
 // Teste das caixinha de ingredientes
 
@@ -12,6 +11,7 @@ const ChipExample = () => {
 
   return (
     <>
+    <Header_Search/>
       <ScrollView
         style={[styles.container, { backgroundColor: colors.surface }]}
       >
