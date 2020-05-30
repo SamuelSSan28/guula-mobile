@@ -7,8 +7,8 @@
 	render() {
 		return (
 			<Appbar.Header style={styles.header}>
-                <Image source={logoImg}/>
-                <Menu_header/>
+                {/** search */}
+                <Menu_Pontinho/>
 			</Appbar.Header>
 		)
 	}

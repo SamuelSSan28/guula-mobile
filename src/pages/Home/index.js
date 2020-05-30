@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import styles from './styles';
-import {useNavigation,useRoute} from '@react-navigation/native'
 import api from '../../services/api.js'
-import  Card_Component  from '../Componentes/Card.js';
+import Header_Base from '../Componentes/Header_Base';
 import {
     ScrollView,
     TouchableOpacity,
@@ -45,6 +44,8 @@ export default function HomeScreen(){
     */
 
   return(
+    <>
+    <Header_Base/>
             <FlatList
                 style={{ marginTop: 8 }}
                 contentContainerStyle={styles.content}
@@ -52,5 +53,6 @@ export default function HomeScreen(){
                 keyExtractor={receita => String(receita.id)}
                 renderItem={renderItem}
             />        
+    </>
     )
 }
