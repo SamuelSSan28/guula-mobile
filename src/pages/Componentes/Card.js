@@ -1,19 +1,42 @@
 import * as React from 'react';
-import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
-import {TouchableOpacity} from 'react-native';
+import { Card, Title, Paragraph } from 'react-native-paper';
+import {StyleSheet,TouchableOpacity, FlatList, ScrollView} from 'react-native';
 
-export default class Card_Component extends React.Component {
-  render() {
+
+const styles = StyleSheet.create({
+  content:{
+    justifyContent: 'flex-start',
+    padding: 0
+},
+})
+
+const renderItem = ({item:recipe}) => (
+  <ScrollView>
+     <Card style={{padding: 10,margin:5}} elevation={2}>
+      <TouchableOpacity>
+        <Card.Cover source={{ uri: recipe.imagem}} />
+        <Card.Content>  
+          <Title>{recipe.titulo}</Title>
+          <Paragraph>{recipe.tempo_preparo}, `{recipe.rendimento}` </Paragraph>
+        </Card.Content>
+      </TouchableOpacity>
+    </Card>
+  </ScrollView>
+);
+
+
+export default function Card_Component(props) {
     return (   
-      <Card style={{padding: 10,margin:5}} elevation={2}>
-        <TouchableOpacity>
-          <Card.Cover source={{ uri: 'https://www.receiteria.com.br/wp-content/uploads/como-fazer-miojo-no-micro-ondas-1-730x450.jpg' }} />
-          <Card.Content>
-            <Title>Receitinha da Gisele</Title>
-            <Paragraph>2 minutinhos e tá pronto </Paragraph>
-          </Card.Content>
-        </TouchableOpacity>
-      </Card>
+      <>
+      {(props.receitas !== undefined) &&
+      <FlatList
+                style={{ marginTop: 8 }}
+                contentContainerStyle={styles.content}
+                data={props.receitas}
+                keyExtractor={receita => String(receita.id)}
+                renderItem={renderItem}
+            />        
+      }
+      </>
     )  
-  }
 }
