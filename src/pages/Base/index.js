@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { BottomNavigation } from 'react-native-paper';
 import HomeScreen from '../Home';
+import SearchScreen from '../Search';
 import FavoriteScreen from '../Favorite';
 import {
     View,
@@ -11,7 +12,7 @@ import {
 
 const HomeRoute = () => <View><HomeScreen/></View>;
 
-const SearchRoute = () => <Text>Search</Text>;
+const SearchRoute = () => <SearchScreen/>;
 
 const FavoriteRoute = () => <View><FavoriteScreen/></View>;
 

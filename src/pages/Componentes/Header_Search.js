@@ -1,16 +1,25 @@
  import * as React from 'react';
- import { Appbar } from 'react-native-paper';
- import Menu_Pontinho from './Menu_Pontinho';
+ import { Appbar,Searchbar } from 'react-native-paper';
  import styles from '../Base/styles';
  
- export default class Base extends React.Component {
+ export default class Header_Search extends React.Component {
+	state = {
+	  searchQuery: '',
+	};
+  
+	_onChangeSearch = query => this.setState({ searchQuery: query });
+  
 	render() {
-		return (
-			<Appbar.Header style={styles.header}>
-                {/** search */}
-                <Menu_Pontinho/>
-			</Appbar.Header>
-		)
+	  const { searchQuery } = this.state;
+	  return (
+		<Appbar.Header style={styles.header}>
+			<Searchbar
+			placeholder="Search"
+			onIconPress={this._onChangeSearch}
+			value={searchQuery}
+			iconColor="#ff914d"
+				/>
+		</Appbar.Header>
+	  );
 	}
-	
- }
+  }
