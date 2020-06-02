@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
 
 })
 
-export default function LoginScreen(){
+export default function LoginScreen(props){
   const [email_p, setEmail] = useState('');
   const [senha_p, setSenha] = useState('');
   const [loading, setLoading] = React.useState(false);
@@ -42,15 +42,14 @@ export default function LoginScreen(){
     }
     setLoading(true);
     try{
-      const response = await api.post('users/login', {email_p, senha_p});
+      const response = await api.post('users/login', {senha_p, email_p});
       const id = response.data.id;
-      /**try {
-        await AsyncStorage.setItem("userId", JSON.stringify({id}));
+      try {
+        await AsyncStorage.setItem("user", JSON.stringify({id}));
       } catch (error) {
        console.log("Something went wrong", error);
       }
-      */
-     alert('ok');
+      props.setIsSignIn("true");
     }catch(err){
       alert(err.message);
     }

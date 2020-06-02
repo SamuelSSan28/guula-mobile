@@ -32,7 +32,7 @@ export default function FavoriteScreen() {
 
         const response = await api.get('favorites', {
             headers: {
-                Authorization: 1,
+                Authorization: userId,
             }
         })
             .catch(function (error) {
@@ -46,21 +46,17 @@ export default function FavoriteScreen() {
 
     React.useEffect(() => {
         //resgatar dados do usuario logado
-        /**_retrieveData = async () => {
+        async () => {
           try {
-            const value = await AsyncStorage.getItem('id');
-            if (value !== null) {
-              this.setState({isSignIn: true, userId: value});
+            const value = await AsyncStorage.getItem('user');
+            alert(Object.keys(value));
+            if (value.id !== undefined) {
+                setUserId(value.id);
             }
           } catch (error) {
-            // Error retrieving data
+            alert(error)
           }
-        };*/
-        //--------gambiarra provisória---------
-        setIsSignIn(false);
-        setUserId('1');
-
-        //------------
+        }
         loadRecipes();
 
     }, [])
@@ -69,7 +65,7 @@ export default function FavoriteScreen() {
         <>
             <Header_Base />
             {!isSignIn ?
-                <LoginScreen />
+                <LoginScreen setIsSignIn={setIsSignIn}/>
                 : <>
             <View style={styles.container}>
                 {/**<Text style={styles.usuario}>{`Usuario: ${userId}`}</Text>*/}
