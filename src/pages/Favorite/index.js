@@ -2,15 +2,11 @@ import * as React from 'react';
 import Header_Base from '../Componentes/Header_Base';
 import LoginScreen from '../Login';
 import api from '../../services/api';
-import {Card, Title, Paragraph } from 'react-native-paper';
 import styles from './styles';
 import Card_Component from '../Componentes/Card';
 import {
     View,
     Text,
-    ScrollView,
-    TouchableOpacity,
-    FlatList,
     AsyncStorage //armazenar dados dos usuario (id, nome)
 } from 'react-native';
 
@@ -61,7 +57,7 @@ export default function FavoriteScreen() {
           }
         };*/
         //--------gambiarra provisória---------
-        setIsSignIn(true);
+        setIsSignIn(false);
         setUserId('1');
 
         //------------
