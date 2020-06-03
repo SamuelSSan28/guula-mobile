@@ -12,8 +12,6 @@ import {
 } from 'react-native';
 
 export default function FavoriteScreen() {
-    const [isSignIn, setIsSignIn] = React.useState(false);
-    const [userId, setUserId] = React.useState(null);
 
     const [receitas, setReceitas] = React.useState([]);
     const [total, setTotal] = React.useState(0);
@@ -32,10 +30,9 @@ export default function FavoriteScreen() {
         }
 
         setLoading(true);
-
         const response = await api.get('favorites', {
             headers: {
-                Authorization: userId,
+                Authorization: user.id,
             }
         })
             .catch(function (error) {
@@ -49,8 +46,7 @@ export default function FavoriteScreen() {
 
     React.useEffect(() => {
         loadRecipes();
-
-    }, [])
+    }, [user])
 
     return (
         <>

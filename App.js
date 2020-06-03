@@ -6,10 +6,9 @@ import { Provider as PaperProvider } from 'react-native-paper';
 export default function App() {
 
   const [user, setUser] = useState({
-    id: '',
+    id: null,
     loggedIn: false
   })
-
 
   return (
     <UserProvider value={{user, setUser}}>
