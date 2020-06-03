@@ -3,7 +3,7 @@
  import Menu_Pontinho from './Menu_Pontinho';
  import styles from '../Base/styles';
  import logoImg from '../assets/logo.png';
- import {Image} from 'react-native';
+ import {Image, Text} from 'react-native';
  
  export default class Header_Base extends React.Component {
 	render() {

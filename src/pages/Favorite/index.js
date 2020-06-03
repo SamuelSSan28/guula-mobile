@@ -4,6 +4,7 @@ import LoginScreen from '../Login';
 import api from '../../services/api';
 import styles from './styles';
 import Card_Component from '../Componentes/Card';
+import {useAuth} from '../../../providers/UserProvider';
 import {
     View,
     Text,
@@ -65,7 +66,9 @@ export default function FavoriteScreen() {
         <>
             <Header_Base />
             {!isSignIn ?
+            <>
                 <LoginScreen setIsSignIn={setIsSignIn}/>
+            </>
                 : <>
             <View style={styles.container}>
                 {/**<Text style={styles.usuario}>{`Usuario: ${userId}`}</Text>*/}

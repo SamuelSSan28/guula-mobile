@@ -3,8 +3,6 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import Base from './pages/Base';
 
-
-
 const AppStack = createStackNavigator();
 
 export default function Routes(){
