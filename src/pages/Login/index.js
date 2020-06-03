@@ -45,11 +45,14 @@ export default function LoginScreen(props){
       const response = await api.post('users/login', {senha_p, email_p});
       const id = response.data.id;
       try {
-        await AsyncStorage.setItem("user", JSON.stringify({id}));
+        await AsyncStorage.setItem("userId", JSON.stringify({id}));
       } catch (error) {
        console.log("Something went wrong", error);
       }
-      props.setIsSignIn("true");
+      props.setIsSignIn({
+        id: id,
+        loggedIn: true
+      });
     }catch(err){
       alert(err.message);
     }

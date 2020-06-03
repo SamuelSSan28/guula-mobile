@@ -4,7 +4,7 @@ import LoginScreen from '../Login';
 import api from '../../services/api';
 import styles from './styles';
 import Card_Component from '../Componentes/Card';
-import {useAuth} from '../../../providers/UserProvider';
+import UserContext from '../../../providers/UserProvider';
 import {
     View,
     Text,
@@ -19,6 +19,8 @@ export default function FavoriteScreen() {
     const [total, setTotal] = React.useState(0);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
+
+    const {user, setUser} = React.useContext(UserContext);
 
     async function loadRecipes() {
         if (loading) {
@@ -46,18 +48,6 @@ export default function FavoriteScreen() {
     }
 
     React.useEffect(() => {
-        //resgatar dados do usuario logado
-        async () => {
-          try {
-            const value = await AsyncStorage.getItem('user');
-            alert(Object.keys(value));
-            if (value.id !== undefined) {
-                setUserId(value.id);
-            }
-          } catch (error) {
-            alert(error)
-          }
-        }
         loadRecipes();
 
     }, [])
@@ -65,9 +55,9 @@ export default function FavoriteScreen() {
     return (
         <>
             <Header_Base />
-            {!isSignIn ?
+            {!user.loggedIn ?
             <>
-                <LoginScreen setIsSignIn={setIsSignIn}/>
+                <LoginScreen setIsSignIn={setUser}/>
             </>
                 : <>
             <View style={styles.container}>
