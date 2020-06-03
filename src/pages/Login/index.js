@@ -1,7 +1,8 @@
 import * as React from 'react';
 import {useState} from 'react';
 import api from '../../services/api';
-import {Text, TextInput, View, Button, StyleSheet, TouchableOpacity, AsyncStorage} from 'react-native';
+import {Text, View, StyleSheet, ActivityIndicator,TouchableOpacity, AsyncStorage} from 'react-native';
+import {TextInput, HelperText, Button} from 'react-native-paper';
 
 
 const styles = StyleSheet.create({
@@ -15,12 +16,11 @@ const styles = StyleSheet.create({
   input: {
     margin: 15,
     height: 40,
-    borderColor: "black",
-    borderWidth: 1
+    
   },
   submitButton: {
-    backgroundColor: "black",
     padding: 10,
+    backgroundColor: "orange",
     margin: 15,
     alignItems: "center",
     height: 40
@@ -55,9 +55,13 @@ export default function LoginScreen(props){
         loggedIn: true
       });
     }catch(err){
-      alert(err.message);
+      alert("Email ou senha incorretos!");
     }
     setLoading(false);
+  }
+
+  function handleEmailError(){
+    return !(email_p.includes('@') || email_p === '');
   }
 
     return(
@@ -65,18 +69,21 @@ export default function LoginScreen(props){
             <View>
         <TextInput
           style={styles.input}
-          underlineColorAndroid="transparent"
           placeholder="Email"
+          value={email_p}
           placeholderTextColor="black"
-          autoCapitalize="none"
           onChangeText={text => setEmail(text)}
         />
+        <HelperText
+          type="error"
+          visible={handleEmailError()}
+        >
+          Email inválido
+        </HelperText>
         <TextInput
           style={styles.input}
-          underlineColorAndroid="transparent"
           placeholder="Password"
           placeholderTextColor="black"
-          autoCapitalize="none"
           secureTextEntry={true}
           onChangeText={text => setSenha(text)}
         />
@@ -84,9 +91,14 @@ export default function LoginScreen(props){
           style={styles.submitButton}
           onPress={() => handleLogin()}
         >
-          <Text style={styles.submitButtonText}> Submit </Text>
+          {loading ? <ActivityIndicator size="small" color="white" /> : <Text style={styles.submitButtonText}>Entrar</Text>       }
         </TouchableOpacity>
-        {loading && <Text>loading...</Text>}
+        <Button
+          style={{backgroundColor: "transparent"}}
+        >
+          <Text style={{color: "orange", fontSize: 14}}> Criar uma conta </Text>
+        </Button>
+
       </View>
 
   </>
