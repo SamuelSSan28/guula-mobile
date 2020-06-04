@@ -4,7 +4,11 @@ import Header_Back from '../Componentes/Header_Back'
 import api from '../../services/api';
 import {Text, ActivityIndicator} from 'react-native';
 
+//import { useNavigation } from '@react-navigation/native';
+
 export default function SignupScreen()  {
+
+  //const navigation = useNavigation();
 
   const [text_nome, setText_nome] = useState('');
   const [text_email, setText_email] = useState('');
@@ -17,6 +21,10 @@ export default function SignupScreen()  {
   const [email_erro, setEmail_erro] = useState(false);
   const [mensagem_email_erro, setMensagem_email_erro] = useState('');
   const [loading, setLoading] = React.useState(false);
+
+  /*function navigateToLogin() {
+    navigation.goBack();
+  }*/
 
   function isEmail(field) {
     usuario = field.substring(0, field.indexOf("@"));
@@ -101,7 +109,7 @@ export default function SignupScreen()  {
 
     return (
       <>
-        <Header_Back />
+        <Header_Back/>
         <TextInput
           label='Nome'
           value={text_nome}

@@ -1,14 +1,13 @@
 import * as React from 'react';
-import { Appbar,Searchbar } from 'react-native-paper';
+import { Appbar, Searchbar } from 'react-native-paper';
 import styles from '../Base/styles';
+import { useNavigation } from '@react-navigation/native';
 
-export default class Header_Back extends React.Component {
- 
- render() {
-   return (
-   <Appbar.Header style={styles.header}> 
-    <Appbar.BackAction color = '#ffffff' onPress={() => {}} />
-   </Appbar.Header>
-   );
- }
- }
+export default function Header_Back() {
+  const navigation = useNavigation();
+  return (
+    <Appbar.Header style={styles.header}>
+      <Appbar.BackAction color='#ffffff' onPress={() => navigation.goBack()} />
+    </Appbar.Header>
+  );
+}
