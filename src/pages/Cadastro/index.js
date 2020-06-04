@@ -3,6 +3,8 @@ import { TextInput, Button, HelperText } from 'react-native-paper';
 import Header_Back from '../Componentes/Header_Back'
 import api from '../../services/api';
 import { Text, View, ActivityIndicator, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
 
 const styles = StyleSheet.create({
   container: {
@@ -48,6 +50,8 @@ export default function SignupScreen() {
   const [email_erro, setEmail_erro] = useState(false);
   const [mensagem_email_erro, setMensagem_email_erro] = useState('');
   const [loading, setLoading] = React.useState(false);
+
+  const navigation = useNavigation();
 
 
   function isEmail(field) {
@@ -104,6 +108,7 @@ export default function SignupScreen() {
 
   async function funcao_cadastrar() {
 
+
     if (loading) {
       return;
     }
@@ -119,6 +124,7 @@ export default function SignupScreen() {
       const response = await api.post('users', data);
       if (response.status == 200) {
         alert('Usuário cadastrado com sucesso!');
+        navigation.goBack();
       }
       else {
         alert('Falha ao cadastrar usuário');
