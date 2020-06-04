@@ -1,39 +1,8 @@
-// fazer todos os imports necessários
-
-
-// export default cadastroscreen
-
-//atributos da classe (state)
-//nome
-//email
-//senha
-//repeticao da senha
-//loading
-
-//metodos da classe (funcoes)
-//pega o nome digitado
-//fazer um touppercase
-//pega o email digitado
-//validar o email
-//pega a senha digitada
-//criptografar a senha (talvez)
-//pega repeticao da senha
-//verificar se as senhas correspondem
-//enviar para o back
-
-//retorno  (render)
-//header-cadastro
-//caixa de texto - nome
-//caixa de texto - email
-//caixa de texto - senha
-//caixa de texto - confirmar senha
-// botao de cadastrar
-
 import React, { useState } from 'react';
-//import * as React from 'react';
 import { TextInput, Button, HelperText } from 'react-native-paper';
 import Header_Back from '../Componentes/Header_Back'
 import api from '../../services/api';
+import {Text, ActivityIndicator} from 'react-native';
 
 export default function SignupScreen()  {
 
@@ -47,6 +16,7 @@ export default function SignupScreen()  {
   const [mensagem_senha_erro, setMensagem_senha_erro] = useState('');
   const [email_erro, setEmail_erro] = useState(false);
   const [mensagem_email_erro, setMensagem_email_erro] = useState('');
+  const [loading, setLoading] = React.useState(false);
 
   function isEmail(field) {
     usuario = field.substring(0, field.indexOf("@"));
@@ -102,12 +72,17 @@ export default function SignupScreen()  {
 
   async function funcao_cadastrar() {
 
+    if(loading){
+      return;
+    }
+
     const data = {
       nome: text_nome,
       senha_p: text_senha,
       email_p: text_email
     };
 
+    setLoading(true);
     try {
       const response = await api.post('users', data);
       if(response.status == 200){
@@ -120,6 +95,7 @@ export default function SignupScreen()  {
     } catch (err) {
       alert('Falha ao cadastrar usuário');
     }
+    setLoading(false);
   }
 
 
@@ -174,9 +150,9 @@ export default function SignupScreen()  {
         >
           {mensagem_senha_erro}
         </HelperText>
-        <Button mode="contained" onPress={() => {funcao_validar()}} color='#ff914d' dark={true}>
-          Cadastrar
-       </Button>
+        {loading ? <ActivityIndicator size="small" color="#ff914d" /> : <Button mode="contained" onPress={() => {funcao_validar()}} color='#ff914d' dark={true}>
+         Cadastrar     
+       </Button>}
       </>
     );
 }
