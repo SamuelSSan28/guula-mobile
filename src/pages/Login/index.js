@@ -3,6 +3,7 @@ import {useState} from 'react';
 import api from '../../services/api';
 import {Text, View, StyleSheet, ActivityIndicator,TouchableOpacity, AsyncStorage} from 'react-native';
 import {TextInput, HelperText, Button} from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 
 
 const styles = StyleSheet.create({
@@ -32,9 +33,16 @@ const styles = StyleSheet.create({
 })
 
 export default function LoginScreen(props){
+
+  const navigation = useNavigation();
+
   const [email_p, setEmail] = useState('');
   const [senha_p, setSenha] = useState('');
   const [loading, setLoading] = React.useState(false);
+
+  function navigateToSignUp() {
+    navigation.navigate('Cadastro');
+  }
 
   async function handleLogin(){
     if (loading) {
@@ -108,6 +116,7 @@ export default function LoginScreen(props){
        </Button>}
         <Button
           style={{backgroundColor: "transparent"}}
+          onPress={() => navigateToSignUp()}
         >
           <Text style={{color: "#ff914d", fontSize: 14}}> Criar uma conta </Text>
         </Button>
