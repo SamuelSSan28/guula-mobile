@@ -3,6 +3,8 @@ import { BottomNavigation } from 'react-native-paper';
 import HomeScreen from '../Home';
 import SearchScreen from '../Search';
 import FavoriteScreen from '../Favorite';
+
+
 import {
     View,
     Text,
@@ -37,14 +39,12 @@ export default class Base extends React.Component {
 
   render() {
     return (    
-      <>
         <BottomNavigation
           navigationState={this.state}
           onIndexChange={this._handleIndexChange}
           renderScene={this._renderScene}
           shifting={true}
         />
-      </>
     );
   }
 }

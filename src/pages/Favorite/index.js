@@ -2,26 +2,23 @@ import * as React from 'react';
 import Header_Base from '../Componentes/Header_Base';
 import LoginScreen from '../Login';
 import api from '../../services/api';
-import {Card, Title, Paragraph } from 'react-native-paper';
 import styles from './styles';
 import Card_Component from '../Componentes/Card';
+import UserContext from '../../../providers/UserProvider';
 import {
     View,
     Text,
-    ScrollView,
-    TouchableOpacity,
-    FlatList,
     AsyncStorage //armazenar dados dos usuario (id, nome)
 } from 'react-native';
 
 export default function FavoriteScreen() {
-    const [isSignIn, setIsSignIn] = React.useState(false);
-    const [userId, setUserId] = React.useState(null);
 
     const [receitas, setReceitas] = React.useState([]);
     const [total, setTotal] = React.useState(0);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
+
+    const {user, setUser} = React.useContext(UserContext);
 
     async function loadRecipes() {
         if (loading) {
@@ -33,10 +30,9 @@ export default function FavoriteScreen() {
         }
 
         setLoading(true);
-
         const response = await api.get('favorites', {
             headers: {
-                Authorization: 1,
+                Authorization: user.id,
             }
         })
             .catch(function (error) {
@@ -49,31 +45,16 @@ export default function FavoriteScreen() {
     }
 
     React.useEffect(() => {
-        //resgatar dados do usuario logado
-        /**_retrieveData = async () => {
-          try {
-            const value = await AsyncStorage.getItem('id');
-            if (value !== null) {
-              this.setState({isSignIn: true, userId: value});
-            }
-          } catch (error) {
-            // Error retrieving data
-          }
-        };*/
-        //--------gambiarra provisória---------
-        setIsSignIn(true);
-        setUserId('1');
-
-        //------------
         loadRecipes();
-
-    }, [])
+    }, [user])
 
     return (
         <>
             <Header_Base />
-            {!isSignIn ?
-                <LoginScreen />
+            {!user.loggedIn ?
+            <>
+                <LoginScreen setIsSignIn={setUser}/>
+            </>
                 : <>
             <View style={styles.container}>
                 {/**<Text style={styles.usuario}>{`Usuario: ${userId}`}</Text>*/}

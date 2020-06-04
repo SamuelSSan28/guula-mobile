@@ -10,7 +10,7 @@ export default function HomeScreen(){
   const [recipes, setRecipes] = useState([]);
 
   async function loadRecipes(){
-    const res = await api.get("recipes/random/8");
+    const res = await api.get("recipes/random/8").catch(function(err){alert(err)});
     setRecipes(res.data);
   }
   useEffect( () => {loadRecipes()}, []); 
