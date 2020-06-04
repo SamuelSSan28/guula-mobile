@@ -55,14 +55,30 @@ export default function LoginScreen(props){
         loggedIn: true
       });
     }catch(err){
-      alert("Email ou senha incorretos!");
+      alert(err.response.data.error);
     }
     setLoading(false);
   }
 
-  function handleEmailError(){
-    return !(email_p.includes('@') || email_p === '');
-  }
+  function isEmail(field) {
+    var usuario = field.substring(0, field.indexOf("@"));
+    var dominio = field.substring(field.indexOf("@") + 1, field.length);
+
+    if ((usuario.length >= 1) &&
+        (dominio.length >= 3) &&
+        (usuario.search("@") == -1) &&
+        (dominio.search("@") == -1) &&
+        (usuario.search(" ") == -1) &&
+        (dominio.search(" ") == -1) &&
+        (dominio.search(".") != -1) &&
+        (dominio.indexOf(".") >= 1) &&
+        (dominio.lastIndexOf(".") < dominio.length - 1)) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
 
     return(
         <>
@@ -76,7 +92,7 @@ export default function LoginScreen(props){
         />
         <HelperText
           type="error"
-          visible={handleEmailError()}
+          visible={!isEmail(email_p)}
         >
           Email inválido
         </HelperText>
@@ -87,16 +103,13 @@ export default function LoginScreen(props){
           secureTextEntry={true}
           onChangeText={text => setSenha(text)}
         />
-        <TouchableOpacity
-          style={styles.submitButton}
-          onPress={() => handleLogin()}
-        >
-          {loading ? <ActivityIndicator size="small" color="white" /> : <Text style={styles.submitButtonText}>Entrar</Text>       }
-        </TouchableOpacity>
+        {loading ? <ActivityIndicator size="small" color="#ff914d" /> : <Button mode="contained" onPress={() => handleLogin()} color='#ff914d' dark={true}>
+         Entrar     
+       </Button>}
         <Button
           style={{backgroundColor: "transparent"}}
         >
-          <Text style={{color: "orange", fontSize: 14}}> Criar uma conta </Text>
+          <Text style={{color: "#ff914d", fontSize: 14}}> Criar uma conta </Text>
         </Button>
 
       </View>
