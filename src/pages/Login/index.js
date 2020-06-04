@@ -4,36 +4,8 @@ import api from '../../services/api';
 import { Text, View, StyleSheet, ActivityIndicator, TouchableOpacity, AsyncStorage } from 'react-native';
 import { TextInput, HelperText, Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 50,
-    backgroundColor: "transparent"
-  },
-  input: {
-    height: 45,
-    backgroundColor: "transparent",
-    borderRadius: 5,
-    borderColor: "grey",
-    borderWidth: 1,
-  },
-  submitButton: {
-
-  },
-  submitButtonText: {
-
-  },
-  text: {
-    textAlign: "center",
-    color: "#616161",
-    fontSize: 15,
-    paddingBottom: 30
-  }
-
-})
+import styles from './styles';
+import Alert from '../Componentes/Alert';
 
 export default function LoginScreen(props) {
 
@@ -44,6 +16,9 @@ export default function LoginScreen(props) {
   const [loading, setLoading] = useState(false);
   const [emailErr, setEmailErr] = useState(false);
   const [pwErr, setPwErr] = useState(false);
+
+  const [alertContent, setAlertContent] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
 
   function navigateToSignUp() {
     navigation.navigate('Cadastro');
@@ -78,7 +53,8 @@ export default function LoginScreen(props) {
         loggedIn: true
       });
     } catch (err) {
-      alert(err.response.data.error);
+      setShowAlert(true);
+      setAlertContent(err.response.data.error)
     }
     setLoading(false);
   }
@@ -106,7 +82,7 @@ export default function LoginScreen(props) {
   return (
     <>
       <View style={styles.container}>
-        <Text style={styles.text}>Entre com a sua conta para salvar suas receitas favoritas!</Text>
+        <Text style={styles.textTop}>Entre com a sua conta para salvar suas receitas favoritas!</Text>
          <TextInput
           style={styles.input}
           placeholder="Email"
@@ -148,9 +124,9 @@ export default function LoginScreen(props) {
         {loading ? <ActivityIndicator size="small" color="#ff914d" /> : <Button mode="contained" onPress={() => handleValidation()} color='#ff914d' dark={true}>
           Entrar
        </Button>}
-          <Text style={{color: "#616161", fontSize: 14, textAlign: "center", padding: 10}}>Não tem uma conta? <Text onPress={() => navigateToSignUp()} style={{ color: "#ff914d", fontSize: 14 }}>Cadastre-se</Text>.</Text>
+          <Text style={styles.textBottom}>Não tem uma conta? <Text onPress={() => navigateToSignUp()} style={{ color: "#ff914d", fontSize: 14 }}>Cadastre-se</Text>.</Text>
       </View>
-
+    {showAlert && <Alert content={alertContent} setShowAlert={setShowAlert}/>}
     </>
   )
 }
