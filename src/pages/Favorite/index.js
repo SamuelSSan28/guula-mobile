@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Header_Base from '../Componentes/Header_Base';
 import LoginScreen from '../Login';
 import api from '../../services/api';
 import styles from './styles';
@@ -10,6 +9,7 @@ import {
     Text,
     AsyncStorage //armazenar dados dos usuario (id, nome)
 } from 'react-native';
+import Header_Base from '../Componentes/Header_Base';
 
 export default function FavoriteScreen() {
 
@@ -50,7 +50,7 @@ export default function FavoriteScreen() {
 
     return (
         <>
-            <Header_Base />
+        <Header_Base/>
             {!user.loggedIn ?
             <>
                 <LoginScreen setIsSignIn={setUser}/>

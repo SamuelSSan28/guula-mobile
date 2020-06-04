@@ -12,11 +12,11 @@ import {
   } from 'react-native';
 
 
-const HomeRoute = () => <View><HomeScreen/></View>;
+const HomeRoute = () => <HomeScreen/>;
 
 const SearchRoute = () => <SearchScreen/>;
 
-const FavoriteRoute = () => <View><FavoriteScreen/></View>;
+const FavoriteRoute = () =><FavoriteScreen/>;
 
 export default class Base extends React.Component {
   state = {
