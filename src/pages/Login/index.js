@@ -15,19 +15,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5FCFF"
   },
   input: {
-    margin: 15,
-    height: 40,
+    
     
   },
   submitButton: {
-    padding: 10,
-    backgroundColor: "orange",
-    margin: 15,
-    alignItems: "center",
-    height: 40
+   
   },
   submitButtonText: {
-    color: "white"
+  
   }
 
 })
@@ -38,26 +33,38 @@ export default function LoginScreen(props){
 
   const [email_p, setEmail] = useState('');
   const [senha_p, setSenha] = useState('');
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = useState(false);
+  const [emailErr, setEmailErr] = useState(false);
+  const [pwErr, setPwErr] = useState(false);
 
   function navigateToSignUp() {
     navigation.navigate('Cadastro');
   }
 
-  async function handleLogin(){
+  async function handleValidation(){
     if (loading) {
       return;
     }
+    let existe_erro = false;
+    if(!isEmail(email_p)){
+      existe_erro = true;
+      setEmailErr(true);
+    }
+    if(senha_p.length < 6){
+      existe_erro = true;
+      setPwErr(true);
+    }
+    if(!existe_erro){
+     await handleLogin();
+    }
+
+  }
+
+  async function handleLogin(){
     setLoading(true);
     try{
       const response = await api.post('users/login', {senha_p, email_p});
       const id = response.data;
-      /**try {
-        await AsyncStorage.setItem("userId", JSON.stringify({id}));
-      } catch (error) {
-       console.log("Something went wrong", error);
-      }
-      */
       props.setIsSignIn({
         id: id,
         loggedIn: true
@@ -96,11 +103,11 @@ export default function LoginScreen(props){
           placeholder="Email"
           value={email_p}
           placeholderTextColor="black"
-          onChangeText={text => setEmail(text)}
+          onChangeText={text => {setEmail(text); setEmailErr(false)}}
         />
         <HelperText
           type="error"
-          visible={!isEmail(email_p)}
+          visible={emailErr}
         >
           Email inválido
         </HelperText>
@@ -109,9 +116,15 @@ export default function LoginScreen(props){
           placeholder="Password"
           placeholderTextColor="black"
           secureTextEntry={true}
-          onChangeText={text => setSenha(text)}
+          onChangeText={text => {setSenha(text); setPwErr(false)}}
         />
-        {loading ? <ActivityIndicator size="small" color="#ff914d" /> : <Button mode="contained" onPress={() => handleLogin()} color='#ff914d' dark={true}>
+        <HelperText
+          type="error"
+          visible={pwErr}
+        >
+          A senha deve possuir ao menos 6 caracteres
+        </HelperText>
+        {loading ? <ActivityIndicator size="small" color="#ff914d" /> : <Button mode="contained" onPress={() => handleValidation()} color='#ff914d' dark={true}>
          Entrar     
        </Button>}
         <Button
