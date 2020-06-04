@@ -2,13 +2,40 @@ import React, { useState } from 'react';
 import { TextInput, Button, HelperText } from 'react-native-paper';
 import Header_Back from '../Componentes/Header_Back'
 import api from '../../services/api';
-import {Text, ActivityIndicator} from 'react-native';
+import { Text, View, ActivityIndicator, StyleSheet } from 'react-native';
 
-//import { useNavigation } from '@react-navigation/native';
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "flex-start",
+    padding: 50,
+    backgroundColor: "transparent"
+  },
+  input: {
+    height: 45,
+    backgroundColor: "transparent",
+    borderRadius: 5,
+    borderColor: "grey",
+    borderWidth: 1,
+  },
+  submitButton: {
 
-export default function SignupScreen()  {
+  },
+  submitButtonText: {
 
-  //const navigation = useNavigation();
+  },
+  text: {
+    textAlign: "center",
+    color: "#616161",
+    fontSize: 15,
+    paddingBottom: 30
+  }
+
+})
+
+
+export default function SignupScreen() {
+
 
   const [text_nome, setText_nome] = useState('');
   const [text_email, setText_email] = useState('');
@@ -22,29 +49,26 @@ export default function SignupScreen()  {
   const [mensagem_email_erro, setMensagem_email_erro] = useState('');
   const [loading, setLoading] = React.useState(false);
 
-  /*function navigateToLogin() {
-    navigation.goBack();
-  }*/
 
   function isEmail(field) {
     usuario = field.substring(0, field.indexOf("@"));
     dominio = field.substring(field.indexOf("@") + 1, field.length);
 
     if ((usuario.length >= 1) &&
-        (dominio.length >= 3) &&
-        (usuario.search("@") == -1) &&
-        (dominio.search("@") == -1) &&
-        (usuario.search(" ") == -1) &&
-        (dominio.search(" ") == -1) &&
-        (dominio.search(".") != -1) &&
-        (dominio.indexOf(".") >= 1) &&
-        (dominio.lastIndexOf(".") < dominio.length - 1)) {
-        return true;
+      (dominio.length >= 3) &&
+      (usuario.search("@") == -1) &&
+      (dominio.search("@") == -1) &&
+      (usuario.search(" ") == -1) &&
+      (dominio.search(" ") == -1) &&
+      (dominio.search(".") != -1) &&
+      (dominio.indexOf(".") >= 1) &&
+      (dominio.lastIndexOf(".") < dominio.length - 1)) {
+      return true;
     }
     else {
-        return false;
+      return false;
     }
-}
+  }
 
   async function funcao_validar() {
     let existe_erro = false;
@@ -58,7 +82,7 @@ export default function SignupScreen()  {
       setNome_erro(true);
       setMensagem_nome_erro('Nome excede número de caracteres')
     }
-    if(!isEmail(text_email)){
+    if (!isEmail(text_email)) {
       existe_erro = true;
       setEmail_erro(true);
       setMensagem_email_erro('Email inválido')
@@ -73,14 +97,14 @@ export default function SignupScreen()  {
       setSenha_erro(true);
       setMensagem_senha_erro('Senhas não correspondem')
     }
-    if(!existe_erro){
+    if (!existe_erro) {
       await funcao_cadastrar();
     }
   }
 
   async function funcao_cadastrar() {
 
-    if(loading){
+    if (loading) {
       return;
     }
 
@@ -93,10 +117,10 @@ export default function SignupScreen()  {
     setLoading(true);
     try {
       const response = await api.post('users', data);
-      if(response.status == 200){
+      if (response.status == 200) {
         alert('Usuário cadastrado com sucesso!');
       }
-      else{
+      else {
         alert('Falha ao cadastrar usuário');
       }
 
@@ -107,60 +131,95 @@ export default function SignupScreen()  {
   }
 
 
-    return (
-      <>
-        <Header_Back/>
-        <TextInput
-          label='Nome'
-          value={text_nome}
-          onChangeText={text_nome => { setText_nome(text_nome); setNome_erro(false); }}
-          error={nome_erro}
-        />
-        <HelperText
-          type="error"
-          visible={nome_erro}
-        >
-          {mensagem_nome_erro}
-        </HelperText>
-        <TextInput
-          label='Email'
-          value={text_email}
-          onChangeText={text_email => {setText_email(text_email); setEmail_erro(false); }}
-          error={email_erro}
-        />
-        <HelperText
-          type="error"
-          visible={email_erro}
-        >
-          {mensagem_email_erro}
-        </HelperText>
-        <TextInput secureTextEntry={true}
-          label='Senha'
-          value={text_senha}
-          onChangeText={text_senha => {setText_senha(text_senha); setSenha_erro(false); }}
-          error={senha_erro}
-        />
-        <HelperText
-          type="error"
-          visible={senha_erro}
-        >
-          {mensagem_senha_erro}
-        </HelperText>
-        <TextInput secureTextEntry={true}
-          label='Confirmar Senha'
-          value={text_confirmar_senha}
-          onChangeText={text_confirmar_senha => { setText_confirmar_senha(text_confirmar_senha); setSenha_erro(false); }}
-          error={senha_erro}
-        />
-        <HelperText
-          type="error"
-          visible={senha_erro}
-        >
-          {mensagem_senha_erro}
-        </HelperText>
-        {loading ? <ActivityIndicator size="small" color="#ff914d" /> : <Button mode="contained" onPress={() => {funcao_validar()}} color='#ff914d' dark={true}>
-         Cadastrar     
+  return (
+    <>
+      <Header_Back />
+      <View style={styles.container}>
+      <Text style={styles.text}>Crie sua conta de maneira rápida e fácil!</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Nome"
+        value={text_nome}
+        placeholderTextColor="black"
+        onChangeText={text_nome => { setText_nome(text_nome); setNome_erro(false); }}
+        underlineColor="transparent"
+        theme={{
+          colors: {
+            primary: 'transparent'
+          }
+        }}
+        error={nome_erro}
+      />
+      <HelperText
+        type="error"
+        visible={nome_erro}
+      >
+        {mensagem_nome_erro}
+      </HelperText>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={text_email}
+        placeholderTextColor="black"
+        onChangeText={text_email => { setText_email(text_email); setEmail_erro(false); }}
+        underlineColor="transparent"
+        theme={{
+          colors: {
+            primary: 'transparent'
+          }
+        }}
+        error={email_erro}
+      />
+      <HelperText
+        type="error"
+        visible={email_erro}
+      >
+        {mensagem_email_erro}
+      </HelperText>
+      <TextInput secureTextEntry={true}
+        style={styles.input}
+        placeholder="Senha"
+        value={text_senha}
+        placeholderTextColor="black"
+        onChangeText={text_senha => { setText_senha(text_senha); setSenha_erro(false); }}
+        underlineColor="transparent"
+        theme={{
+          colors: {
+            primary: 'transparent'
+          }
+        }}
+        error={senha_erro}
+      />
+      <HelperText
+        type="error"
+        visible={senha_erro}
+      >
+        {mensagem_senha_erro}
+      </HelperText>
+      <TextInput secureTextEntry={true}
+        style={styles.input}
+        placeholder="Confirmar Senha"
+        value={text_confirmar_senha}
+        placeholderTextColor="black"
+        onChangeText={text_confirmar_senha => { setText_confirmar_senha(text_confirmar_senha); setSenha_erro(false); }}
+        underlineColor="transparent"
+        theme={{
+          colors: {
+            primary: 'transparent'
+          }
+        }}
+        error={senha_erro}
+      />
+      <HelperText
+        type="error"
+        visible={senha_erro}
+      >
+        {mensagem_senha_erro}
+      </HelperText>
+      {loading ? <ActivityIndicator size="small" color="#ff914d" /> : <Button mode="contained" onPress={() => { funcao_validar() }} color='#ff914d' dark={true}>
+        Cadastrar
        </Button>}
+    </View>
       </>
     );
 }
