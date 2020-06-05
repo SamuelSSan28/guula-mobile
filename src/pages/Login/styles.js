@@ -23,12 +23,12 @@ export default StyleSheet.create({
       },
       textTop: {
         textAlign: "center",
-        color: "#616161",
+        color: "#595959",
         fontSize: 15,
         paddingBottom: 30
       },
       textBottom:{
-        color: "#616161", 
+        color: "#595959", 
         fontSize: 14, 
         textAlign: "center", 
         padding: 10

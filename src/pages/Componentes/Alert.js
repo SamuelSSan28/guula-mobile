@@ -12,13 +12,22 @@ export default function Alert(props) {
     return (
         <Portal>
             <Dialog
+                style = {{
+                    textAlign: "center"
+                }}
                 visible={visible}
                 onDismiss={() => _hideDialog()}>
                 <Dialog.Content>
-                    <Paragraph>{props.content}</Paragraph>
+                    <Paragraph style={{
+                        textAlign: "center",
+                        color: "#595959"
+                    }}>{props.content}</Paragraph>
                 </Dialog.Content>
-                <Dialog.Actions>
-                    <Button onPress={() => _hideDialog()}>Ok</Button>
+                <Dialog.Actions style={{
+                }}>
+                    <Button
+                    color="#ff914d"
+                    onPress={() => _hideDialog()}>Ok</Button>
                 </Dialog.Actions>
             </Dialog>
         </Portal>
