@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {Container} from '../../GlobalStyles'
 
 export default StyleSheet.create({
 
@@ -6,7 +7,7 @@ export default StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         padding: 50,
-        backgroundColor: "transparent"
+        ...Container
       },
       input: {
         height: 45,
