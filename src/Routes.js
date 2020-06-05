@@ -9,7 +9,14 @@ const AppStack = createStackNavigator();
 export default function Routes(){
     return(
         <NavigationContainer>
-            <AppStack.Navigator screenOptions={{headerShown:false}}>
+            <AppStack.Navigator 
+                screenOptions={{
+                    headerShown:false,
+                    cardStyle : {
+                        backgroundColor: "#ff914d"
+                    }
+                }}
+            >
                 <AppStack.Screen name ="Home" component={Base}/>
                 <AppStack.Screen name ="Cadastro" component={SignUpScreen}/>
             </AppStack.Navigator>
