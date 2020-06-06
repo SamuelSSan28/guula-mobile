@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Card, Title, Paragraph } from 'react-native-paper';
-import {StyleSheet,TouchableOpacity, FlatList, ScrollView} from 'react-native';
+import {StyleSheet,TouchableOpacity, FlatList, ScrollView, View, ActivityIndicator} from 'react-native';
 
 
 const styles = StyleSheet.create({
@@ -26,6 +26,17 @@ const renderItem = ({item:recipe}) => (
 
 
 export default function Card_Component(props) {
+
+  function renderFooter(){
+    if(!props.loading) return null;
+    
+    return (
+      <View>
+        <ActivityIndicator size="large" color="#ff914d" /> 
+      </View>
+    )
+  }
+
     return (   
       <>
       {(props.receitas !== undefined) &&
@@ -35,7 +46,10 @@ export default function Card_Component(props) {
                 data={props.receitas}
                 keyExtractor={receita => String(receita.id)}
                 renderItem={renderItem}
-            />        
+                onEndReached={!props.func ? () => {} : props.func}
+                onEndReachedThreshold={0.1}
+                ListFooterComponent={renderFooter}
+      />        
       }
       </>
     )  
