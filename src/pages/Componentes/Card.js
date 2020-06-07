@@ -1,6 +1,7 @@
 import * as React from 'react';
+import {useState} from 'react';
 import { Card, Title, Paragraph } from 'react-native-paper';
-import {StyleSheet,TouchableOpacity, FlatList, ScrollView, View, ActivityIndicator} from 'react-native';
+import {StyleSheet,TouchableOpacity, FlatList, ScrollView, View, ActivityIndicator, RefreshControl} from 'react-native';
 
 
 const styles = StyleSheet.create({
@@ -36,7 +37,13 @@ export default function Card_Component(props) {
       </View>
     )
   }
+  const [refreshing, setRefreshing] = useState(false);
 
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    await props.onRefresh();
+    setRefreshing(false);
+  }, [refreshing]);
     return (   
       <>
       {(props.receitas !== undefined) &&
@@ -49,6 +56,9 @@ export default function Card_Component(props) {
                 onEndReached={!props.func ? () => {} : props.func}
                 onEndReachedThreshold={0.1}
                 ListFooterComponent={renderFooter}
+                refreshControl={
+                  <RefreshControl colors={["#ff914d"]} refreshing={refreshing} onRefresh={onRefresh} />
+                }
       />        
       }
       </>

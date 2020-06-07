@@ -16,7 +16,12 @@ export default function HomeScreen(){
     }
     setLoading(true);
     const res = await api.get(`recipes?page=${page}`).catch(function(err){alert(err)});
-    setRecipes([...recipes,...res.data]);
+    const receitas = res.data;
+    for (let i = receitas.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [receitas[i], receitas[j]] = [receitas[j], receitas[i]];
+  }
+    setRecipes([...recipes,...receitas]);
     setPage(page+1);
     setLoading(false);
   }

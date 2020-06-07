@@ -20,6 +20,11 @@ export default function FavoriteScreen() {
 
     const {user, setUser} = React.useContext(UserContext);
 
+    async function onRefresh(){
+        //clear
+       await loadRecipes();
+    }
+
     async function loadRecipes() {
         if (loading) {
             return;
@@ -38,8 +43,8 @@ export default function FavoriteScreen() {
             .catch(function (error) {
                 setError(error)
             });
-
-        setReceitas([...receitas, ...response.data]);
+        
+        setReceitas(response.data);
         setTotal(response.headers.total_receitas_favoritas);
         setLoading(false);
     }
@@ -65,7 +70,7 @@ export default function FavoriteScreen() {
                     margin:10,
                 }}>{total} {(total === '1') ? "receita" : "receitas"}</Text>                
                 </View>
-                <Card_Component receitas={receitas}/>
+                <Card_Component receitas={receitas} onRefresh={onRefresh}/>
             </View>        
                 </>}
         </>
