@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import api from '../../services/api';
-import { Text, View, ActivityIndicator,KeyboardAvoidingView,Platform } from 'react-native';
+import { Text, ActivityIndicator,KeyboardAvoidingView,Platform } from 'react-native';
 import { TextInput, HelperText, Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import styles from './styles';
