@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import api from '../../services/api';
-import { Text, View, StyleSheet, ActivityIndicator, TouchableOpacity, AsyncStorage } from 'react-native';
+import { Text, View, ActivityIndicator,KeyboardAvoidingView,Platform } from 'react-native';
 import { TextInput, HelperText, Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import styles from './styles';
@@ -59,33 +59,22 @@ export default function LoginScreen(props) {
     setLoading(false);
   }
 
-  function isEmail(field) {
-    var usuario = field.substring(0, field.indexOf("@"));
-    var dominio = field.substring(field.indexOf("@") + 1, field.length);
-
-    if ((usuario.length >= 1) &&
-      (dominio.length >= 3) &&
-      (usuario.search("@") == -1) &&
-      (dominio.search("@") == -1) &&
-      (usuario.search(" ") == -1) &&
-      (dominio.search(" ") == -1) &&
-      (dominio.search(".") != -1) &&
-      (dominio.indexOf(".") >= 1) &&
-      (dominio.lastIndexOf(".") < dominio.length - 1)) {
-      return true;
-    }
-    else {
-      return false;
-    }
+  function isEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
   }
 
   return (
     <>
-      <View style={styles.container}>
+      <KeyboardAvoidingView 
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
         <Text style={styles.textTop}>Entre com a sua conta para salvar suas receitas favoritas!</Text>
          <TextInput
           style={styles.input}
           placeholder="Email"
+          keyboardType="email-address"
           value={email_p}
           placeholderTextColor="black"
           onChangeText={text => { setEmail(text); setEmailErr(false) }}
@@ -125,7 +114,7 @@ export default function LoginScreen(props) {
           Entrar
        </Button>}
           <Text style={styles.textBottom}>Não tem uma conta? <Text onPress={() => navigateToSignUp()} style={{ color: "#ff914d", fontSize: 14 }}>Cadastre-se</Text>.</Text>
-      </View>
+      </KeyboardAvoidingView>
     {showAlert && <Alert content={alertContent} setShowAlert={setShowAlert}/>}
     </>
   )
