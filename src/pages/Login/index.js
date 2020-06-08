@@ -19,6 +19,7 @@ export default function LoginScreen(props) {
 
   const [alertContent, setAlertContent] = useState('');
   const [showAlert, setShowAlert] = useState(false);
+  
 
   function navigateToSignUp() {
     navigation.navigate('Cadastro');
