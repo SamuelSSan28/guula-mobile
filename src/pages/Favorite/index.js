@@ -8,6 +8,7 @@ import Alert from '../Componentes/Alert';
 import {
     View,
     Text,
+    Image,
     AsyncStorage //armazenar dados dos usuario (id, nome)
 } from 'react-native';
 import Header_Base from '../Componentes/Header_Base';
@@ -73,12 +74,19 @@ export default function FavoriteScreen() {
                     flex: 1, 
                     justifyContent: "center",
                     backgroundColor:"#fff",
+                    alignItems: "center",
                     padding: 20,
                 }}>
+                    <Image style={{
+                        width: 150,
+                        height: 150,
+                    }}
+                    source={require('../../assets/book.png')}/>
                     <Text style={{
                         textAlign:"center",
                         fontSize: 20,
-                        color: "#595959"
+                        color: "#595959",
+                        paddingTop: 30
                     }}>Favorite receitas para guardá-las para mais tarde. Nós vamos matê-las aqui para você!</Text>
                 </View>
                 </> 
