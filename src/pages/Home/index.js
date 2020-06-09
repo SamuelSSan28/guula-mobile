@@ -13,6 +13,11 @@ export default function HomeScreen(){
   const [showAlert, setShowAlert] = useState(false);
   const [alertContent, setAlertContent] = useState('');
 
+  async function onRefresh(){
+    setRecipes([]);
+    await loadRecipes();
+  }
+
   async function loadRecipes(){
     if(loading){
       return;
@@ -41,7 +46,7 @@ export default function HomeScreen(){
   return(
     <>
     <Header_Base/>
-    <Card_Component receitas={recipes} func={loadRecipes} loading={loading}/>  
+    <Card_Component receitas={recipes} func={loadRecipes} loading={loading} onRefresh={onRefresh}/>  
     {showAlert && <Alert content={alertContent} setShowAlert={setShowAlert}/>}
     </>
     )

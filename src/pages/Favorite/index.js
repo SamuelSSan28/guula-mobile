@@ -85,9 +85,11 @@ export default function FavoriteScreen() {
                     source={require('../../assets/book.png')}/>
                     <Text style={{
                         textAlign:"center",
-                        fontSize: 20,
+                        fontSize: 18,
                         color: "#595959",
-                        paddingTop: 30
+                        paddingTop: 30,
+                        fontFamily:'Poppins_400Regular',
+                        
                     }}>Favorite receitas para guardá-las para mais tarde. Nós vamos matê-las aqui para você!</Text>
                 </View>
                 </> 

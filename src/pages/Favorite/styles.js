@@ -9,7 +9,8 @@ export default StyleSheet.create({
     },
     total:{
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        fontFamily: 'Poppins_400Regular'
     },
     content:{
         justifyContent: 'flex-start',

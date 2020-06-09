@@ -89,6 +89,9 @@ export default function LoginScreen(props) {
         <HelperText
           type="error"
           visible={emailErr}
+          style={{
+            fontFamily:'Poppins_400Regular',
+          }}
         >
           Email inválido
         </HelperText>
@@ -108,6 +111,9 @@ export default function LoginScreen(props) {
         <HelperText
           type="error"
           visible={pwErr}
+          style={{
+            fontFamily:'Poppins_400Regular',
+          }}
         >
           A senha deve possuir ao menos 6 caracteres
         </HelperText>
