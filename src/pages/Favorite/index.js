@@ -29,6 +29,7 @@ export default function FavoriteScreen() {
     }
 
     async function loadRecipes() {
+
         if (loading) {
             return;
         }
@@ -46,7 +47,7 @@ export default function FavoriteScreen() {
             .catch(function (error) {
                 setError(error)
             });
-        
+
         setReceitas(response.data);
         setTotal(response.headers.total_receitas_favoritas);
         setLoading(false);

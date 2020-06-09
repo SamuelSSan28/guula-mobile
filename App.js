@@ -27,7 +27,7 @@ export default function App() {
 }
   async function storeUser(){
     try{
-      AsyncStorage.setItem('userId', user.id);
+      AsyncStorage.setItem('userId', String(user.id));
     }catch(error){
 
     }
