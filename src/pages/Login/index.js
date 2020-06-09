@@ -57,7 +57,7 @@ export default function LoginScreen(props) {
       setShowAlert(true);
       setAlertContent(err.response.data.error)
     }
-    setLoading(false);
+    //setLoading(false);
   }
 
   function isEmail(email) {
