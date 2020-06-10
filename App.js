@@ -5,7 +5,6 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import { AppLoading } from 'expo';
 import { AsyncStorage } from 'react-native';
 import { Poppins_400Regular, Poppins_700Bold, useFonts } from '@expo-google-fonts/poppins';
-import api from './src/services/api';
 import {FavoriteProvider} from './providers/FavoriteProvider';
 
 export default function App() {
@@ -19,8 +18,8 @@ export default function App() {
     id: null,
     loggedIn: false
   })
+ 
   const [receitas, setReceitas] = useState([]);
-  const [totalReceitas, setTotalReceitas] = useState(0);
 
   async function loadUser() {
     try {
@@ -30,7 +29,6 @@ export default function App() {
           id: value,
           loggedIn: false
         })
-        //buscar lista de receitas favoritas aqui
       }
     }
     catch (error) {
@@ -45,29 +43,13 @@ export default function App() {
     }
   }
 
-  async function loadRecipes(){
-    const response = await api.get('favorites', {
-      headers: {
-        Authorization: user.id,
-      }
-    })
-      .catch(function (error) {
-        setError(error)
-      });
-
-    setReceitas(response.data);
-    setTotalReceitas(response.headers.total_receitas_favoritas);
-  }
-
+  
   useEffect(() => {
     loadUser();
   }, [])
   useEffect(() => {
     storeUser();
   }, [user])
-  useEffect(() => {
-    loadRecipes();
-  }, [user, totalReceitas, receitas])
 
   if (!fontsLoaded) {
     //landing
@@ -76,7 +58,7 @@ export default function App() {
 
   return (
     <UserProvider value={{ user, setUser }}>
-      <FavoriteProvider value={{receitas, setReceitas, totalReceitas, setTotalReceitas}}>
+      <FavoriteProvider value={{receitas, setReceitas}}>
         <PaperProvider>
           <Routes />
         </PaperProvider>
