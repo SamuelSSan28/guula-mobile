@@ -12,7 +12,7 @@ export default StyleSheet.create({
         backgroundColor: "transparent",
         borderRadius: 5,
         borderColor: "grey",
-        borderWidth: 1,
+        borderWidth: 1,        
       },
       submitButton: {
     
@@ -24,13 +24,15 @@ export default StyleSheet.create({
         textAlign: "center",
         color: "#595959",
         fontSize: 15,
-        paddingBottom: 30
+        paddingBottom: 30,
+        fontFamily: 'Poppins_400Regular',
       },
       textBottom:{
         color: "#595959", 
         fontSize: 14, 
         textAlign: "center", 
-        padding: 10
+        padding: 10,
+        fontFamily: 'Poppins_400Regular',
       }
 
 });
