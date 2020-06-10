@@ -4,60 +4,27 @@ import api from '../../services/api';
 import styles from './styles';
 import Card_Component from '../Componentes/Card';
 import UserContext from '../../../providers/UserProvider';
+import FavoriteProvider from '../../../providers/FavoriteProvider';
 import Alert from '../Componentes/Alert';
 import {
     View,
     Text,
     Image,
-    AsyncStorage //armazenar dados dos usuario (id, nome)
 } from 'react-native';
 import Header_Base from '../Componentes/Header_Base';
 import { ActivityIndicator } from 'react-native-paper';
 
 export default function FavoriteScreen() {
 
-    const [receitas, setReceitas] = React.useState([]);
-    const [total, setTotal] = React.useState(0);
-    const [loading, setLoading] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);//implementar no provider
     const [error, setError] = React.useState(null);
 
     const {user, setUser} = React.useContext(UserContext);
+    const {receitas, totalReceitas} = React.useContext(FavoriteProvider);
 
-    async function onRefresh(){
-        //clear
-       await loadRecipes();
+    function onRefresh(){
+        //recarregar
     }
-
-    async function loadRecipes() {
-
-        if (loading) {
-            return;
-        }
-
-        if (total > 0 && receitas.length === total) {
-            return;
-        }
-
-        setLoading(true);
-        const response = await api.get('favorites', {
-            headers: {
-                Authorization: user.id,
-            }
-        })
-            .catch(function (error) {
-                setError(error)
-            });
-
-        setReceitas(response.data);
-        setTotal(response.headers.total_receitas_favoritas);
-        setLoading(false);
-    }
-
-    React.useEffect(() => {
-       if(user.loggedIn){ 
-            loadRecipes();
-       }
-    }, [user])
 
     return (
         <>
@@ -69,7 +36,7 @@ export default function FavoriteScreen() {
                 : <>
                 {/**<Text style={styles.usuario}>{`Usuario: ${userId}`}</Text>*/}
                 
-                { loading ? <View style={{flex: 1, justifyContent: "center"}}><ActivityIndicator size="large" color="#ff914d"/></View> : total === '0' ? 
+                { loading ? <View style={{flex: 1, justifyContent: "center"}}><ActivityIndicator size="large" color="#ff914d"/></View> : totalReceitas === '0' ? 
                 <>
                 <View style={{
                     flex: 1, 
@@ -100,7 +67,7 @@ export default function FavoriteScreen() {
                     borderBottomWidth: 0.5,
                     borderBottomColor:'black',
                     margin:10,
-                }}>{total} {(total === '1') ? "receita" : "receitas"}</Text>                
+                }}>{totalReceitas} {(totalReceitas === '1') ? "receita" : "receitas"}</Text>                
                 </View>
                 <Card_Component receitas={receitas} onRefresh={onRefresh}/>
                 </>
