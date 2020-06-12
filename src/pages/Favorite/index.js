@@ -34,8 +34,13 @@ export default function FavoriteScreen() {
           .catch(function (error) {
             setError(error)
           });
-    
+        
         setReceitas([...receitas, ...response.data]);
+        (receitas).map(receita => {
+            receita['id'] = receita['receita_id'];
+            delete receita.receita_id;
+        })
+        console.log(receitas);
         setTotalReceitas(response.headers.total_receitas_favoritas);
         setPage(page + 1);
       }
