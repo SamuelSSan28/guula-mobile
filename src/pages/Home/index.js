@@ -2,16 +2,36 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import api from '../../services/api.js'
 import Header_Base from '../Componentes/Header_Base';
-
 import Card_Component from '../Componentes/Card';
+import Alert from '../Componentes/Alert';
 
 
 export default function HomeScreen(){
   const [recipes, setRecipes] = useState([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertContent, setAlertContent] = useState('');
+
+  async function onRefresh(){
+    setRecipes([]);
+    await loadRecipes();
+  }
 
   async function loadRecipes(){
-    const res = await api.get("recipes/random/8").catch(function(err){alert(err)});
-    setRecipes(res.data);
+    if(loading){
+      return;
+    }
+    setLoading(true);
+    const res = await api.get(`recipes?page=${page}`).catch(function(err){setShowAlert(true), setAlertContent(err)});
+    const receitas = res.data;
+    for (let i = receitas.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [receitas[i], receitas[j]] = [receitas[j], receitas[i]];
+  }
+    setRecipes([...recipes,...receitas]);
+    setPage(page+1);
+    setLoading(false);
   }
   useEffect( () => {loadRecipes()}, []); 
 
@@ -26,7 +46,8 @@ export default function HomeScreen(){
   return(
     <>
     <Header_Base/>
-    <Card_Component receitas={recipes}/> 
+    <Card_Component receitas={recipes} func={loadRecipes} loading={loading} onRefresh={onRefresh}/>  
+    {showAlert && <Alert content={alertContent} setShowAlert={setShowAlert}/>}
     </>
     )
 }

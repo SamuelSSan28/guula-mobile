@@ -1,39 +1,11 @@
 import * as React from 'react';
 import { useState } from 'react';
 import api from '../../services/api';
-import { Text, View, StyleSheet, ActivityIndicator, TouchableOpacity, AsyncStorage } from 'react-native';
+import { Text, ActivityIndicator,KeyboardAvoidingView,Platform } from 'react-native';
 import { TextInput, HelperText, Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 50,
-    backgroundColor: "transparent"
-  },
-  input: {
-    height: 45,
-    backgroundColor: "transparent",
-    borderRadius: 5,
-    borderColor: "grey",
-    borderWidth: 1,
-  },
-  submitButton: {
-
-  },
-  submitButtonText: {
-
-  },
-  text: {
-    textAlign: "center",
-    color: "#616161",
-    fontSize: 15,
-    paddingBottom: 30
-  }
-
-})
+import styles from './styles';
+import Alert from '../Componentes/Alert';
 
 export default function LoginScreen(props) {
 
@@ -44,6 +16,10 @@ export default function LoginScreen(props) {
   const [loading, setLoading] = useState(false);
   const [emailErr, setEmailErr] = useState(false);
   const [pwErr, setPwErr] = useState(false);
+
+  const [alertContent, setAlertContent] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
+  
 
   function navigateToSignUp() {
     navigation.navigate('Cadastro');
@@ -78,38 +54,28 @@ export default function LoginScreen(props) {
         loggedIn: true
       });
     } catch (err) {
-      alert(err.response.data.error);
+      setShowAlert(true);
+      setAlertContent(err.response.data.error)
     }
-    setLoading(false);
+    //setLoading(false);
   }
 
-  function isEmail(field) {
-    var usuario = field.substring(0, field.indexOf("@"));
-    var dominio = field.substring(field.indexOf("@") + 1, field.length);
-
-    if ((usuario.length >= 1) &&
-      (dominio.length >= 3) &&
-      (usuario.search("@") == -1) &&
-      (dominio.search("@") == -1) &&
-      (usuario.search(" ") == -1) &&
-      (dominio.search(" ") == -1) &&
-      (dominio.search(".") != -1) &&
-      (dominio.indexOf(".") >= 1) &&
-      (dominio.lastIndexOf(".") < dominio.length - 1)) {
-      return true;
-    }
-    else {
-      return false;
-    }
+  function isEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
   }
 
   return (
     <>
-      <View style={styles.container}>
-        <Text style={styles.text}>Entre com a sua conta para salvar suas receitas favoritas!</Text>
+      <KeyboardAvoidingView 
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <Text style={styles.textTop}>Entre com a sua conta para salvar suas receitas favoritas!</Text>
          <TextInput
           style={styles.input}
           placeholder="Email"
+          keyboardType="email-address"
           value={email_p}
           placeholderTextColor="black"
           onChangeText={text => { setEmail(text); setEmailErr(false) }}
@@ -123,6 +89,9 @@ export default function LoginScreen(props) {
         <HelperText
           type="error"
           visible={emailErr}
+          style={{
+            fontFamily:'Poppins_400Regular',
+          }}
         >
           Email inválido
         </HelperText>
@@ -142,15 +111,18 @@ export default function LoginScreen(props) {
         <HelperText
           type="error"
           visible={pwErr}
+          style={{
+            fontFamily:'Poppins_400Regular',
+          }}
         >
           A senha deve possuir ao menos 6 caracteres
         </HelperText>
         {loading ? <ActivityIndicator size="small" color="#ff914d" /> : <Button mode="contained" onPress={() => handleValidation()} color='#ff914d' dark={true}>
           Entrar
        </Button>}
-          <Text style={{color: "#616161", fontSize: 14, textAlign: "center", padding: 10}}>Não tem uma conta? <Text onPress={() => navigateToSignUp()} style={{ color: "#ff914d", fontSize: 14 }}>Cadastre-se</Text>.</Text>
-      </View>
-
+          <Text style={styles.textBottom}>Não tem uma conta? <Text onPress={() => navigateToSignUp()} style={{ color: "#ff914d", fontSize: 14 }}>Cadastre-se</Text>.</Text>
+      </KeyboardAvoidingView>
+    {showAlert && <Alert content={alertContent} setShowAlert={setShowAlert}/>}
     </>
   )
 }

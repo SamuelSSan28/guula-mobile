@@ -1,73 +1,83 @@
 import * as React from 'react';
 import LoginScreen from '../Login';
-import api from '../../services/api';
 import styles from './styles';
 import Card_Component from '../Componentes/Card';
 import UserContext from '../../../providers/UserProvider';
-import {
-    View,
-    Text,
-    AsyncStorage //armazenar dados dos usuario (id, nome)
-} from 'react-native';
+import FavoriteProvider from '../../../providers/FavoriteProvider';
+import Alert from '../Componentes/Alert';
+import { View, Text, Image } from 'react-native';
 import Header_Base from '../Componentes/Header_Base';
+import { ActivityIndicator } from 'react-native-paper';
+import api from '../../services/api';
 
 export default function FavoriteScreen() {
 
-    const [receitas, setReceitas] = React.useState([]);
-    const [total, setTotal] = React.useState(0);
-    const [loading, setLoading] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);//implementar no provider
     const [error, setError] = React.useState(null);
 
-    const {user, setUser} = React.useContext(UserContext);
+    const [totalReceitas, setTotalReceitas] = React.useState(0);
+    const [page, setPage] = React.useState(1);
 
-    async function loadRecipes() {
-        if (loading) {
-            return;
-        }
+    const { user, setUser } = React.useContext(UserContext);
+    const { receitas, setReceitas } = React.useContext(FavoriteProvider);
 
-        if (total > 0 && receitas.length === total) {
-            return;
-        }
-
-        setLoading(true);
-        const response = await api.get('favorites', {
-            headers: {
-                Authorization: user.id,
-            }
-        })
-            .catch(function (error) {
-                setError(error)
-            });
-
-        setReceitas([...receitas, ...response.data]);
-        setTotal(response.headers.total_receitas_favoritas);
-        setLoading(false);
+    function onRefresh() {
+        loadRecipes();
     }
 
-    React.useEffect(() => {
-        loadRecipes();
-    }, [user])
+    async function loadRecipes(){
+        const response = await api.get(`favorites?page=${page}`, {
+          headers: {
+            Authorization: user.id,
+          }
+        })
+          .catch(function (error) {
+            setError(error)
+          });
+        
+        setReceitas([...receitas, ...response.data]);
+        (receitas).map(receita => {
+            receita['id'] = receita['receita_id'];
+            delete receita.receita_id;
+        })
+        console.log(receitas);
+        setTotalReceitas(response.headers.total_receitas_favoritas);
+        setPage(page + 1);
+      }
 
+      React.useEffect(() => {
+          loadRecipes();
+      }, [user])
+
+      
     return (
         <>
-        <Header_Base/>
+            <Header_Base />
             {!user.loggedIn ?
-            <>
-                <LoginScreen setIsSignIn={setUser}/>
-            </>
+                <>
+                    <LoginScreen setIsSignIn={setUser} />
+                </>
                 : <>
-            <View style={styles.container}>
-                {/**<Text style={styles.usuario}>{`Usuario: ${userId}`}</Text>*/}
-                <View style={styles.total}>
-                <Text style={{
-                    borderBottomWidth: 0.5,
-                    borderBottomColor:'black',
-                    margin:10,
-                }}>{total} {(total === '1') ? "receita" : "receitas"}</Text>                
-                </View>
-                <Card_Component receitas={receitas}/>
-            </View>        
+                    {/**<Text style={styles.usuario}>{`Usuario: ${userId}`}</Text>*/}
+
+                    {loading ? <View style={{ flex: 1, justifyContent: "center" }}><ActivityIndicator size="large" color="#ff914d" /></View> : totalReceitas === '0' ?
+                        <>
+                            <View style={styles.contentView}>
+                                <Image style={styles.image}
+                                    source={require('../../assets/book.png')} />
+                                <Text style={styles.centerText}>Favorite receitas para guardá-las para mais tarde. Nós vamos matê-las aqui para você!</Text>
+                            </View>
+                        </>
+                        :
+                        <>
+                            <View style={styles.totalView}>
+                                <Text style={styles.totalText}>{totalReceitas} {(totalReceitas === '1') ? "receita" : "receitas"}</Text>
+                            </View>
+                            <Card_Component receitas={receitas} func={loadRecipes} onRefresh={onRefresh} />
+                        </>
+                    }
                 </>}
+            {error && <Alert content={error} setShowAlert={setError} />}
         </>
     )
 }

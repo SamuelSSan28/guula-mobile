@@ -2,37 +2,9 @@ import React, { useState } from 'react';
 import { TextInput, Button, HelperText } from 'react-native-paper';
 import Header_Back from '../Componentes/Header_Back'
 import api from '../../services/api';
-import { Text, View, ActivityIndicator, StyleSheet } from 'react-native';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "flex-start",
-    padding: 50,
-    backgroundColor: "transparent"
-  },
-  input: {
-    height: 45,
-    backgroundColor: "transparent",
-    borderRadius: 5,
-    borderColor: "grey",
-    borderWidth: 1,
-  },
-  submitButton: {
-
-  },
-  submitButtonText: {
-
-  },
-  text: {
-    textAlign: "center",
-    color: "#616161",
-    fontSize: 15,
-    paddingBottom: 30
-  }
-
-})
-
+import { Text, Alert, ActivityIndicator, Platform, KeyboardAvoidingView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import styles from './styles.js'
 
 export default function SignupScreen() {
 
@@ -49,25 +21,11 @@ export default function SignupScreen() {
   const [mensagem_email_erro, setMensagem_email_erro] = useState('');
   const [loading, setLoading] = React.useState(false);
 
+  const navigation = useNavigation();
 
-  function isEmail(field) {
-    usuario = field.substring(0, field.indexOf("@"));
-    dominio = field.substring(field.indexOf("@") + 1, field.length);
-
-    if ((usuario.length >= 1) &&
-      (dominio.length >= 3) &&
-      (usuario.search("@") == -1) &&
-      (dominio.search("@") == -1) &&
-      (usuario.search(" ") == -1) &&
-      (dominio.search(" ") == -1) &&
-      (dominio.search(".") != -1) &&
-      (dominio.indexOf(".") >= 1) &&
-      (dominio.lastIndexOf(".") < dominio.length - 1)) {
-      return true;
-    }
-    else {
-      return false;
-    }
+  function isEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
   }
 
   async function funcao_validar() {
@@ -104,6 +62,7 @@ export default function SignupScreen() {
 
   async function funcao_cadastrar() {
 
+
     if (loading) {
       return;
     }
@@ -118,14 +77,32 @@ export default function SignupScreen() {
     try {
       const response = await api.post('users', data);
       if (response.status == 200) {
-        alert('Usuário cadastrado com sucesso!');
+        Alert.alert(
+          'Sucesso',
+          'Usuário cadastrado com sucesso!',
+          [
+            { text: 'OK', onPress: () => navigation.goBack() }
+          ],
+          { cancelable: false }
+        );
       }
       else {
-        alert('Falha ao cadastrar usuário');
+        Alert.alert(
+          'Erro',
+          'Falha ao cadastrar usuário!',
+          null,
+          { cancelable: false }
+        );
       }
 
     } catch (err) {
-      alert('Falha ao cadastrar usuário');
+      Alert.alert(
+        'Erro',
+        err.response.data.error,
+        null,
+        { cancelable: false }
+      );
+
     }
     setLoading(false);
   }
@@ -134,92 +111,95 @@ export default function SignupScreen() {
   return (
     <>
       <Header_Back />
-      <View style={styles.container}>
-      <Text style={styles.text}>Crie sua conta de maneira rápida e fácil!</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Nome"
-        value={text_nome}
-        placeholderTextColor="black"
-        onChangeText={text_nome => { setText_nome(text_nome); setNome_erro(false); }}
-        underlineColor="transparent"
-        theme={{
-          colors: {
-            primary: 'transparent'
-          }
-        }}
-        error={nome_erro}
-      />
-      <HelperText
-        type="error"
-        visible={nome_erro}
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        style={styles.container}
       >
-        {mensagem_nome_erro}
-      </HelperText>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={text_email}
-        placeholderTextColor="black"
-        onChangeText={text_email => { setText_email(text_email); setEmail_erro(false); }}
-        underlineColor="transparent"
-        theme={{
-          colors: {
-            primary: 'transparent'
-          }
-        }}
-        error={email_erro}
-      />
-      <HelperText
-        type="error"
-        visible={email_erro}
-      >
-        {mensagem_email_erro}
-      </HelperText>
-      <TextInput secureTextEntry={true}
-        style={styles.input}
-        placeholder="Senha"
-        value={text_senha}
-        placeholderTextColor="black"
-        onChangeText={text_senha => { setText_senha(text_senha); setSenha_erro(false); }}
-        underlineColor="transparent"
-        theme={{
-          colors: {
-            primary: 'transparent'
-          }
-        }}
-        error={senha_erro}
-      />
-      <HelperText
-        type="error"
-        visible={senha_erro}
-      >
-        {mensagem_senha_erro}
-      </HelperText>
-      <TextInput secureTextEntry={true}
-        style={styles.input}
-        placeholder="Confirmar Senha"
-        value={text_confirmar_senha}
-        placeholderTextColor="black"
-        onChangeText={text_confirmar_senha => { setText_confirmar_senha(text_confirmar_senha); setSenha_erro(false); }}
-        underlineColor="transparent"
-        theme={{
-          colors: {
-            primary: 'transparent'
-          }
-        }}
-        error={senha_erro}
-      />
-      <HelperText
-        type="error"
-        visible={senha_erro}
-      >
-        {mensagem_senha_erro}
-      </HelperText>
-      {loading ? <ActivityIndicator size="small" color="#ff914d" /> : <Button mode="contained" onPress={() => { funcao_validar() }} color='#ff914d' dark={true}>
-        Cadastrar
+        <Text style={styles.textTop}>Crie sua conta de maneira rápida e fácil!</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Nome"
+          value={text_nome}
+          placeholderTextColor="black"
+          onChangeText={text_nome => { setText_nome(text_nome); setNome_erro(false); }}
+          underlineColor="transparent"
+          theme={{
+            colors: {
+              primary: 'transparent'
+            }
+          }}
+          error={nome_erro}
+        />
+        <HelperText
+          type="error"
+          visible={nome_erro}
+        >
+          {mensagem_nome_erro}
+        </HelperText>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={text_email}
+          placeholderTextColor="black"
+          onChangeText={text_email => { setText_email(text_email); setEmail_erro(false); }}
+          underlineColor="transparent"
+          theme={{
+            colors: {
+              primary: 'transparent'
+            }
+          }}
+          error={email_erro}
+        />
+        <HelperText
+          type="error"
+          visible={email_erro}
+        >
+          {mensagem_email_erro}
+        </HelperText>
+        <TextInput secureTextEntry={true}
+          style={styles.input}
+          placeholder="Senha"
+          value={text_senha}
+          placeholderTextColor="black"
+          onChangeText={text_senha => { setText_senha(text_senha); setSenha_erro(false); }}
+          underlineColor="transparent"
+          theme={{
+            colors: {
+              primary: 'transparent'
+            }
+          }}
+          error={senha_erro}
+        />
+        <HelperText
+          type="error"
+          visible={senha_erro}
+        >
+          {mensagem_senha_erro}
+        </HelperText>
+        <TextInput secureTextEntry={true}
+          style={styles.input}
+          placeholder="Confirmar Senha"
+          value={text_confirmar_senha}
+          placeholderTextColor="black"
+          onChangeText={text_confirmar_senha => { setText_confirmar_senha(text_confirmar_senha); setSenha_erro(false); }}
+          underlineColor="transparent"
+          theme={{
+            colors: {
+              primary: 'transparent'
+            }
+          }}
+          error={senha_erro}
+        />
+        <HelperText
+          type="error"
+          visible={senha_erro}
+        >
+          {mensagem_senha_erro}
+        </HelperText>
+        {loading ? <ActivityIndicator size="small" color="#ff914d" /> : <Button mode="contained" onPress={() => { funcao_validar() }} color='#ff914d' dark={true}>
+          Cadastrar
        </Button>}
-    </View>
-      </>
-    );
+      </KeyboardAvoidingView>
+    </>
+  );
 }

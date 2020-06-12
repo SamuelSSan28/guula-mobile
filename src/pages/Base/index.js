@@ -4,14 +4,6 @@ import HomeScreen from '../Home';
 import SearchScreen from '../Search';
 import FavoriteScreen from '../Favorite';
 
-
-import {
-    View,
-    Text,
-    AsyncStorage //armazenar dados dos usuario (id, nome)
-  } from 'react-native';
-
-
 const HomeRoute = () => <HomeScreen/>;
 
 const SearchRoute = () => <SearchScreen/>;
