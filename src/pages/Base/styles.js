@@ -14,7 +14,8 @@ export default StyleSheet.create({
         justifyContent: 'space-between',
         alignItems:'center',
         backgroundColor: '#ff914d',
-        fontFamily: 'sans-serif-light'
+        fontFamily: 'sans-serif-light',
+        margin:0
     },   
     bottomMenu:{
         fontFamily: 'sans-serif-light',

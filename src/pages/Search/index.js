@@ -1,18 +1,41 @@
 import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet, FlatList } from 'react-native';
-import { Chip, List, Searchbar,Appbar,Subheading } from 'react-native-paper';
-import Header_Search from '../Componentes/Header_Search';
+import { View, StyleSheet, FlatList,Text,TouchableOpacity, ActivityIndicator,Image } from 'react-native';
+import { Chip, List, Searchbar,Appbar,Subheading,Divider,Card, Title, Paragraph,IconButton } from 'react-native-paper';
 import style from '../Base/styles';
-import { set } from 'react-native-reanimated';
+import api from '../../services/api.js'
+import Constants from "expo-constants";
 
 const styles = StyleSheet.create({
     container: {
       flex: 1,
+      marginTop: Constants.statusBarHeight,
+      marginHorizontal: 3
+
     },
+	ingredientes_box:{
+		margin: 10,
+	},
+	ingredientes_quant_box:{
+		margin: 5,
+		alignItems:'center',
+	},
+	ingredientes_box_text:{
+		marginBottom: 5,
+		color:"#a6a6a6",
+		fontSize:15,
+		fontWeight: "bold",
+	
+	},
+	ingredientes_quant_text:{
+		color:"#a6a6a6",
+		fontSize:16,
+
+	},
     row: {
       flexDirection: 'row',
       flexWrap: 'wrap',
-      paddingHorizontal: 12,
+      paddingHorizontal: 0,
+      marginTop:0
     },
     chip: {
       backgroundColor:"#ff914d",
@@ -22,65 +45,181 @@ const styles = StyleSheet.create({
     tiny: {
       color:"#ffff"
     },
+    text: {
+      textAlign: "center",
+      color: "#616161",
+      fontSize: 15,
+      paddingBottom: 30
+    },container: {
+      flex: 1, 
+        justifyContent: "center",
+        backgroundColor:"#fff",
+        alignItems: "center",
+        padding: 10,
+    },
+    image:{
+      margin:10,
+      width: 150,
+      height: 150,
+    },
+  
   });
 
 
-function Greeting(props) {
-    const isLoggedIn = props.isLoggedIn;
-    if (isLoggedIn) {
-      return <UserGreeting />;
-    }
-    
-}
-
 export default function SearchScreeen(){
+  const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  let limpar = "";
   var [ingredientes, setIngredientes] = useState([]);
   const [quantReceitas, setQuantReceitas] = useState(0);
   const [refresh,setRefresh] = useState(false)
-  const renderItem = ({item:ingrediente}) => (
+  const [recipes, setRecipes] = useState([]);
+
+  const renderItemI = ({item:ingrediente}) => (
     <Chip onPress={() => {}} onClose={() => {_removeIngrediente(ingrediente)}} style={styles.chip} textStyle={styles.tiny}>
          {ingrediente}
     </Chip>
   );
 
+  const renderHeader= () => {
+      if (ingredientes.length  > 0 )
+      return (
+        <>
+        <View  style={styles.ingredientes_box}>
+              <Text style={styles.ingredientes_box_text}> Ingredientes: </Text> 
+              <View style={styles.row}>
+                <FlatList
+                showsVerticalScrollIndicator = {false}
+                data={ingredientes}
+                renderItem={renderItemI}
+                extraData={refresh}
+                keyExtractor={ingrediente => String(ingrediente)}
+                horizontal
+                />
+            </View>
+          </View>
+          <Divider />
+				
+          <View style={styles.ingredientes_quant_box}>
+            { (quantReceitas > 0 && ingredientes.length  > 0 ) ? 
+                  <>
+                    <Text style={styles.ingredientes_quant_text}>{quantReceitas} receitas encontradas</Text> 
+                  </>
+                  : 
+                  <View></View>}
+          </View>
+       </>
+      );
+      return(
+        <View>
+          
+        </View>
+      );        
+  }
+  
+  
+	const renderFooter = () => {
+		if (!loading) return null
+		return (
+		  <View
+			style={{
+			  paddingVertical: 20,
+			  borderTopWidth: 1,
+			  borderColor: '#CED0CE'
+			}}>
+			<ActivityIndicator animating size='large' />
+		  </View>
+		)
+	}
+
+	const renderItem = ({item:recipe}) => (
+	  <View>
+		 <Card style={{padding: 10,margin:5}} elevation={2} onPress={() => navigateToDetail(recipe)}>
+		  <TouchableOpacity>
+			<Card.Cover source={{ uri: recipe.imagem}} />
+			<Card.Content>  
+			  <Title>{recipe.titulo}</Title>
+        <IconButton style={styles.recipeIcons}
+                                icon="clock-outline"
+                                color="#ff914d"
+                                size={25}
+                            />
+			  <Paragraph>{recipe.tempo_preparo}, {recipe.rendimento} </Paragraph>
+			</Card.Content>
+		  </TouchableOpacity>
+		</Card>
+	  </View>
+	);
+	
+
 
   async function _onPressSearch(){
-    if(searchQuery == '')
+    if(searchQuery == '' || ingredientes.indexOf(searchQuery) != -1)
       return false
-    ingredientes.push(searchQuery)
+    ingredientes.push(searchQuery)   
+    _SearchRecipe()
+    setSearchQuery("")
     setRefresh(!refresh)
   }
   
   async function _removeIngrediente(ingrediente){
     var index = ingredientes.indexOf(ingrediente);
     if (index != -1) ingredientes.splice(index, 1);
-    setRefresh(!refresh)
+    _SearchRecipe()
+    setQuantReceitas(quantReceitas - 1)
+  }
+
+  async function _SearchRecipe(){
+    var lista_ingredientes = "";
+
+    if (ingredientes.length== 0)
+      return "Sem receitas pra vc meu consagrado"
+
+    for(var i = 0; i < ingredientes.length; i++){
+      lista_ingredientes += ingredientes[i]+" "
+    }
+    const res = await api.get("recipes/ingredientes",{ 'headers': { 'ingredientes': lista_ingredientes }   });
+    setRecipes(res.data);
+    setQuantReceitas(res.headers.total_receitas_by_ingredientes)
+    setLoading(false)
   }
 
     return (    
       <>
-       <Appbar.Header style={style.header}>
-        <Searchbar
-        placeholder="Search"
-        onChangeText={setSearchQuery}
-        onIconPress={_onPressSearch}
-        iconColor="#ff914d"
-          />
-		  </Appbar.Header>
+        <Appbar.Header style={style.header}>
+          <Searchbar
+          style={
+            { flexDirection: 'row-reverse',}
+          }
+          placeholder="Search"
+          onChangeText={setSearchQuery}
+          onIconPress={_onPressSearch}
+          iconColor="#ff914d"
+          value={searchQuery}
+            />
+        </Appbar.Header>
 
-       <ScrollView style={[styles.container]} >
-        {ingredientes.length ? <List.Section title="Ingredientes: ">
-          <FlatList
-          contentContainerStyle={styles.row}
-          data={ingredientes}
-          renderItem={renderItem}
-          extraData={refresh}
-          />
+		 
+        {console.log("Quantidade: "+quantReceitas)}
+        {console.log(ingredientes.length)}
+        {(quantReceitas > 0 && ingredientes.length  > 0 ) ?  
+             <FlatList
+                style={{ marginTop: 8 }}
+                contentContainerStyle={styles.content}
+                showsVerticalScrollIndicator = {false}
+                data={recipes}
+                keyExtractor={receita => String(receita.id)}
+                renderItem={renderItem}
+                ListFooterComponent={renderFooter}
+                ListHeaderComponent={renderHeader}
+                   />       
+              : <View style={styles.container}>
+                  <Image style={styles.image}
+                             source={require('../assets/ingredientes.png')} />
+                  <Text  style={styles.text}>Pesquise os ingredientes que voce tem ai do seu ladinho, em cima dessa pia de marmore</Text>
+                </View>}
+
           
-        </List.Section>:<View></View>}
-      </ScrollView>
-      
       </>
     ); 
   
