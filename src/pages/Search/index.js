@@ -4,6 +4,7 @@ import { Chip, List, Searchbar,Appbar,Subheading,Divider,Card, Title, Paragraph,
 import style from '../Base/styles';
 import api from '../../services/api.js'
 import Constants from "expo-constants";
+import {useNavigation,useRoute} from '@react-navigation/native'
 
 const styles = StyleSheet.create({
     container: {
@@ -62,6 +63,23 @@ const styles = StyleSheet.create({
       width: 150,
       height: 150,
     },
+    recipeInfo: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-evenly'
+  }, recipeIconsAndInfo: {
+  alignItems: 'center',
+  flexDirection: 'row',
+  },
+  recipeInfoColor: {
+      color: "#545454"
+  },titulo: {
+    textAlign: "center",
+    color: "#545454",
+    fontSize: 19,
+    fontWeight:"300",
+    fontFamily:""
+  }
   
   });
 
@@ -80,6 +98,11 @@ export default function SearchScreeen(){
          {ingrediente}
     </Chip>
   );
+  const navegation = useNavigation();
+
+  function navigateToDetail(receita){
+    navegation.navigate('Recipe',{receita});
+	}
 
   const renderHeader= () => {
       if (ingredientes.length  > 0 )
@@ -133,23 +156,34 @@ export default function SearchScreeen(){
 	}
 
 	const renderItem = ({item:recipe}) => (
-	  <View>
-		 <Card style={{padding: 10,margin:5}} elevation={2} onPress={() => navigateToDetail(recipe)}>
-		  <TouchableOpacity>
-			<Card.Cover source={{ uri: recipe.imagem}} />
-			<Card.Content>  
-			  <Title>{recipe.titulo}</Title>
+    <Card style={{padding: 10,margin:5}} elevation={2}>
+    <TouchableOpacity onPress={() => navigateToDetail(recipe)}>
+    <Card.Cover source={{ uri: recipe.imagem}} />
+    <View>  
+      <Title  style={styles.titulo}>{recipe.titulo}</Title>
+    </View>
+    <View style={styles.recipeInfo}>
+      <View style={styles.recipeIconsAndInfo}>
         <IconButton style={styles.recipeIcons}
-                                icon="clock-outline"
-                                color="#ff914d"
-                                size={25}
-                            />
-			  <Paragraph>{recipe.tempo_preparo}, {recipe.rendimento} </Paragraph>
-			</Card.Content>
-		  </TouchableOpacity>
-		</Card>
-	  </View>
-	);
+          icon="clock-outline"
+          color="#ff914d"
+          size={25}
+        />
+        <Text style={styles.recipeInfoColor}>{recipe.tempo_preparo}</Text>
+      </View>
+      <View style={styles.recipeIconsAndInfo}>
+        <IconButton style={styles.recipeIcons}
+          icon="circle-slice-1"
+          color="#ff914d"
+          size={25}
+        />
+        <Text style={styles.recipeInfoColor}>{recipe.rendimento}</Text>
+      </View>
+    </View>
+    </TouchableOpacity>
+    {setLoading(false)}
+  </Card>
+ );
 	
 
 
@@ -199,9 +233,6 @@ export default function SearchScreeen(){
             />
         </Appbar.Header>
 
-		 
-        {console.log("Quantidade: "+quantReceitas)}
-        {console.log(ingredientes.length)}
         {(quantReceitas > 0 && ingredientes.length  > 0 ) ?  
              <FlatList
                 style={{ marginTop: 8 }}
@@ -210,6 +241,7 @@ export default function SearchScreeen(){
                 data={recipes}
                 keyExtractor={receita => String(receita.id)}
                 renderItem={renderItem}
+                initialNumToRender = {5}
                 ListFooterComponent={renderFooter}
                 ListHeaderComponent={renderHeader}
                    />       
