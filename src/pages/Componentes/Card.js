@@ -1,28 +1,15 @@
-<<<<<<< HEAD
 import React, { useState } from 'react';
-import { Card, Title, Paragraph,IconButton} from 'react-native-paper';
-=======
-import * as React from 'react';
-import { Card, Title, Paragraph } from 'react-native-paper';
->>>>>>> b666f6e4e5e8b8975f6db55d5b2675efd877c9d5
+import { Card, Title,IconButton} from 'react-native-paper';
 import {useNavigation,useRoute} from '@react-navigation/native'
 
 import {
 	StyleSheet,
-<<<<<<< HEAD
 	TouchableOpacity, 	
 	FlatList, 
-	ScrollView,
+	ActivityIndicator,
 	View,
 	Text} from 'react-native';
-import { NavigationEvents } from 'react-navigation';
-=======
-	TouchableOpacity, 
-	FlatList, 
-	ScrollView, 
-	View,
-	Dimensions} from 'react-native';
->>>>>>> b666f6e4e5e8b8975f6db55d5b2675efd877c9d5
+
 
 const styles = StyleSheet.create({
   content:{
@@ -39,32 +26,46 @@ const styles = StyleSheet.create({
     },
     recipeInfoColor: {
         color: "#545454"
-    },
+	},
+	titulo: {
+		textAlign: "center",
+		color: "#545454",
+		fontSize: 19,
+		fontWeight:"300",
+		fontFamily:""
+	  }
 })
-
 
 
 export default function Card_Component(props) {
 	const navegation = useNavigation();
-	
-	function navigateToDetail(recipe){
-<<<<<<< HEAD
-        navegation.navigate('Recipe',{recipe});
+	const [loading, setLoading] = useState(true);
+
+	function navigateToDetail(receita){
+		console.log("Navigate")
+        navegation.navigate('Recipe',{receita});
 	}
-	
-=======
-        navegation.navigate('Receita',{recipe});
-    }
->>>>>>> b666f6e4e5e8b8975f6db55d5b2675efd877c9d5
-	
+
+	const renderFooter = () => {
+		if (!loading) return null
+		return (
+		  <View
+			style={{
+			  paddingVertical: 20,
+			  borderTopWidth: 1,
+			  borderColor: '#CED0CE'
+			}}>
+			<ActivityIndicator animating size='large' />
+		  </View>
+		)
+	}
+
 	const renderItem = ({item:recipe}) => (
-	  <View>
-		 <Card style={{padding: 10,margin:5}} elevation={2} onPress={() => navigateToDetail(recipe)}>
-		  <TouchableOpacity>
+		 <Card style={{padding: 10,margin:5}} elevation={2}>
+		  <TouchableOpacity onPress={() => navigateToDetail(recipe)}>
 			<Card.Cover source={{ uri: recipe.imagem}} />
-<<<<<<< HEAD
 			<View>  
-			  <Title>{recipe.titulo}</Title>
+			  <Title style={styles.titulo}>{recipe.titulo}</Title>
 			</View>
 			<View style={styles.recipeInfo}>
 				<View style={styles.recipeIconsAndInfo}>
@@ -84,35 +85,23 @@ export default function Card_Component(props) {
 					<Text style={styles.recipeInfoColor}>{recipe.rendimento}</Text>
 				</View>
 			</View>
-=======
-			<Card.Content>  
-			  <Title>{recipe.titulo}</Title>
-			  <Paragraph>{recipe.tempo_preparo}, {recipe.rendimento} </Paragraph>
-			</Card.Content>
->>>>>>> b666f6e4e5e8b8975f6db55d5b2675efd877c9d5
 		  </TouchableOpacity>
+		  {setLoading(false)}
 		</Card>
-	  </View>
 	);
 	
-<<<<<<< HEAD
     return (  
-=======
-    return (   
->>>>>>> b666f6e4e5e8b8975f6db55d5b2675efd877c9d5
       <>
       {(props.receitas !== undefined) &&
           <FlatList
                 style={{ marginTop: 8 }}
                 contentContainerStyle={styles.content}
 				showsVerticalScrollIndicator = {false}
+				initialNumToRender = {5}
                 data={props.receitas}
                 keyExtractor={receita => String(receita.id)}
-<<<<<<< HEAD
 				renderItem={renderItem}
-=======
-                renderItem={renderItem}
->>>>>>> b666f6e4e5e8b8975f6db55d5b2675efd877c9d5
+				ListFooterComponent={renderFooter}
             />       
       }
       </>

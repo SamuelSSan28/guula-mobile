@@ -54,10 +54,10 @@ export default function LoginScreen(props) {
         loggedIn: true
       });
     } catch (err) {
+      setLoading(false);
       setShowAlert(true);
       setAlertContent(err.response.data.error)
     }
-    //setLoading(false);
   }
 
   function isEmail(email) {

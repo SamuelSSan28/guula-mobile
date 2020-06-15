@@ -35,14 +35,6 @@ export default function HomeScreen(){
   }
   useEffect( () => {loadRecipes()}, []); 
 
-
-  /*  
-    function navigateToDetail(incident){
-        navegation.navigate('Detail',{incident});
-    }
-    Passar os dados das receitas para a rota de receitas
-    */
-
   return(
     <>
     <Header_Base/>
