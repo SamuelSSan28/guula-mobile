@@ -4,7 +4,12 @@ import { Text, View, StyleSheet, Image, PixelRatio } from 'react-native';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 import {useNavigation,useRoute} from '@react-navigation/native'
 import { ScrollView } from 'react-native-gesture-handler';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import api from '../../services/api';
+import UserContext from '../../../providers/UserProvider';
+import FavoriteProvider from '../../../providers/FavoriteProvider';
+import SnackbarComponent from '../Componentes/Snackbar';
+
 
 const styles = StyleSheet.create({
     titleAndFavouriteContent: {
@@ -58,13 +63,61 @@ const styles = StyleSheet.create({
 export default function RecipeScreen() {
 	const navegation = useNavigation();
     const route = useRoute();
+    const { user } = React.useContext(UserContext);
+    const { receitas, setReceitas, totalReceitas, setTotalReceitas } = React.useContext(FavoriteProvider);
+
+    const [heart, setHeart] = useState(false);
+    const [showSnackbar, setShowSnackbar] = useState(false);
+    const [snackbarContent, setSnackbarContent] = useState('');
 	
     const recipe = route.params.receita;
-    
-    console.log(recipe)
-    /*let imagem = require('./pizza.png')
+        /*let imagem = require('./pizza.png')
     let source = resolveAssetSource(imagem)*/
-	
+    async function handleFavorite(){
+
+        if(!user.loggedIn){
+            //usuario não logado
+            return
+        }
+
+        if(heart){
+            setHeart(false);
+            await api.delete(`favorites/${recipe.id}`, {
+                headers: {
+                    authorization: user.id
+                }
+            }).catch(function(error){
+
+            })
+            setTotalReceitas(Number(totalReceitas) - 1)
+            setReceitas(receitas.filter(receita => receita.id !== recipe.id))
+            setSnackbarContent("Receita removida dos favoritos!")
+            setShowSnackbar(true);
+
+        }else{
+            setHeart(true);
+            await api.post('favorites',{receita_id: recipe.id}, {
+                headers: {
+                    authorization: user.id
+                }
+            }).catch(function(error){
+
+            })
+            const r = receitas;
+            r.push(recipe);
+            setReceitas(r);
+            setTotalReceitas(Number(totalReceitas) + 1);
+            setSnackbarContent("Receita adicionada aos favoritos!")
+            setShowSnackbar(true);
+        }
+    }
+    
+    useEffect(() => {
+        if(receitas.includes(recipe)){
+            setHeart(true);
+        }
+    }, [])
+    
     return (
         <>
             <Header_Back />
@@ -82,8 +135,9 @@ export default function RecipeScreen() {
                         <Text style={styles.recipeName}> {recipe.titulo}</Text>
                         <IconButton style={styles.recipeFavouriteIcon}
                             icon="heart"
-                            color="#d9d9d9"
+                            color={heart ? "red" : "#d9d9d9"}
                             size={30}
+                            onPress={handleFavorite}
                         />
                     </View>
                     <View style={styles.recipeInfo}>
@@ -129,6 +183,7 @@ export default function RecipeScreen() {
 						</Paragraph>
                     </View>
                 </View>
+                <SnackbarComponent visible={showSnackbar} setVisible={setShowSnackbar} content={snackbarContent} />
             </ScrollView>
         </>
     );

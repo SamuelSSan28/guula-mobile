@@ -20,6 +20,7 @@ export default function App() {
   })
  
   const [receitas, setReceitas] = useState([]);
+  const [totalReceitas, setTotalReceitas] = useState(0);
 
   async function loadUser() {
     try {
@@ -58,7 +59,7 @@ export default function App() {
 
   return (
     <UserProvider value={{ user, setUser }}>
-      <FavoriteProvider value={{receitas, setReceitas}}>
+      <FavoriteProvider value={{receitas, setReceitas, totalReceitas, setTotalReceitas}}>
         <PaperProvider>
           <Routes />
         </PaperProvider>
