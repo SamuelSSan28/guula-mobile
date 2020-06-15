@@ -1,13 +1,12 @@
 import { IconButton, Paragraph } from 'react-native-paper';
 import Header_Back from '../Componentes/Header_Back'
-import { Text, View, StyleSheet, Image, PixelRatio } from 'react-native';
-import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
-<<<<<<< HEAD
-import {useNavigation,useRoute} from '@react-navigation/native'
-=======
->>>>>>> b666f6e4e5e8b8975f6db55d5b2675efd877c9d5
+import { Text, View, StyleSheet, Image, Alert } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { ScrollView } from 'react-native-gesture-handler';
-import React from 'react';
+import React, { useState } from 'react';
+import UserContext from '../../../providers/UserProvider';
+import api from '../../services/api';
+import FavoriteProvider from '../../../providers/FavoriteProvider';
 
 const styles = StyleSheet.create({
     titleAndFavouriteContent: {
@@ -33,7 +32,7 @@ const styles = StyleSheet.create({
     recipeTitles: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         marginVertical: 10
     },
     recipeScroll: {
@@ -50,56 +49,86 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     recipeInfoColor: {
-        color: "#545454"
+        color: "#545454",
+        fontFamily: 'Poppins_400Regular'
     },
     recipeTitleText: {
-        fontSize: 20
+        fontSize: 20,
+        fontFamily: 'Poppins_700Bold'
     }
 })
 
 
 export default function RecipeScreen() {
-<<<<<<< HEAD
-	const navegation = useNavigation();
+
+    const navigation = useNavigation();
+
+    async function favoritarReceita() {
+        const data = {
+            receita_id: recipe.id
+        };
+
+        if (!favoritou) {
+            const response = await api.post('favorites', data, {
+                headers: {
+                    Authorization: user.id,
+                }
+            })
+                .catch(function (error) {
+                    Alert.alert(error)
+                });
+            if (response.status == 200) {
+                setReceitas([...receitas, ...[recipe]]);
+                setFavoritou(true);
+            }
+        }
+        else {
+            const response = await api.delete('favorites/' + recipe.id, {
+                headers: {
+                    Authorization: user.id,
+                }
+            })
+                .catch(function (error) {
+                    Alert.alert(error)
+                });
+            if (response.status == 204) {
+                setReceitas(receitas.filter(e => e.receita_id != recipe.id));
+                setFavoritou(false);
+            }
+        }
+    }
+
+    const navegation = useNavigation();
     const route = useRoute();
-	
-	const recipe = route.params.recipe;
-    /*let imagem = require('./pizza.png')
-    let source = resolveAssetSource(imagem)*/
-	
-=======
+    const { user, setUser } = React.useContext(UserContext);
+    const [source, setSource] = useState('');
+    const [recipe, setRecipe] = useState(route.params.recipe);
+    const { receitas, setReceitas } = React.useContext(FavoriteProvider);
+    const [favoritou, setFavoritou] = useState(receitas.some(e => e.id === recipe.id));
 
-    /*let imagem = require('./pizza.png')
-    let source = resolveAssetSource(imagem)*/
+    Image.getSize(recipe.imagem, (width, height) => { setSource({ width: width, height: height }); });
 
->>>>>>> b666f6e4e5e8b8975f6db55d5b2675efd877c9d5
     return (
         <>
             <Header_Back />
             <ScrollView style={styles.recipeScroll}>
-                {/*<Image
-                    style={{
-                        width: '100%',
-                        height: source.height / PixelRatio.get()
-                    }}
-<<<<<<< HEAD
-                    source= {recipe.imagem}
-=======
-                    source={imagem}
->>>>>>> b666f6e4e5e8b8975f6db55d5b2675efd877c9d5
-                    resizeMode="contain"
-                />*/}
+                <Image source={{ uri: recipe.imagem }} style={{ aspectRatio: source ? source.width / source.height : 1, width: '100%', height: null }} resizeMode='contain' />
                 <View style={styles.recipeView}>
                     <View style={styles.titleAndFavouriteContent}>
-<<<<<<< HEAD
                         <Text style={styles.recipeName}> {recipe.titulo}</Text>
-=======
-                        <Text style={styles.recipeName}>Pizza</Text>
->>>>>>> b666f6e4e5e8b8975f6db55d5b2675efd877c9d5
                         <IconButton style={styles.recipeFavouriteIcon}
                             icon="heart"
-                            color="#d9d9d9"
+                            color={favoritou ? "red" : "#d9d9d9"}
                             size={30}
+                            animated={true}
+                            onPress={() => {
+                                user.loggedIn ? favoritarReceita() : Alert.alert(
+                                    'Atenção',
+                                    'É preciso estar logado para favoritar suas receitas!',
+                                    null,
+                                    { cancelable: false }
+                                );
+                            }}
                         />
                     </View>
                     <View style={styles.recipeInfo}>
@@ -109,11 +138,7 @@ export default function RecipeScreen() {
                                 color="#ff914d"
                                 size={25}
                             />
-<<<<<<< HEAD
                             <Text style={styles.recipeInfoColor}> {recipe.tempo_preparo}</Text>
-=======
-                            <Text style={styles.recipeInfoColor}>20 Min</Text>
->>>>>>> b666f6e4e5e8b8975f6db55d5b2675efd877c9d5
                         </View>
                         <View style={styles.recipeIconsAndInfo}>
                             <IconButton style={styles.recipeIcons}
@@ -121,11 +146,7 @@ export default function RecipeScreen() {
                                 color="#ff914d"
                                 size={25}
                             />
-<<<<<<< HEAD
                             <Text style={styles.recipeInfoColor}> {recipe.rendimento}</Text>
-=======
-                            <Text style={styles.recipeInfoColor}>4 Pessoas</Text>
->>>>>>> b666f6e4e5e8b8975f6db55d5b2675efd877c9d5
                         </View>
                         <View style={styles.recipeIconsAndInfo}>
                             <IconButton style={styles.recipeIcons}
@@ -137,52 +158,20 @@ export default function RecipeScreen() {
                         </View>
                     </View>
                     <View style={styles.recipeTitles}>
-                        <Text style={styles.recipeTitleText}>Ingredientes </Text>
+                        <Text style={styles.recipeTitleText}>Ingredientes</Text>
                     </View>
                     <View>
                         <Paragraph style={styles.recipeInfoColor}>
-<<<<<<< HEAD
                             {recipe.ingredientes}
-						</Paragraph>
-=======
-                            1 kg de farinha de trigo
-
-                            30 g de fermento biológico
-
-                            3 xícaras de água morna
-
-                            3/4 xícaras de óleo
-
-                            1 colher (chá) de sal
-
-                            1 colher (chá) de açúcar
-
-                            1 colher (sopa) de pinga
-</Paragraph>
->>>>>>> b666f6e4e5e8b8975f6db55d5b2675efd877c9d5
+                        </Paragraph>
                     </View>
                     <View style={styles.recipeTitles}>
                         <Text style={styles.recipeTitleText}>Modo de Preparo</Text>
                     </View>
                     <View>
                         <Paragraph style={styles.recipeInfoColor}>
-<<<<<<< HEAD
-							{recipe.modo_preparo}
-						</Paragraph>
-=======
-                            Misture o fermento, o sal e o açúcar em um pouco de água morna, até que o fermento esteja completamente dissolvido.
-
-                            Em seguida, adicione metade da medida de farinha de trigo, o óleo e mexa até criar uma consistência pastosa.
-
-                            Acrescente o restante da farinha de trigo, a água morna e misture bem.
-
-                            Assim que a massa desgrudar das mãos, deixe crescer por 30 minutos.
-
-                            Abra os discos, fure a massa com um garfo e pincele o molho.
-
-                            Leve ao forno médio (180° C), preaquecido, por 15 minutos.
-</Paragraph>
->>>>>>> b666f6e4e5e8b8975f6db55d5b2675efd877c9d5
+                            {recipe.modo_preparo}
+                        </Paragraph>
                     </View>
                 </View>
             </ScrollView>
