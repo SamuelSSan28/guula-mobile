@@ -25,7 +25,6 @@ export default function SnackbarComponent(props) {
           theme={{
             colors:{
               accent: "#f47f37",
-              text: "#f47f37",
               surface: "#595959",
             },
             fonts:configureFonts({
