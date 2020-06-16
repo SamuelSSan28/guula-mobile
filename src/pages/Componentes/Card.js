@@ -41,9 +41,8 @@ export default function Card_Component(props) {
 	const navegation = useNavigation();
 	const [loading, setLoading] = useState(true);
 
-	function navigateToDetail(receita){
-		console.log("Navigate")
-        navegation.navigate('Recipe',{receita});
+	function navigateToDetail(recipe){
+        navegation.navigate('Recipe',{recipe});
 	}
 
 	const renderFooter = () => {

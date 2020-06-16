@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import UserContext from '../../../providers/UserProvider';
 import api from '../../services/api';
 import FavoriteProvider from '../../../providers/FavoriteProvider';
+import SnackbarComponent from '../Componentes/Snackbar';
 
 const styles = StyleSheet.create({
     titleAndFavouriteContent: {
@@ -79,6 +80,9 @@ export default function RecipeScreen() {
                 });
             if (response.status == 200) {
                 setReceitas([...receitas, ...[recipe]]);
+                setTotalReceitas(Number(totalReceitas)+1);
+                setSnackbarContent("Receita adicionada aos favoritos!")
+                setShowSnackbar(true);
                 setFavoritou(true);
             }
         }
@@ -92,7 +96,10 @@ export default function RecipeScreen() {
                     Alert.alert(error)
                 });
             if (response.status == 204) {
-                setReceitas(receitas.filter(e => e.receita_id != recipe.id));
+                setReceitas(receitas.filter(e => e.id != recipe.id));
+                setTotalReceitas(Number(totalReceitas)-1);
+                setSnackbarContent("Receita removida dos favoritos!")
+                setShowSnackbar(true);
                 setFavoritou(false);
             }
         }
@@ -103,9 +110,11 @@ export default function RecipeScreen() {
     const { user, setUser } = React.useContext(UserContext);
     const [source, setSource] = useState('');
     const [recipe, setRecipe] = useState(route.params.recipe);
-    const { receitas, setReceitas } = React.useContext(FavoriteProvider);
+    const { receitas, setReceitas, totalReceitas, setTotalReceitas } = React.useContext(FavoriteProvider);
     const [favoritou, setFavoritou] = useState(receitas.some(e => e.id === recipe.id));
-
+    const [showSnackbar, setShowSnackbar] = useState(false);
+    const [snackbarContent, setSnackbarContent] = useState('');
+    
     Image.getSize(recipe.imagem, (width, height) => { setSource({ width: width, height: height }); });
 
     return (
@@ -174,7 +183,10 @@ export default function RecipeScreen() {
                         </Paragraph>
                     </View>
                 </View>
+
             </ScrollView>
+            { true && <SnackbarComponent visible={showSnackbar} setVisible={setShowSnackbar} content={snackbarContent} />}
+
         </>
     );
 }

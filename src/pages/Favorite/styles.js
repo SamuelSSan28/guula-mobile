@@ -17,8 +17,7 @@ export default StyleSheet.create({
         padding: 0
     },
     totalText:{
-        borderBottomWidth: 0.5,
-        borderBottomColor:'black',
+       color:"#595959",
         margin:10,
         fontFamily: 'Poppins_400Regular'
     },
