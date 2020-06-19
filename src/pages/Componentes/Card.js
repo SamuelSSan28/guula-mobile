@@ -8,6 +8,7 @@ import {
 	FlatList, 
 	ActivityIndicator,
 	View,
+	RefreshControl,
 	Text} from 'react-native';
 
 
@@ -39,26 +40,28 @@ const styles = StyleSheet.create({
 
 export default function Card_Component(props) {
 	const navegation = useNavigation();
-	const [loading, setLoading] = useState(true);
+	const [refreshing, setRefreshing] = useState(false);
 
-	function navigateToDetail(receita){
-		console.log("Navigate")
-        navegation.navigate('Recipe',{receita});
+	function navigateToDetail(recipe){
+        navegation.navigate('Recipe',{recipe});
 	}
 
 	const renderFooter = () => {
-		if (!loading) return null
+		if (!props.loading) return null
 		return (
 		  <View
 			style={{
 			  paddingVertical: 20,
-			  borderTopWidth: 1,
-			  borderColor: '#CED0CE'
 			}}>
-			<ActivityIndicator animating size='large' />
+			<ActivityIndicator animating size='large' color="#ff914d"/>
 		  </View>
 		)
 	}
+	const onRefresh = React.useCallback(async () => {
+		setRefreshing(true);
+		await props.onRefresh();
+		setRefreshing(false);
+	  }, [refreshing]);
 
 	const renderItem = ({item:recipe}) => (
 		 <Card style={{padding: 10,margin:5}} elevation={2}>
@@ -86,7 +89,6 @@ export default function Card_Component(props) {
 				</View>
 			</View>
 		  </TouchableOpacity>
-		  {setLoading(false)}
 		</Card>
 	);
 	
@@ -102,6 +104,11 @@ export default function Card_Component(props) {
                 keyExtractor={receita => String(receita.id)}
 				renderItem={renderItem}
 				ListFooterComponent={renderFooter}
+				onEndReached={!props.func ? () => {} : props.func}
+                onEndReachedThreshold={0.1}
+                refreshControl={
+                  <RefreshControl colors={["#ff914d"]} refreshing={refreshing} onRefresh={onRefresh} />
+                }
             />       
       }
       </>

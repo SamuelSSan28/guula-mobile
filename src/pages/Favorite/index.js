@@ -7,7 +7,7 @@ import FavoriteProvider from '../../../providers/FavoriteProvider';
 import Alert from '../Componentes/Alert';
 import { View, Text, Image } from 'react-native';
 import Header_Base from '../Componentes/Header_Base';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, Divider } from 'react-native-paper';
 import api from '../../services/api';
 
 export default function FavoriteScreen() {
@@ -71,6 +71,8 @@ export default function FavoriteScreen() {
                             <View style={styles.totalView}>
                                 <Text style={styles.totalText}>{totalReceitas} {(totalReceitas === '1') ? "receita" : "receitas"}</Text>
                             </View>
+                            <Divider />
+
                             <Card_Component receitas={receitas} func={loadRecipes} onRefresh={onRefresh} />
                         </>
                     }
