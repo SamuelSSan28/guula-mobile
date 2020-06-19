@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
 
 
 export default function SearchScreeen(){
+  const flatListRef = React.useRef()
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   let limpar = "";
@@ -98,6 +99,12 @@ export default function SearchScreeen(){
          {ingrediente}
     </Chip>
   );
+
+  const toTop = () => {
+    // use current
+    flatListRef.current.scrollToOffset({ animated: true, offset: 0 })
+  }
+
   const navegation = useNavigation();
 
   function navigateToDetail(receita){
@@ -236,6 +243,7 @@ export default function SearchScreeen(){
         {(quantReceitas > 0 && ingredientes.length  > 0 ) ?  
              <FlatList
                 style={{ marginTop: 8 }}
+                ref={flatListRef}
                 contentContainerStyle={styles.content}
                 showsVerticalScrollIndicator = {false}
                 data={recipes}

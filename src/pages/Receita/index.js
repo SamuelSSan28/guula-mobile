@@ -102,7 +102,7 @@ export default function RecipeScreen() {
     const route = useRoute();
     const { user, setUser } = React.useContext(UserContext);
     const [source, setSource] = useState('');
-    const [recipe, setRecipe] = useState(route.params.recipe);
+    const [recipe, setRecipe] = useState(route.params.receita);
     const { receitas, setReceitas } = React.useContext(FavoriteProvider);
     const [favoritou, setFavoritou] = useState(receitas.some(e => e.id === recipe.id));
 
