@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, FlatList,Text,TouchableOpacity, ActivityIndicator,Image } from 'react-native';
+import React, { useState,useEffect } from 'react';
+import { View, StyleSheet, FlatList,Text,TouchableOpacity, ActivityIndicator,Image,TouchableWithoutFeedback,Alert } from 'react-native';
 import { Chip, List, Searchbar,Appbar,Subheading,Divider,Card, Title, Paragraph,IconButton } from 'react-native-paper';
 import style from '../Base/styles';
 import api from '../../services/api.js'
@@ -48,8 +48,9 @@ const styles = StyleSheet.create({
     },
     text: {
       textAlign: "center",
-      color: "#616161",
-      fontSize: 15,
+      color: "#595959",
+      fontFamily:'Poppins_400Regular',
+      fontSize: 18,
       paddingBottom: 30
     },container: {
       flex: 1, 
@@ -88,11 +89,29 @@ export default function SearchScreeen(){
   const flatListRef = React.useRef()
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  let limpar = "";
   var [ingredientes, setIngredientes] = useState([]);
-  const [quantReceitas, setQuantReceitas] = useState(0);
+  const [quantReceitas, setQuantReceitas] = useState(1);
   const [refresh,setRefresh] = useState(false)
   const [recipes, setRecipes] = useState([]);
+  const [count_touch, setCount_touch] = useState(0);
+
+  const frases = ["A vida é como cozinhar: antes de escolher o que gosta, prove um pouco de tudo",
+                  "Adorar cozinhar infelizmente não é sinônimo de adorar a obrigação de lavar uma interminável pilha de panelas sujas",
+                  "Amadurecimento é quando você perde o medo de fazer feijão.",
+                  "Quem nunca foi levar o prato sujo pra cozinha e foi parar no banheiro ?",
+                  "Case com uma pessoa que saiba cozinhar. A beleza acaba, a fome não!",
+                  "Se está ruim pra você, imagina pra quem só lembrou de colocar sal no arroz, depois que ele secou.",
+                  "Aquela comida que sempre tem: Patê.",
+                  "Aquela comida que é bem observada: Pavê.",
+                  "A vida é como tentar cortar um bife duro com talher de plástico em uma marmita de isopor.",
+                  "Chuva é a perfeita camuflagem para fritar batata na madrugada as escondidas.",
+                  "Você sabia que comida japonesa no Japão se chama comida daqui mesmo?",
+                  "Hoje o meu almoço vai ser comida francesa: Restodeontê.  ",
+                  "Mãe, tem algo doce para comer? Tem açúcar!",
+                  "Comer é bom, pena que suja prato.",
+                  "Se nada funcionar, tente um pedaço de bolo de chocolate!",
+                  "Aquela vontade de comer alguma coisa que não sei o que é, mas que com certeza não tenho em casa."
+                  ]
 
   const renderItemI = ({item:ingrediente}) => (
     <Chip onPress={() => {}} onClose={() => {_removeIngrediente(ingrediente)}} style={styles.chip} textStyle={styles.tiny}>
@@ -109,6 +128,24 @@ export default function SearchScreeen(){
 
   function navigateToDetail(receita){
     navegation.navigate('Recipe',{receita});
+  }
+  
+  function show_alert(){
+    setCount_touch(parseInt(count_touch) + 1);
+    console.log(count_touch)
+
+    if (parseInt(count_touch) ==  20){
+      var random_id = Math.floor((Math.random() * 16))
+      Alert.alert(
+        "Uma mensagem pra voce:",
+        frases[random_id],
+        [
+          { text: 'OK', onPress: () => (setCount_touch(parseInt(1))) }
+        ],
+        { cancelable: false }
+      );
+    
+    }
 	}
 
   const renderHeader= () => {
@@ -194,21 +231,24 @@ export default function SearchScreeen(){
 	
 
 
-  async function _onPressSearch(){
+   function _onPressSearch(){
     if(searchQuery == '' || ingredientes.indexOf(searchQuery) != -1)
       return false
     ingredientes.push(searchQuery)   
     _SearchRecipe()
     setSearchQuery("")
     setRefresh(!refresh)
+    toTop()
   }
   
-  async function _removeIngrediente(ingrediente){
+  function _removeIngrediente(ingrediente){
     var index = ingredientes.indexOf(ingrediente);
     if (index != -1) ingredientes.splice(index, 1);
     _SearchRecipe()
     setQuantReceitas(quantReceitas - 1)
   }
+
+  function onChangeText_Search(){}
 
   async function _SearchRecipe(){
     var lista_ingredientes = "";
@@ -225,7 +265,9 @@ export default function SearchScreeen(){
     setLoading(false)
   }
 
-    return (    
+  useEffect( () => {_SearchRecipe()}, []);
+
+  return (    
       <>
         <Appbar.Header style={style.header}>
           <Searchbar
@@ -254,9 +296,12 @@ export default function SearchScreeen(){
                 ListHeaderComponent={renderHeader}
                    />       
               : <View style={styles.container}>
-                  <Image style={styles.image}
-                             source={require('../assets/ingredientes.png')} />
-                  <Text  style={styles.text}>Pesquise os ingredientes que voce tem ai do seu ladinho, em cima dessa pia de marmore</Text>
+                  <TouchableWithoutFeedback onPress={show_alert}> 
+                    <Image style={styles.image}
+                              source={require('../assets/ingredientes.png')} />
+                  </TouchableWithoutFeedback>
+                  <Text  style={styles.text}>Pesquisa aí pow .</Text>
+
                 </View>}
 
           

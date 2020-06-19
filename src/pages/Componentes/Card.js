@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Card, Title,IconButton} from 'react-native-paper';
 import {useNavigation,useRoute} from '@react-navigation/native'
 
@@ -99,7 +99,7 @@ export default function Card_Component(props) {
                 style={{ marginTop: 8 }}
                 contentContainerStyle={styles.content}
 				showsVerticalScrollIndicator = {false}
-				initialNumToRender = {5}
+				initialNumToRender = {3}
                 data={props.receitas}
                 keyExtractor={receita => String(receita.id)}
 				renderItem={renderItem}
