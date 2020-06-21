@@ -25,11 +25,12 @@ Guula é um aplicativo desenvolvido com o propósito de sugerir receitas maravil
 
 <div align="center">
 <h1 align="row">
- <img alt="Example" title="Home" src="https://raw.githubusercontent.com/SamuelSSan28/guula-mobile/master/assets/homeScreen.png" width="150px" height="250px"/>
+ <img alt="Example" title="Home" margin="5px" src="https://raw.githubusercontent.com/SamuelSSan28/guula-mobile/master/assets/homeScreen.png" width="250px" height="350px"/>
 
- <img alt="Example" title="Search" src="https://raw.githubusercontent.com/SamuelSSan28/guula-mobile/master/assets/searchScreen.png" width="150px" height="250px"/>
+ <img alt="Example" title="Search"  margin="5px" 
+ src="https://raw.githubusercontent.com/SamuelSSan28/guula-mobile/master/assets/searchScreen.png" width="250px" height="350px"/>
 
- <img alt="Example" title="Login" src="https://raw.githubusercontent.com/SamuelSSan28/guula-mobile/master/assets/loginScreen.png" width="150px" height="250px"/>
+ <img alt="Example" title="Login" margin="5px" src="https://raw.githubusercontent.com/SamuelSSan28/guula-mobile/master/assets/loginScreen.png" width="250px" height="350px"/>
 </h1>
 </div>
 <br />
