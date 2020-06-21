@@ -30,9 +30,8 @@ export default function Menu_Pontinho (props) {
   function closeMenu(){
     setVisible(false);
   }
- 
+
   return (
-    <Provider>
       <View
         style={{
           flexDirection: 'row',
@@ -48,11 +47,14 @@ export default function Menu_Pontinho (props) {
           <Menu.Item onPress={navigateToAbout} title="About" icon="information-outline" />
           <Divider />
           <Menu.Item onPress={() => {}} title="Contact us" icon="email"/>
-          <Divider />
-          {user.loggedIn && <Menu.Item onPress={logout} title="Logout" icon= "logout-variant"/>}
+          {user.loggedIn &&
+          <>
+            <Divider />
+            <Menu.Item onPress={logout} title="Logout" icon= "logout-variant"/> 
+          </>
+          }
         </Menu>
       </View>
-    </Provider>
   );
 
 }
