@@ -4,6 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import Base from './pages/Base';
 import SignUpScreen from './pages/Cadastro';
 import RecipeScreen from './pages/Receita';
+import About from './pages/About';
 
 const AppStack = createStackNavigator();
 
@@ -20,6 +21,7 @@ export default function Routes(){
                 <AppStack.Screen name ="Home" component={Base}/>
                 <AppStack.Screen name ="Cadastro" component={SignUpScreen}/>
 				<AppStack.Screen name ="Recipe" component={RecipeScreen}/>
+                <AppStack.Screen name ="About" component={About}/>
             </AppStack.Navigator>
         </NavigationContainer>
 

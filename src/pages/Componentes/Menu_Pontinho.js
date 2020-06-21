@@ -2,39 +2,57 @@ import * as React from 'react';
 import { View } from 'react-native';
 import { Button, Paragraph, Menu, Divider, Provider } from 'react-native-paper';
 import { Appbar } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import UserContext from '../../../providers/UserProvider';
 
-export default class Menu_Pontinho extends React.Component {
-  state = {
-    visible: false,
-  };
+export default function Menu_Pontinho (props) {
+   
+  const [visible, setVisible] = React.useState(false); 
+  const navigation = useNavigation();
 
-  _openMenu = () => this.setState({ visible: true });
+  const {user, setUser} = React.useContext(UserContext);
 
-  _closeMenu = () => this.setState({ visible: false });
-
-  render() {
-    return (
-      <Provider>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'flex-end'
-          }}>
-          <Menu
-            visible={this.state.visible}
-            onDismiss={this._closeMenu}
-            anchor={
-                <Appbar.Action icon="dots-vertical" onPress={this._openMenu} />
-            }
-          >
-            <Menu.Item onPress={() => {}} title="About" icon="information-outline" />
-            <Divider />
-            <Menu.Item onPress={() => {}} title="Contact us" icon="email"/>
-            <Divider />
-            <Menu.Item onPress={() => {}} title="Logout" icon= "logout-variant"/>
-          </Menu>
-        </View>
-      </Provider>
-    );
+  function navigateToAbout(){
+    navigation.navigate('About');
   }
+
+  function logout(){
+    setUser({
+      id: null,
+      loggedIn: false
+    })
+  }
+
+  function openMenu(){
+    setVisible(true);
+  }
+
+  function closeMenu(){
+    setVisible(false);
+  }
+ 
+  return (
+    <Provider>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'flex-end'
+        }}>
+        <Menu
+          visible={visible}
+          onDismiss={closeMenu}
+          anchor={
+              <Appbar.Action icon="dots-vertical" onPress={openMenu} />
+          }
+        >
+          <Menu.Item onPress={navigateToAbout} title="About" icon="information-outline" />
+          <Divider />
+          <Menu.Item onPress={() => {}} title="Contact us" icon="email"/>
+          <Divider />
+          {user.loggedIn && <Menu.Item onPress={logout} title="Logout" icon= "logout-variant"/>}
+        </Menu>
+      </View>
+    </Provider>
+  );
+
 }
