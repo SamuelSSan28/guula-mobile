@@ -1,18 +1,20 @@
 import * as React from 'react';
 import { useState } from 'react';
-import api from '../../services/api';
+import api_users from '../../services/api_users';
 import { Text, ActivityIndicator,KeyboardAvoidingView,Platform } from 'react-native';
 import { TextInput, HelperText, Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import styles from './styles';
 import Alert from '../Componentes/Alert';
+import * as Crypto from 'expo-crypto';
+import { string } from 'yup';
 
 export default function LoginScreen(props) {
 
   const navigation = useNavigation();
 
-  const [email_p, setEmail] = useState('');
-  const [senha_p, setSenha] = useState('');
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
   const [loading, setLoading] = useState(false);
   const [emailErr, setEmailErr] = useState(false);
   const [pwErr, setPwErr] = useState(false);
@@ -30,11 +32,11 @@ export default function LoginScreen(props) {
       return;
     }
     let existe_erro = false;
-    if (!isEmail(email_p)) {
+    if (!isEmail(email)) {
       existe_erro = true;
       setEmailErr(true);
     }
-    if (senha_p.length < 6) {
+    if (senha.length < 6) {
       existe_erro = true;
       setPwErr(true);
     }
@@ -44,20 +46,34 @@ export default function LoginScreen(props) {
 
   }
 
+
   async function handleLogin() {
     setLoading(true);
     try {
-      const response = await api.post('users/login', { senha_p, email_p });
+      const password = await Crypto.digestStringAsync(
+                              Crypto.CryptoDigestAlgorithm.SHA256,
+                              senha,
+                            );
+
+      const email_ = await Crypto.digestStringAsync(
+                              Crypto.CryptoDigestAlgorithm.SHA256,
+                              email,
+                            );
+      
+      const response = await api_users.get('users/login', { 'headers': { "senha":password, "email":email_}});
       const id = response.data;
+      console.log( response.data)
       props.setIsSignIn({
         id: id,
         loggedIn: true
       });
     } catch (err) {
+      console.log(err.response.data)
       setLoading(false);
       setShowAlert(true);
       setAlertContent(err.response.data.error)
     }
+    
   }
 
   function isEmail(email) {
@@ -76,7 +92,7 @@ export default function LoginScreen(props) {
           style={styles.input}
           placeholder="Email"
           keyboardType="email-address"
-          value={email_p}
+          value={email}
           placeholderTextColor="black"
           onChangeText={text => { setEmail(text); setEmailErr(false) }}
           underlineColor="transparent"
