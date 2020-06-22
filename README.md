@@ -22,17 +22,16 @@
 <h5 align="justify">
 Guula é um aplicativo desenvolvido com o propósito de sugerir receitas maravilhosas de acordo com os ingredientes que o usuário possui. Com mais de 5 mil receitas, o aplicativo fornece opções para todos os gostos. Além de informações básicas como lista de ingredientes e modo de preparo, cada receita é acompanhada de uma foto e grau de dificuldade.
 </h5>
-
 <div align="center">
 <h1 align="row">
- <img alt="Example" title="Home" margin="5px" src="https://raw.githubusercontent.com/SamuelSSan28/guula-mobile/master/assets/homeScreen.png" width="250px" height="350px"/>
+ <img alt="Example" title="Home" src="https://raw.githubusercontent.com/SamuelSSan28/guula-mobile/master/assets/homeScreen.png" width="250px" height="350px"/>
 
- <img alt="Example" title="Search"  margin="5px" 
- src="https://raw.githubusercontent.com/SamuelSSan28/guula-mobile/master/assets/searchScreen.png" width="250px" height="350px"/>
+ <img alt="Example" title="Search" src="https://raw.githubusercontent.com/SamuelSSan28/guula-mobile/master/assets/searchScreen.png" width="250px" height="350px"/>
 
- <img alt="Example" title="Login" margin="5px" src="https://raw.githubusercontent.com/SamuelSSan28/guula-mobile/master/assets/loginScreen.png" width="250px" height="350px"/>
+ <img alt="Example" title="Login" src="https://raw.githubusercontent.com/SamuelSSan28/guula-mobile/master/assets/loginScreen.png" width="250px" height="350px"/>
 </h1>
 </div>
+
 <br />
 
 ## :rocket: Tecnologias
