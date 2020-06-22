@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { TextInput, Button, HelperText } from 'react-native-paper';
 import Header_Back from '../Componentes/Header_Back'
-import api from '../../services/api';
-import { Text, Alert, ActivityIndicator, Platform, KeyboardAvoidingView } from 'react-native';
+import api_users from '../../services/api_users';
+import { Text, Alert, ActivityIndicator, Platform, KeyboardAvoidingView,SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import styles from './styles.js'
 
@@ -75,7 +75,7 @@ export default function SignupScreen() {
 
     setLoading(true);
     try {
-      const response = await api.post('users', data);
+      const response = await api_users.post('users', data);
       if (response.status == 200) {
         Alert.alert(
           'Sucesso',
@@ -111,8 +111,7 @@ export default function SignupScreen() {
   return (
     <>
       <Header_Back />
-      <KeyboardAvoidingView
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
+      <SafeAreaView
         style={styles.container}
       >
         <Text style={styles.textTop}>Crie sua conta de maneira rápida e fácil!</Text>
@@ -199,7 +198,7 @@ export default function SignupScreen() {
         {loading ? <ActivityIndicator size="small" color="#ff914d" /> : <Button mode="contained" onPress={() => { funcao_validar() }} color='#ff914d' dark={true}>
           Cadastrar
        </Button>}
-      </KeyboardAvoidingView>
+      </SafeAreaView>
     </>
   );
 }
