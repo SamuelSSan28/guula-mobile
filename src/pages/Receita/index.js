@@ -5,7 +5,7 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import { ScrollView } from 'react-native-gesture-handler';
 import React, { useState } from 'react';
 import UserContext from '../../../providers/UserProvider';
-import api from '../../services/api';
+import api_users from '../../services/api_users';
 import FavoriteProvider from '../../../providers/FavoriteProvider';
 import SnackbarComponent from '../Componentes/Snackbar';
 
@@ -70,7 +70,7 @@ export default function RecipeScreen() {
         };
 
         if (!favoritou) {
-            const response = await api.post('favorites', data, {
+            const response = await api_users.post('favorites', data, {
                 headers: {
                     Authorization: user.id,
                 }
@@ -87,7 +87,7 @@ export default function RecipeScreen() {
             }
         }
         else {
-            const response = await api.delete('favorites/' + recipe.id, {
+            const response = await api_users.delete('favorites/' + recipe.id, {
                 headers: {
                     Authorization: user.id,
                 }
