@@ -8,7 +8,7 @@ import Alert from '../Componentes/Alert';
 import { View, Text, Image } from 'react-native';
 import Header_Base from '../Componentes/Header_Base';
 import { ActivityIndicator, Divider } from 'react-native-paper';
-import api from '../../services/api';
+import api_users from '../../services/api_users';
 
 export default function FavoriteScreen() {
 
@@ -25,7 +25,7 @@ export default function FavoriteScreen() {
     }
 
     async function loadRecipes(){
-        const response = await api.get(`favorites?page=${page}`, {
+        const response = await api_users.get(`favorites?page=${page}`, {
           headers: {
             Authorization: user.id,
           }
