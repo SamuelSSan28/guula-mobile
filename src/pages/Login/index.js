@@ -65,7 +65,7 @@ export default function LoginScreen(props) {
       console.log( response.data)
       props.setIsSignIn({
         id: id,
-        loggedIn: true
+        loggedIn: true 
       });
     } catch (err) {
       console.log(err.response.data)
