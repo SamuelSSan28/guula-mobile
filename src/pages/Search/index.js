@@ -1,96 +1,18 @@
 import React, { useState,useEffect } from 'react';
-import { View, StyleSheet, FlatList,Text,TouchableOpacity, ActivityIndicator,Image,TouchableWithoutFeedback,Alert } from 'react-native';
+import { View, FlatList,Text,TouchableOpacity, ActivityIndicator,Image,TouchableWithoutFeedback,Alert } from 'react-native';
 import { Chip, List, Searchbar,Appbar,Subheading,Divider,Card, Title, Paragraph,IconButton } from 'react-native-paper';
 import style from '../Base/styles';
+import styles from './styles';
 import api from '../../services/api.js'
-import Constants from "expo-constants";
 import {useNavigation,useRoute} from '@react-navigation/native'
-
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      marginTop: Constants.statusBarHeight,
-      marginHorizontal: 3
-
-    },
-	ingredientes_box:{
-		margin: 10,
-	},
-	ingredientes_quant_box:{
-		margin: 5,
-		alignItems:'center',
-	},
-	ingredientes_box_text:{
-		marginBottom: 5,
-		color:"#a6a6a6",
-		fontSize:15,
-		fontWeight: "bold",
-	
-	},
-	ingredientes_quant_text:{
-		color:"#a6a6a6",
-		fontSize:16,
-
-	},
-    row: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      paddingHorizontal: 0,
-      marginTop:0
-    },
-    chip: {
-      backgroundColor:"#ff914d",
-      margin: 4,
-
-    },
-    tiny: {
-      color:"#ffff"
-    },
-    text: {
-      textAlign: "center",
-      color: "#595959",
-      fontFamily:'Poppins_400Regular',
-      fontSize: 18,
-      paddingBottom: 30
-    },container: {
-      flex: 1, 
-        justifyContent: "center",
-        backgroundColor:"#fff",
-        alignItems: "center",
-        padding: 10,
-    },
-    image:{
-      margin:10,
-      width: 150,
-      height: 150,
-    },
-    recipeInfo: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-evenly'
-  }, recipeIconsAndInfo: {
-  alignItems: 'center',
-  flexDirection: 'row',
-  },
-  recipeInfoColor: {
-      color: "#545454"
-  },titulo: {
-    textAlign: "center",
-    color: "#545454",
-    fontSize: 19,
-    fontWeight:"300",
-    fontFamily:""
-  }
-  
-  });
-
 
 export default function SearchScreeen(){
   const flatListRef = React.useRef()
+  let [pesquisasRecentes,setPesquisas] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  var [ingredientes, setIngredientes] = useState([]);
-  const [quantReceitas, setQuantReceitas] = useState(1);
+  const [ingredientes, setIngredientes] = useState([]);
+  const [quantReceitas, setQuantReceitas] = useState(0);
   const [refresh,setRefresh] = useState(false)
   const [recipes, setRecipes] = useState([]);
   const [count_touch, setCount_touch] = useState(0);
@@ -126,13 +48,13 @@ export default function SearchScreeen(){
 
   const navegation = useNavigation();
 
-  function navigateToDetail(receita){
-    navegation.navigate('Recipe',{receita});
+  function navigateToDetail(recipe){
+    navegation.navigate('Recipe',{recipe});
   }
   
   function show_alert(){
     setCount_touch(parseInt(count_touch) + 1);
-    console.log(count_touch)
+  
 
     if (parseInt(count_touch) ==  20){
       var random_id = Math.floor((Math.random() * 16))
@@ -175,6 +97,12 @@ export default function SearchScreeen(){
                   : 
                   <View></View>}
           </View>
+
+          {(refresh == true) ?
+                <ActivityIndicator animating size='large' color="#ff914d"/> 
+            :  <View></View> } 
+
+          
        </>
       );
       return(
@@ -183,21 +111,6 @@ export default function SearchScreeen(){
         </View>
       );        
   }
-  
-  
-	const renderFooter = () => {
-		if (!loading) return null
-		return (
-		  <View
-			style={{
-			  paddingVertical: 20,
-			  borderTopWidth: 1,
-			  borderColor: '#CED0CE'
-			}}>
-			<ActivityIndicator animating size='large' />
-		  </View>
-		)
-	}
 
 	const renderItem = ({item:recipe}) => (
     <Card style={{padding: 10,margin:5}} elevation={2}>
@@ -225,44 +138,55 @@ export default function SearchScreeen(){
       </View>
     </View>
     </TouchableOpacity>
-    {setLoading(false)}
   </Card>
  );
-	
+ 
+ const renderItem_Vazio = () => (
+  <View></View>
+);
 
 
-   function _onPressSearch(){
+async function _onPressSearch(){
     if(searchQuery == '' || ingredientes.indexOf(searchQuery) != -1)
-      return false
-    ingredientes.push(searchQuery)   
-    _SearchRecipe()
+      return false 
+    //setIngredientes([...ingredientes,searchQuery])
+    ingredientes.push(searchQuery)
     setSearchQuery("")
-    setRefresh(!refresh)
-    toTop()
+    setRefresh(true)
+    console.log("Inseriu o ingrediente")
+     _SearchRecipe()
+    if(ingredientes.length > 1)
+      toTop()
   }
   
-  function _removeIngrediente(ingrediente){
+  async function _removeIngrediente(ingrediente){
     var index = ingredientes.indexOf(ingrediente);
     if (index != -1) ingredientes.splice(index, 1);
-    _SearchRecipe()
-    setQuantReceitas(quantReceitas - 1)
+     _SearchRecipe()
+
   }
 
   function onChangeText_Search(){}
 
   async function _SearchRecipe(){
     var lista_ingredientes = "";
-
-    if (ingredientes.length== 0)
+    
+    
+    if (ingredientes.length== 0){
+      console.log(ingredientes)
       return "Sem receitas pra vc meu consagrado"
-
+      
+    }
     for(var i = 0; i < ingredientes.length; i++){
       lista_ingredientes += ingredientes[i]+" "
     }
+    console.log("Antes de Usar a API")
     const res = await api.get("recipes/ingredientes",{ 'headers': { 'ingredientes': lista_ingredientes }   });
+    setPesquisas([...pesquisasRecentes,...res.data])
+    console.log(pesquisasRecentes.length)
     setRecipes(res.data);
     setQuantReceitas(res.headers.total_receitas_by_ingredientes)
-    setLoading(false)
+    setRefresh(false)
   }
 
   useEffect( () => {_SearchRecipe()}, []);
@@ -282,7 +206,7 @@ export default function SearchScreeen(){
             />
         </Appbar.Header>
 
-        {(quantReceitas > 0 && ingredientes.length  > 0 ) ?  
+        {(ingredientes.length  > 0 ) ?  
              <FlatList
                 style={{ marginTop: 8 }}
                 ref={flatListRef}
@@ -290,19 +214,20 @@ export default function SearchScreeen(){
                 showsVerticalScrollIndicator = {false}
                 data={recipes}
                 keyExtractor={receita => String(receita.id)}
-                renderItem={renderItem}
+                renderItem={(quantReceitas  > 0 ) ? renderItem: renderItem_Vazio}
                 initialNumToRender = {5}
-                ListFooterComponent={renderFooter}
                 ListHeaderComponent={renderHeader}
-                   />       
-              : <View style={styles.container}>
-                  <TouchableWithoutFeedback onPress={show_alert}> 
-                    <Image style={styles.image}
-                              source={require('../assets/ingredientes.png')} />
-                  </TouchableWithoutFeedback>
-                  <Text  style={styles.text}>Pesquisa aí pow .</Text>
+                   />    
+                      
+              :  <View style={styles.container}>
+                     <TouchableWithoutFeedback onPress={show_alert}> 
+                       <Image style={styles.image}
+                                 source={require('../assets/ingredientes.png')} />
+                     </TouchableWithoutFeedback>
+                     <Text  style={styles.text}>Pesquisa aí pow .</Text>
+   
+                   </View>}
 
-                </View>}
 
           
       </>
