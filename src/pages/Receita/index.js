@@ -114,7 +114,7 @@ export default function RecipeScreen() {
     const [favoritou, setFavoritou] = useState(receitas.some(e => e.id === recipe.id));
     const [showSnackbar, setShowSnackbar] = useState(false);
     const [snackbarContent, setSnackbarContent] = useState('');
-    
+    const dificuldade = {"Dificuldade elevada":"Dificil", "Dificuldade média":"Média", "Dificuldade baixa":"Fácil"   }
     Image.getSize(recipe.imagem, (width, height) => { setSource({ width: width, height: height }); });
 
     return (
@@ -163,7 +163,7 @@ export default function RecipeScreen() {
                                 color="#ff914d"
                                 size={25}
                             />
-                            <Text style={styles.recipeInfoColor}>Fácil</Text>
+                            <Text style={styles.recipeInfoColor}>{dificuldade[recipe.dificuldade]}</Text>
                         </View>
                     </View>
                     <View style={styles.recipeTitles}>
