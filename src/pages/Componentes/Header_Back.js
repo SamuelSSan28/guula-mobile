@@ -5,9 +5,21 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function Header_Back() {
   const navigation = useNavigation();
+  let back = true;
+
+
+  function go_back(){
+    if(back){
+      back =false
+      navigation.goBack()
+    }
+    
+  }
+
+
   return (
     <Appbar.Header style={styles.header}>
-      <Appbar.BackAction color='#ffffff' onPress={() => navigation.goBack()} />
+      <Appbar.BackAction color='#ffffff' onPress={go_back} />
     </Appbar.Header>
   );
 }

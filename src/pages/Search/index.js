@@ -130,7 +130,7 @@ export default function SearchScreeen(){
       </View>
       <View style={styles.recipeIconsAndInfo}>
         <IconButton style={styles.recipeIcons}
-          icon="circle-slice-1"
+          icon="silverware"
           color="#ff914d"
           size={25}
         />

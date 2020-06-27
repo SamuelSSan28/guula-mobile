@@ -1,6 +1,6 @@
-import { IconButton, Paragraph } from 'react-native-paper';
+import { IconButton, Paragraph,Checkbox,List } from 'react-native-paper';
 import Header_Back from '../Componentes/Header_Back'
-import { Text, View, StyleSheet, Image, Alert } from 'react-native';
+import { Text, View, StyleSheet, Image, Alert,TouchableRipple } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { ScrollView } from 'react-native-gesture-handler';
 import React, { useState } from 'react';
@@ -8,8 +8,25 @@ import UserContext from '../../../providers/UserProvider';
 import api_users from '../../services/api_users';
 import FavoriteProvider from '../../../providers/FavoriteProvider';
 import SnackbarComponent from '../Componentes/Snackbar';
+import { render } from 'react-dom';
 
 const styles = StyleSheet.create({
+    row: {
+        flexDirection: 'row-reverse',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingVertical: 2,
+        paddingHorizontal: 8,
+      },
+      row2: {
+        flexDirection: 'row',
+      },
+      textCheck:{
+        flex: 1, 
+        flexWrap: 'wrap',
+        fontSize: 18,
+        marginLeft: 5
+      },
     titleAndFavouriteContent: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -61,7 +78,7 @@ const styles = StyleSheet.create({
 
 
 export default function RecipeScreen() {
-
+    const [checked, setChecked] = useState({});
     const navigation = useNavigation();
 
     async function favoritarReceita() {
@@ -105,6 +122,64 @@ export default function RecipeScreen() {
         }
     }
 
+    function renderIgredientes(ingredientes){
+        var indice = 0;
+
+        var lista = ingredientes.split("\n");
+
+        for(let i = 0; i < lista.length; i++){
+            if(lista[i] == "" || lista[i] == " ")
+                indice = i
+        }
+
+        //console.log("iNDICE: " + indice)
+        //console.log("TAMANHO" + lista.length)
+        
+        lista.splice(indice,lista.length - indice);
+
+        const listIngredientes = lista.map((ingrediente) => 
+             <View style={styles.row}>
+                <Paragraph style={styles.textCheck}>{ingrediente} </Paragraph>
+                <Checkbox status="unchecked" disabled />
+              </View>           
+        )
+
+        return listIngredientes
+    }
+
+    function renderPreparo(Preparo){
+        var indice = 0;
+
+        var lista = Preparo.split("\n")
+        
+        for(let i = 0; i < lista.length; i++){
+
+            if(lista[i].includes("Gostou" ) || lista[i].includes("gostou") ){
+                indice = i
+            }
+                
+        }
+        //console.log("iNDICE: " + indice)
+        //
+
+        lista.splice(indice,lista.length - indice);
+
+        const listPreparo = lista.map((prep) =>
+                <View style={styles.row2} >
+                    <IconButton 
+                        style={styles.recipeIcons}
+                        icon="menu-down-outline"
+                        
+                        size={25} 
+                    />
+                    <Text>{prep}  </Text>
+                </View>
+                        
+        );
+                        
+        return listPreparo
+    }
+
     const navegation = useNavigation();
     const route = useRoute();
     const { user, setUser } = React.useContext(UserContext);
@@ -116,7 +191,7 @@ export default function RecipeScreen() {
     const [snackbarContent, setSnackbarContent] = useState('');
     const dificuldade = {"Dificuldade elevada":"Dificil", "Dificuldade média":"Média", "Dificuldade baixa":"Fácil"   }
     Image.getSize(recipe.imagem, (width, height) => { setSource({ width: width, height: height }); });
-
+    
     return (
         <>
             <Header_Back />
@@ -151,7 +226,7 @@ export default function RecipeScreen() {
                         </View>
                         <View style={styles.recipeIconsAndInfo}>
                             <IconButton style={styles.recipeIcons}
-                                icon="circle-slice-1"
+                                icon="silverware"
                                 color="#ff914d"
                                 size={25}
                             />
@@ -159,7 +234,7 @@ export default function RecipeScreen() {
                         </View>
                         <View style={styles.recipeIconsAndInfo}>
                             <IconButton style={styles.recipeIcons}
-                                icon="puzzle-outline"
+                                icon="poll"
                                 color="#ff914d"
                                 size={25}
                             />
@@ -167,20 +242,25 @@ export default function RecipeScreen() {
                         </View>
                     </View>
                     <View style={styles.recipeTitles}>
-                        <Text style={styles.recipeTitleText}>Ingredientes</Text>
+                        <IconButton style={styles.recipeIcons}
+                                icon="chef-hat"
+                                color="#ff914d"
+                                size={25}
+                            />
+                        <Text style={styles.recipeTitleText}> Ingredientes</Text>
                     </View>
                     <View>
-                        <Paragraph style={styles.recipeInfoColor}>
-                            {recipe.ingredientes}
-                        </Paragraph>
+                        <Paragraph style={styles.recipeInfoColor}/>
+
+                        {renderIgredientes(recipe.ingredientes)}
                     </View>
                     <View style={styles.recipeTitles}>
                         <Text style={styles.recipeTitleText}>Modo de Preparo</Text>
                     </View>
                     <View>
-                        <Paragraph style={styles.recipeInfoColor}>
-                            {recipe.modo_preparo}
-                        </Paragraph>
+                        <Paragraph style={styles.recipeInfoColor} / >
+                        {renderPreparo(recipe.modo_preparo)}
+
                     </View>
                 </View>
 

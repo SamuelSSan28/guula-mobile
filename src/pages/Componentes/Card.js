@@ -81,7 +81,7 @@ export default function Card_Component(props) {
 				</View>
 				<View style={styles.recipeIconsAndInfo}>
 					<IconButton style={styles.recipeIcons}
-						icon="circle-slice-1"
+						icon="silverware"
 						color="#ff914d"
 						size={25}
 					/>
