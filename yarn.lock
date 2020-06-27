@@ -1125,6 +1125,11 @@
     prop-types "^15.7.2"
     react-is "^16.8.0"
 
+"@react-native-community/checkbox@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@react-native-community/checkbox/-/checkbox-0.2.2.tgz#40413657b2fd7ec92fbb53bf71a639c7864bc678"
+  integrity sha512-lmnXDrW5cH+LHfOJDkaa+5uutQ7rVsDRo3Ezea4ArHFgSCt/rAIJVmkop/DMhd37F6DH5BfTFTdM4I7GuBrHIQ==
+
 "@react-native-community/cli-debugger-ui@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-debugger-ui/-/cli-debugger-ui-3.0.0.tgz#d01d08d1e5ddc1633d82c7d84d48fff07bd39416"
@@ -5042,6 +5047,13 @@ rimraf@~2.2.6:
   version "2.2.8"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.2.8.tgz#e439be2aaee327321952730f99a8929e4fc50582"
   integrity sha1-5Dm+Kq7jJzIZUnMPmaiSnk/FBYI=
+
+rn-checkbox-list@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/rn-checkbox-list/-/rn-checkbox-list-0.2.0.tgz#919687832de8a52168b2c14c77b9493443187b09"
+  integrity sha512-q2+G9cm7ZvRLwF1axKYJKD24ncZAcc5HyFg3BfMuJDpZH7V+Fw0+Wg6nZ/xnjKk0FMgWGQhFGt0g7tgIn7zDCQ==
+  dependencies:
+    "@react-native-community/checkbox" "^0.2.2"
 
 rsvp@^4.8.4:
   version "4.8.5"

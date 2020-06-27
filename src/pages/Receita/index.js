@@ -3,12 +3,12 @@ import Header_Back from '../Componentes/Header_Back'
 import { Text, View, StyleSheet, Image, Alert,TouchableRipple } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { ScrollView } from 'react-native-gesture-handler';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import UserContext from '../../../providers/UserProvider';
 import api_users from '../../services/api_users';
 import FavoriteProvider from '../../../providers/FavoriteProvider';
 import SnackbarComponent from '../Componentes/Snackbar';
-import { render } from 'react-dom';
+import CheckboxList from "rn-checkbox-list";
 
 const styles = StyleSheet.create({
     row: {
@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
 
 export default function RecipeScreen() {
     const [checked, setChecked] = useState({});
+    const [refresh, setRefresh] = useState(false);
     const navigation = useNavigation();
 
     async function favoritarReceita() {
@@ -121,30 +122,40 @@ export default function RecipeScreen() {
             }
         }
     }
+    
+
+    function setCheck(ingrediente){
+        let aux = checked;
+        aux[ingrediente]  = !aux[ingrediente]
+        setChecked(aux)
+        console.log(checked)
+    }
+
 
     function renderIgredientes(ingredientes){
         var indice = 0;
 
         var lista = ingredientes.split("\n");
+        
+        var lista_dict = []
 
         for(let i = 0; i < lista.length; i++){
             if(lista[i] == "" || lista[i] == " ")
                 indice = i
+            else{
+                lista_dict.push({id:i,name:lista[i]})
+            }
         }
 
-        //console.log("iNDICE: " + indice)
-        //console.log("TAMANHO" + lista.length)
-        
-        lista.splice(indice,lista.length - indice);
+        return (
+            <CheckboxList
+                theme="orange"
+                listItems={lista_dict}
+                listItemStyle={{ borderBottomColor: '#eee', borderBottomWidth: 1 }}
+                
+/>
 
-        const listIngredientes = lista.map((ingrediente) => 
-             <View style={styles.row}>
-                <Paragraph style={styles.textCheck}>{ingrediente} </Paragraph>
-                <Checkbox status="unchecked" disabled />
-              </View>           
         )
-
-        return listIngredientes
     }
 
     function renderPreparo(Preparo){
@@ -154,24 +165,19 @@ export default function RecipeScreen() {
         
         for(let i = 0; i < lista.length; i++){
 
-            if(lista[i].includes("Gostou" ) || lista[i].includes("gostou") ){
-                indice = i
+            if(lista[i].includes("Gostou" ) || lista[i].includes("gostou")|| lista[i].includes("Procurando") ){
+                if (indice == 0)
+                    indice = i
+               
             }
                 
         }
-        //console.log("iNDICE: " + indice)
-        //
+        //0, 1,2,3,4,5,6,7,8
 
         lista.splice(indice,lista.length - indice);
 
         const listPreparo = lista.map((prep) =>
                 <View style={styles.row2} >
-                    <IconButton 
-                        style={styles.recipeIcons}
-                        icon="menu-down-outline"
-                        
-                        size={25} 
-                    />
                     <Text>{prep}  </Text>
                 </View>
                         

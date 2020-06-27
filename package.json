@@ -32,6 +32,7 @@
     "react-navigation": "^4.3.9",
     "react-navigation-tabs": "react-navigation/tabs",
     "recyclerlistview": "^3.0.0",
+    "rn-checkbox-list": "^0.2.0",
     "yup": "^0.29.1"
   },
   "devDependencies": {
