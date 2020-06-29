@@ -101,7 +101,7 @@ export default function Card_Component(props) {
 				showsVerticalScrollIndicator = {false}
 				initialNumToRender = {3}
                 data={props.receitas}
-                keyExtractor={receita => String(receita.id)}
+                keyExtractor={receita => String(receita.id)+"RRR"}
 				renderItem={renderItem}
 				ListFooterComponent={renderFooter}
 				onEndReached={!props.func ? () => {} : props.func}

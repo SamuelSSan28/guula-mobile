@@ -1,6 +1,6 @@
 import { IconButton, Paragraph,Checkbox,List } from 'react-native-paper';
 import Header_Back from '../Componentes/Header_Back'
-import { Text, View, StyleSheet, Image, Alert,TouchableRipple } from 'react-native';
+import { Text, View, StyleSheet, Image, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { ScrollView } from 'react-native-gesture-handler';
 import React, { useState,useEffect } from 'react';
@@ -78,8 +78,8 @@ const styles = StyleSheet.create({
 
 
 export default function RecipeScreen() {
-    const [checked, setChecked] = useState({});
-    const [refresh, setRefresh] = useState(false);
+    let [checked, setChecked] = useState(0);
+    const [totalIngredientes, settotalIngredientes] = useState(0);
     const navigation = useNavigation();
 
     async function favoritarReceita() {
@@ -123,20 +123,13 @@ export default function RecipeScreen() {
         }
     }
     
-
-    function setCheck(ingrediente){
-        let aux = checked;
-        aux[ingrediente]  = !aux[ingrediente]
-        setChecked(aux)
-        console.log(checked)
-    }
-
+    useEffect( () => {fa}, []);
 
     function renderIgredientes(ingredientes){
         var indice = 0;
 
         var lista = ingredientes.split("\n");
-        
+
         var lista_dict = []
 
         for(let i = 0; i < lista.length; i++){
@@ -148,7 +141,8 @@ export default function RecipeScreen() {
         }
 
         return (
-            <CheckboxList
+            <CheckboxList    
+                selectedListItems={[]}
                 theme="orange"
                 listItems={lista_dict}
                 listItemStyle={{ borderBottomColor: '#eee', borderBottomWidth: 1 }}
@@ -167,12 +161,9 @@ export default function RecipeScreen() {
 
             if(lista[i].includes("Gostou" ) || lista[i].includes("gostou")|| lista[i].includes("Procurando") ){
                 if (indice == 0)
-                    indice = i
-               
-            }
-                
+                    indice = i       
+            }       
         }
-        //0, 1,2,3,4,5,6,7,8
 
         lista.splice(indice,lista.length - indice);
 
@@ -264,7 +255,7 @@ export default function RecipeScreen() {
                         <Text style={styles.recipeTitleText}>Modo de Preparo</Text>
                     </View>
                     <View>
-                        <Paragraph style={styles.recipeInfoColor} / >
+                        <Paragraph style={styles.recipeInfoColor} />
                         {renderPreparo(recipe.modo_preparo)}
 
                     </View>
