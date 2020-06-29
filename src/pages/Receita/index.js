@@ -123,7 +123,7 @@ export default function RecipeScreen() {
         }
     }
     
-    useEffect( () => {fa}, []);
+  useEffect( () => {favoritarReceita()}, []);
 
     function renderIgredientes(ingredientes){
         var indice = 0;
