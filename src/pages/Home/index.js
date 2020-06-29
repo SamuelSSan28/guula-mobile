@@ -23,7 +23,8 @@ export default function HomeScreen(){
       return;
     }
     setLoading(true);
-    const res = await api.get(`recipes?page=${page}`).catch(function(err){setShowAlert(true), setAlertContent(err)});
+    const res = await api.get(`recipes?page=${page}`)
+    .catch(function(err){setShowAlert(true), setAlertContent(err)});
     const receitas = res.data;
     for (let i = receitas.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
