@@ -88,6 +88,7 @@ export default function RecipeScreen() {
         };
 
         if (!favoritou) {
+            console.log("ok");
             const response = await api_users.post('favorites', data, {
                 headers: {
                     Authorization: user.id,
@@ -271,7 +272,7 @@ export default function RecipeScreen() {
                 </View>
 
             </ScrollView>
-            { true && <SnackbarComponent visible={showSnackbar} setVisible={setShowSnackbar} content={snackbarContent} />}
+         { true && <SnackbarComponent visible={showSnackbar} setVisible={setShowSnackbar} content={snackbarContent} />}
 
         </>
     );
