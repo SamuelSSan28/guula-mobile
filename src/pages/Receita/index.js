@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
       },
       row2: {
         flexDirection: 'row',
+        justifyContent:"center",
       },
       textCheck:{
         flex: 1, 
@@ -34,9 +35,8 @@ const styles = StyleSheet.create({
     },
     recipeName: {
         fontSize: 30,
-        padding: 0,
-        margin: 0,
-        width: '75%'
+        width: '75%',
+        flex:1
     },
     recipeFavouriteIcon: {
         padding: 0,
@@ -50,8 +50,9 @@ const styles = StyleSheet.create({
     recipeTitles: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'flex-start',
-        marginVertical: 10
+        justifyContent: 'center',
+        marginTop: 10,
+        fontFamily: 'Poppins_400Regular',
     },
     recipeScroll: {
         flex: 1
@@ -71,6 +72,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins_400Regular'
     },
     recipeTitleText: {
+        color: "#545454",
         fontSize: 20,
         fontFamily: 'Poppins_700Bold'
     }
@@ -123,7 +125,6 @@ export default function RecipeScreen() {
         }
     }
     
-  useEffect( () => {favoritarReceita()}, []);
 
     function renderIgredientes(ingredientes){
         var indice = 0;
@@ -154,7 +155,7 @@ export default function RecipeScreen() {
 
     function renderPreparo(Preparo){
         var indice = 0;
-
+        var cont = 1;
         var lista = Preparo.split("\n")
         
         for(let i = 0; i < lista.length; i++){
@@ -169,7 +170,8 @@ export default function RecipeScreen() {
 
         const listPreparo = lista.map((prep) =>
                 <View style={styles.row2} >
-                    <Text>{prep}  </Text>
+                    <Text style={{color:"#626262",fontSize: 20,fontFamily: 'Poppins_700Bold',marginRight:3} }>{cont++}  </Text>
+                    <Text style={{color:"#626262",fontSize: 17,flexWrap: 'wrap',flex: 1,marginBottom:10}}>{prep}  </Text>
                 </View>
                         
         );
@@ -196,7 +198,7 @@ export default function RecipeScreen() {
                 <Image source={{ uri: recipe.imagem }} style={{ aspectRatio: source ? source.width / source.height : 1, width: '100%', height: null }} resizeMode='contain' />
                 <View style={styles.recipeView}>
                     <View style={styles.titleAndFavouriteContent}>
-                        <Text style={styles.recipeName}> {recipe.titulo}</Text>
+                        <Text style={styles.recipeName}>{String(recipe.titulo).toUpperCase()}</Text>
                         <IconButton style={styles.recipeFavouriteIcon}
                             icon="heart"
                             color={favoritou ? "red" : "#d9d9d9"}
@@ -247,15 +249,18 @@ export default function RecipeScreen() {
                         <Text style={styles.recipeTitleText}> Ingredientes</Text>
                     </View>
                     <View>
-                        <Paragraph style={styles.recipeInfoColor}/>
 
                         {renderIgredientes(recipe.ingredientes)}
                     </View>
                     <View style={styles.recipeTitles}>
+                            <IconButton style={styles.recipeIcons}
+                                icon="blender"
+                                color="#ff914d"
+                                size={25}
+                            />
                         <Text style={styles.recipeTitleText}>Modo de Preparo</Text>
                     </View>
                     <View>
-                        <Paragraph style={styles.recipeInfoColor} />
                         {renderPreparo(recipe.modo_preparo)}
 
                     </View>
