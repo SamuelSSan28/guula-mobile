@@ -107,7 +107,8 @@ export default function RecipeScreen() {
             }
         }
         else {
-            const response = await api_users.delete('favorites/' + recipe.id, {
+            console.log(recipe)
+            const response = await api_users.delete(`favorites/${recipe.id}`, {
                 headers: {
                     Authorization: user.id,
                 }
