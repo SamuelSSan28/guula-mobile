@@ -88,7 +88,6 @@ export default function RecipeScreen() {
         };
 
         if (!favoritou) {
-            console.log("ok");
             const response = await api_users.post('favorites', data, {
                 headers: {
                     Authorization: user.id,
@@ -124,7 +123,7 @@ export default function RecipeScreen() {
         }
     }
     
-  useEffect( () => {favoritarReceita()}, []);
+  //useEffect( () => {favoritarReceita()}, []);
 
     function renderIgredientes(ingredientes){
         var indice = 0;
@@ -170,7 +169,7 @@ export default function RecipeScreen() {
 
         const listPreparo = lista.map((prep) =>
                 <View style={styles.row2} >
-                    <Text>{prep}  </Text>
+                    <Text>{prep}</Text>
                 </View>
                         
         );
@@ -263,7 +262,7 @@ export default function RecipeScreen() {
                 </View>
 
             </ScrollView>
-         { true && <SnackbarComponent visible={showSnackbar} setVisible={setShowSnackbar} content={snackbarContent} />}
+         { showSnackbar && <SnackbarComponent visible={showSnackbar} setVisible={setShowSnackbar} content={snackbarContent} />}
 
         </>
     );

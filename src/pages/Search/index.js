@@ -189,7 +189,7 @@ async function _onPressSearch(){
     setRefresh(false)
   }
 
-  useEffect( () => {_SearchRecipe()}, []);
+  //useEffect( () => {_SearchRecipe()}, []);
 
   return (    
       <>

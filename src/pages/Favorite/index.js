@@ -25,6 +25,7 @@ export default function FavoriteScreen() {
     }
 
     async function loadRecipes(){
+        console.log("ok")
         const response = await api_users.get(`favorites?page=${page}`, {
           headers: {
             Authorization: user.id,
@@ -44,7 +45,9 @@ export default function FavoriteScreen() {
       }
 
       React.useEffect(() => {
-          loadRecipes();
+          if(user.loggedIn){
+            loadRecipes();
+          }
       }, [user])
 
       
