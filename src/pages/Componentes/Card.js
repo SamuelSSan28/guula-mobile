@@ -33,7 +33,9 @@ const styles = StyleSheet.create({
 		color: "#545454",
 		fontSize: 19,
 		fontWeight:"300",
-		/*fontFamily:""*/
+		fontFamily: 'Poppins_400Regular',
+		marginTop:5
+		
 	  }
 })
 
@@ -68,7 +70,7 @@ export default function Card_Component(props) {
 		  <TouchableOpacity onPress={() => navigateToDetail(recipe)}>
 			<Card.Cover source={{ uri: recipe.imagem}} />
 			<View>  
-			  <Title style={styles.titulo}>{recipe.titulo}</Title>
+			  <Title style={styles.titulo}>{String(recipe.titulo).toUpperCase()}</Title>
 			</View>
 			<View style={styles.recipeInfo}>
 				<View style={styles.recipeIconsAndInfo}>
