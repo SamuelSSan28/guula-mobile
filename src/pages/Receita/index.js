@@ -107,7 +107,8 @@ export default function RecipeScreen() {
             }
         }
         else {
-            const response = await api_users.delete('favorites/' + recipe.id, {
+            console.log(recipe)
+            const response = await api_users.delete(`favorites/${recipe.id}`, {
                 headers: {
                     Authorization: user.id,
                 }
@@ -125,6 +126,7 @@ export default function RecipeScreen() {
         }
     }
     
+  //useEffect( () => {favoritarReceita()}, []);
 
     function renderIgredientes(ingredientes){
         var indice = 0;
@@ -170,6 +172,7 @@ export default function RecipeScreen() {
 
         const listPreparo = lista.map((prep) =>
                 <View style={styles.row2} >
+                    <Text>{prep}</Text>
                     <Text style={{color:"#626262",fontSize: 20,fontFamily: 'Poppins_700Bold',marginRight:3} }>{cont++}  </Text>
                     <Text style={{color:"#626262",fontSize: 17,flexWrap: 'wrap',flex: 1,marginBottom:10}}>{prep}  </Text>
                 </View>
@@ -267,7 +270,7 @@ export default function RecipeScreen() {
                 </View>
 
             </ScrollView>
-            { true && <SnackbarComponent visible={showSnackbar} setVisible={setShowSnackbar} content={snackbarContent} />}
+         { showSnackbar && <SnackbarComponent visible={showSnackbar} setVisible={setShowSnackbar} content={snackbarContent} />}
 
         </>
     );

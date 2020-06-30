@@ -45,7 +45,7 @@ export default function Card_Component(props) {
 	const [refreshing, setRefreshing] = useState(false);
 
 	function navigateToDetail(recipe){
-        navegation.navigate('Recipe',{recipe});
+		navegation.navigate('Recipe',{recipe});
 	}
 
 	const renderFooter = () => {

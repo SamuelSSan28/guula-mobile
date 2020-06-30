@@ -61,10 +61,10 @@ export default function LoginScreen(props) {
                             );
       
       const response = await api_users.get('users/login', { 'headers': { "senha":password, "email":email_}});
-      const id = response.data;
-      console.log( response.data)
+      //const id = response.data;
+      console.log(response.data.id)
       props.setIsSignIn({
-        id: id,
+        id: response.data.id,
         loggedIn: true 
       });
     } catch (err) {
