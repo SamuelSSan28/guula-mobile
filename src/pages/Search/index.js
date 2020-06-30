@@ -1,14 +1,15 @@
 import React, { useState,useEffect } from 'react';
-import { View, FlatList,Text,TouchableOpacity, ActivityIndicator,Image,TouchableWithoutFeedback,Alert } from 'react-native';
-import { Chip, List, Searchbar,Appbar,Subheading,Divider,Card, Title, Paragraph,IconButton } from 'react-native-paper';
+import { View, FlatList,Text,TouchableOpacity, ActivityIndicator,Image,TouchableWithoutFeedback,Alert,Keyboard } from 'react-native';
+import { Chip, Searchbar,Appbar,Divider,Card, Title, Paragraph,IconButton } from 'react-native-paper';
 import style from '../Base/styles';
 import styles from './styles';
 import api from '../../services/api.js'
 import {useNavigation,useRoute} from '@react-navigation/native'
 
 export default function SearchScreeen(){
+  var  [ingredientesAux, setIngredientesAux] = useState([]);
+  var query = ""
   const flatListRef = React.useRef()
-  let [pesquisasRecentes,setPesquisas] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [ingredientes, setIngredientes] = useState([]);
@@ -90,12 +91,19 @@ export default function SearchScreeen(){
           <Divider />
 				
           <View style={styles.ingredientes_quant_box}>
-            { (quantReceitas > 0 && ingredientes.length  > 0 ) ? 
+            { (quantReceitas > 0 && ingredientes.length  > 0) ? 
                   <>
                     <Text style={styles.ingredientes_quant_text}>{quantReceitas} receitas encontradas</Text> 
                   </>
                   : 
-                  <View></View>}
+                  !(refresh) ?
+                  <View>
+                    <Text style={{color:"#626262",fontSize: 20,fontFamily: 'Poppins_700Bold',textAlign:"center"} }> :(</Text> 
+                    <Text style={styles.ingredientes_quant_text}> 0 receitas encontradas</Text> 
+                  </View>
+                  :<View></View>  
+                }
+
           </View>
 
           {(refresh == true) ?
@@ -142,54 +150,89 @@ export default function SearchScreeen(){
  );
  
  const renderItem_Vazio = () => (
-  <View></View>
+  <View>
+    
+  </View>
 );
+
+useEffect(() => {
+  Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
+
+  // cleanup function
+  return () => {
+    Keyboard.removeListener("keyboardDidHide", _keyboardDidHide);
+  };
+}, [searchQuery]);
+
+const _keyboardDidHide = () => {
+  //console.log("Keboard Abaixou")
+  _onPressSearch()
+};
 
 
 async function _onPressSearch(){
-    if(searchQuery == '' || ingredientes.indexOf(searchQuery) != -1)
+    console.log("onpresss: ")
+    console.log(searchQuery)
+    
+    if(searchQuery == '' || ingredientes.indexOf(searchQuery) != -1 || ingredientesAux.indexOf(searchQuery) != -1)
       return false 
-    //setIngredientes([...ingredientes,searchQuery])
-    ingredientes.push(searchQuery)
-    setSearchQuery("")
+    
     setRefresh(true)
-    console.log("Inseriu o ingrediente")
+    setIngredientes([...ingredientes,searchQuery])
+    setSearchQuery("")
+    ingredientesAux.push(searchQuery)
+
+    console.log(ingredientes)
+    console.log(ingredientesAux)
+
      _SearchRecipe()
     if(ingredientes.length > 1)
       toTop()
   }
   
   async function _removeIngrediente(ingrediente){
-    var index = ingredientes.indexOf(ingrediente);
-    if (index != -1) ingredientes.splice(index, 1);
-     _SearchRecipe()
+    console.log("REMOVE: ")
+    
+    const result = ingredientes.filter(item => item !== ingrediente)
+
+    var index = ingredientesAux.indexOf(ingrediente);
+    if (index != -1) ingredientesAux.splice(index, 1);
+    
+    //console.log(ingredientes)
+    console.log(ingredientesAux)
+
+    if(ingredientes.length > 0 &&  ingredientesAux.length > 0 ){
+      _SearchRecipe()
+    }
+    else{
+      setQuantReceitas(0)
+    }
+    setIngredientes(result)
+    
 
   }
 
-  function onChangeText_Search(){}
-
   async function _SearchRecipe(){
+    console.log("Search")
     var lista_ingredientes = "";
-    
-    
-    if (ingredientes.length== 0){
-      console.log(ingredientes)
+
+    setRefresh(true)
+    for(var i = 0; i < ingredientesAux.length; i++){
+      lista_ingredientes += ingredientesAux[i]+" "
+    }
+    console.log(ingredientesAux)
+    const res = await api.get("recipes/ingredientes",{ 'headers': { 'ingredientes': lista_ingredientes }   });
+
+    if (res.headers.total_receitas_by_ingrediente == 0){
+      setRefresh(false)
       return "Sem receitas pra vc meu consagrado"
       
     }
-    for(var i = 0; i < ingredientes.length; i++){
-      lista_ingredientes += ingredientes[i]+" "
-    }
-    console.log("Antes de Usar a API")
-    const res = await api.get("recipes/ingredientes",{ 'headers': { 'ingredientes': lista_ingredientes }   });
-    setPesquisas([...pesquisasRecentes,...res.data])
-    console.log(pesquisasRecentes.length)
+    setRefresh(false)
     setRecipes(res.data);
     setQuantReceitas(res.headers.total_receitas_by_ingredientes)
     setRefresh(false)
   }
-
-  useEffect( () => {_SearchRecipe()}, []);
 
   return (    
       <>
@@ -198,7 +241,7 @@ async function _onPressSearch(){
           style={
             { flexDirection: 'row-reverse',}
           }
-          placeholder="Search"
+          placeholder="Pesquise seus ingredientes"
           onChangeText={setSearchQuery}
           onIconPress={_onPressSearch}
           iconColor="#ff914d"
@@ -227,8 +270,6 @@ async function _onPressSearch(){
                      <Text  style={styles.text}>Pesquisa aí pow .</Text>
    
                    </View>}
-
-
           
       </>
     ); 
