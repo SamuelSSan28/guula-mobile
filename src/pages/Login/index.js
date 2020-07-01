@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { useState } from 'react';
 import api_users from '../../services/api_users';
-import { Text, ActivityIndicator,KeyboardAvoidingView,Platform } from 'react-native';
+import api_email from '../../services/api_email';
+import { Text, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
 import { TextInput, HelperText, Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import styles from './styles';
@@ -21,10 +22,14 @@ export default function LoginScreen(props) {
 
   const [alertContent, setAlertContent] = useState('');
   const [showAlert, setShowAlert] = useState(false);
-  
+
 
   function navigateToSignUp() {
     navigation.navigate('Cadastro');
+  }
+
+  async function navigateToForgotAccount() {
+    navigation.navigate('Senha');
   }
 
   async function handleValidation() {
@@ -51,18 +56,18 @@ export default function LoginScreen(props) {
     setLoading(true);
     try {
       const password = await Crypto.digestStringAsync(
-                              Crypto.CryptoDigestAlgorithm.SHA256,
-                              senha,
-                            );
+        Crypto.CryptoDigestAlgorithm.SHA256,
+        senha,
+      );
 
       const email_ = await Crypto.digestStringAsync(
-                              Crypto.CryptoDigestAlgorithm.SHA256,
-                              email,
-                            );
-      
-      const response = await api_users.get('users/login', { 'headers': { "senha":password, "email":email_}});
+        Crypto.CryptoDigestAlgorithm.SHA256,
+        email,
+      );
+
+      const response = await api_users.get('users/login', { 'headers': { "senha": password, "email": email_ } });
       const id = response.data;
-      console.log( response.data)
+      console.log(response.data)
       props.setIsSignIn({
         id: id,
         loggedIn: true
@@ -73,7 +78,7 @@ export default function LoginScreen(props) {
       setShowAlert(true);
       setAlertContent(err.response.data.error)
     }
-    
+
   }
 
   function isEmail(email) {
@@ -83,12 +88,12 @@ export default function LoginScreen(props) {
 
   return (
     <>
-      <KeyboardAvoidingView 
+      <KeyboardAvoidingView
         behavior={Platform.OS == "ios" ? "padding" : "height"}
         style={styles.container}
       >
         <Text style={styles.textTop}>Entre com a sua conta para salvar suas receitas favoritas!</Text>
-         <TextInput
+        <TextInput
           style={styles.input}
           placeholder="Email"
           keyboardType="email-address"
@@ -106,7 +111,7 @@ export default function LoginScreen(props) {
           type="error"
           visible={emailErr}
           style={{
-            fontFamily:'Poppins_400Regular',
+            fontFamily: 'Poppins_400Regular',
           }}
         >
           Email inválido
@@ -128,7 +133,7 @@ export default function LoginScreen(props) {
           type="error"
           visible={pwErr}
           style={{
-            fontFamily:'Poppins_400Regular',
+            fontFamily: 'Poppins_400Regular',
           }}
         >
           A senha deve possuir ao menos 6 caracteres
@@ -136,9 +141,12 @@ export default function LoginScreen(props) {
         {loading ? <ActivityIndicator size="small" color="#ff914d" /> : <Button mode="contained" onPress={() => handleValidation()} color='#ff914d' dark={true}>
           Entrar
        </Button>}
-          <Text style={styles.textBottom}>Não tem uma conta? <Text onPress={() => navigateToSignUp()} style={{ color: "#ff914d", fontSize: 14 }}>Cadastre-se</Text>.</Text>
+        <Text style={styles.textBottom}>Não tem uma conta? <Text onPress={() => navigateToSignUp()} style={{ color: "#ff914d", fontSize: 14 }}>Cadastre-se</Text>.</Text>
+        <Text onPress={() => navigateToForgotAccount()} style={{
+          color: "#ff914d", fontSize: 14, alignSelf: 'center'
+        }}>Esqueci Minha Senha</Text>
       </KeyboardAvoidingView>
-    {showAlert && <Alert content={alertContent} setShowAlert={setShowAlert}/>}
+      {showAlert && <Alert content={alertContent} setShowAlert={setShowAlert} />}
     </>
   )
 }
