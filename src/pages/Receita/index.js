@@ -180,13 +180,8 @@ export default function RecipeScreen() {
 
         console.log(lista)
 
-<<<<<<< HEAD
         const listPreparo = lista.map((prep, index) =>
                 <View key={index} style={styles.row2} >
-=======
-        const listPreparo = lista.map((prep) =>
-                <View style={styles.row2} >
->>>>>>> 017580f07eda158355503f2d915879e17c793648
                     <Text style={{color:"#626262",fontSize: 20,fontFamily: 'Poppins_700Bold',marginRight:3} }>{cont++}  </Text>
                     <Text style={{color:"#626262",fontSize: 17,flexWrap: 'wrap',flex: 1,marginBottom:10}}>{prep}  </Text>
                 </View>

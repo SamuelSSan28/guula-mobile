@@ -52,7 +52,6 @@ export default function Menu_Pontinho (props) {
         style={{
           flexDirection: 'row',
           justifyContent: 'flex-end',
-          marginBottom: 20
         }}>
         <Menu
           visible={visible}
