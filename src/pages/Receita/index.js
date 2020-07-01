@@ -110,7 +110,6 @@ export default function RecipeScreen() {
             }
         }
         else {
-            console.log(recipe)
             const response = await api_users.delete(`favorites/${recipe.id}`, {
                 headers: {
                     Authorization: user.id,
@@ -192,6 +191,10 @@ export default function RecipeScreen() {
         return listPreparo
     }
 
+    useEffect(() => {
+        Image.getSize(recipe.imagem, (width, height) => { setSource({ width: width, height: height }); });
+    }, [])
+
     const navegation = useNavigation();
     const route = useRoute();
     const { user, setUser } = React.useContext(UserContext);
@@ -202,7 +205,6 @@ export default function RecipeScreen() {
     const [showSnackbar, setShowSnackbar] = useState(false);
     const [snackbarContent, setSnackbarContent] = useState('');
     const dificuldade = {"Dificuldade elevada":"Dificil", "Dificuldade média":"Média", "Dificuldade baixa":"Fácil"   }
-    Image.getSize(recipe.imagem, (width, height) => { setSource({ width: width, height: height }); });
     
     return (
         <>
@@ -280,7 +282,7 @@ export default function RecipeScreen() {
                 </View>
 
             </ScrollView>
-         { showSnackbar && <SnackbarComponent visible={showSnackbar} setVisible={setShowSnackbar} content={snackbarContent} />}
+         {showSnackbar && <SnackbarComponent visible={showSnackbar} setVisible={setShowSnackbar} content={snackbarContent} />}
 
         </>
     );
