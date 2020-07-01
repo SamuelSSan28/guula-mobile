@@ -34,7 +34,10 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     recipeName: {
-        fontSize: 30,
+		color: "#545454",
+		fontSize: 26,
+		fontFamily: 'Poppins_400Regular',
+		marginTop:5,
         width: '75%',
         flex:1
     },
@@ -159,20 +162,27 @@ export default function RecipeScreen() {
         var indice = 0;
         var cont = 1;
         var lista = Preparo.split("\n")
-        
-        for(let i = 0; i < lista.length; i++){
 
-            if(lista[i].includes("Gostou" ) || lista[i].includes("gostou")|| lista[i].includes("Procurando") ){
+
+         if(lista[0].includes("MODO DE PREPARO" ))
+            lista.splice(0,1);
+         
+        for(let i = 0; i < lista.length; i++){
+            if(lista[i].includes("Gostou" ) || lista[i].includes("gostou")|| lista[i].includes("Procurando")
+            || lista[i] == "" || lista[i] == ""){
                 if (indice == 0)
                     indice = i       
-            }       
+            }  
+            
         }
 
-        lista.splice(indice,lista.length - indice);
+        if(indice !== 0 )
+            lista.splice(indice,lista.length - indice);
+
+        console.log(lista)
 
         const listPreparo = lista.map((prep) =>
                 <View style={styles.row2} >
-                    <Text>{prep}</Text>
                     <Text style={{color:"#626262",fontSize: 20,fontFamily: 'Poppins_700Bold',marginRight:3} }>{cont++}  </Text>
                     <Text style={{color:"#626262",fontSize: 17,flexWrap: 'wrap',flex: 1,marginBottom:10}}>{prep}  </Text>
                 </View>

@@ -19,6 +19,7 @@ export default function App() {
     loggedIn: false
   })
  
+
   const [receitas, setReceitas] = useState([]);
   const [totalReceitas, setTotalReceitas] = useState(0);
 
@@ -61,7 +62,7 @@ export default function App() {
     <UserProvider value={{ user, setUser }}>
       <FavoriteProvider value={{receitas, setReceitas, totalReceitas, setTotalReceitas}}>
         <PaperProvider>
-          <StatusBar barStyle="light-content" backgroundColor="#ff914d"/>
+         
           <Routes />
         </PaperProvider>
       </FavoriteProvider>
