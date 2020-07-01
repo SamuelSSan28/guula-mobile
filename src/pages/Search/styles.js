@@ -70,11 +70,13 @@ export default StyleSheet.create({
   recipeInfoColor: {
       color: "#545454"
   },titulo: {
-    textAlign: "center",
-    color: "#545454",
-    fontSize: 19,
-    fontWeight:"300",
-    fontFamily:""
-  }
+		textAlign: "center",
+		color: "#545454",
+		fontSize: 19,
+		fontWeight:"300",
+		fontFamily: 'Poppins_400Regular',
+		marginTop:5
+		
+	  },
   
   });
