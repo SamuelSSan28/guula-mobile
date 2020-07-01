@@ -18,10 +18,10 @@
   <a href="#-Tecnologias">Tecnologias</a>
 </p>
 
-## 💻 Project
-<h5 align="justify">
+## 💻 Projeto
+<p align="justify">
 Guula é um aplicativo desenvolvido com o propósito de sugerir receitas maravilhosas de acordo com os ingredientes que o usuário possui. Com mais de 5 mil receitas, o aplicativo fornece opções para todos os gostos. Além de informações básicas como lista de ingredientes e modo de preparo, cada receita é acompanhada de uma foto e grau de dificuldade.
-</h5>
+</p>
 <div align="center">
 <h1 align="row">
  <img alt="Example" title="Home" src="https://raw.githubusercontent.com/SamuelSSan28/guula-mobile/master/assets/homeScreen.png" width="160px" height="310px"/>
@@ -41,10 +41,14 @@ Esete projeto foi dessenvolvido com as seguintes tecnologias:
 - [Expo][expo]
 
 
-Feito com ♥ by {Gisele, Arthur, Danillo, Samuel}
+Feito com ♥ by { [Gisele][Gisele], [Arthur][Arthur], [Danillo][Danillo], [Samuel][Samuel] }
 
 [nodejs]: https://nodejs.org/
 [typescript]: https://www.typescriptlang.org/
 [expo]: https://expo.io/
 [reactjs]: https://reactjs.org
 [rn]: https://facebook.github.io/react-native/
+[Gisele]: https://github.com/giselesousar
+[Arthur]: https://github.com/basilioarth
+[Danillo]: https://github.com/lucasdanillo
+[Samuel]: https://github.com/SamuelSSan28
