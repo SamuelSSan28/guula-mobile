@@ -19,7 +19,7 @@ export default function Header_Back() {
 
   return (
     <Appbar.Header style={styles.header}>
-      <Appbar.BackAction color='#ffffff' onPress={go_back} />
+      <Appbar.BackAction style={{marginBottom: 20}} color='#ffffff' onPress={go_back} />
     </Appbar.Header>
   );
 }

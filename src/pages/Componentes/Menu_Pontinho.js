@@ -4,6 +4,7 @@ import { Button, Paragraph, Menu, Divider, Provider } from 'react-native-paper';
 import { Appbar } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import UserContext from '../../../providers/UserProvider';
+import FavoriteProvider from '../../../providers/FavoriteProvider';
 import * as MailComposer from 'expo-mail-composer'
 
 export default function Menu_Pontinho (props) {
@@ -12,6 +13,8 @@ export default function Menu_Pontinho (props) {
   const navigation = useNavigation();
   const message = "Olá falera do Guula xomo cai cxs";
   const {user, setUser} = React.useContext(UserContext);
+  const {setReceitas, setTotalReceitas } = React.useContext(FavoriteProvider);
+
 
   function navigateToAbout(){
     navigation.navigate('About');
@@ -22,6 +25,8 @@ export default function Menu_Pontinho (props) {
       id: null,
       loggedIn: false
     })
+    setReceitas([]);
+    setTotalReceitas(0);
   }
 
   
@@ -46,7 +51,8 @@ export default function Menu_Pontinho (props) {
       <View
         style={{
           flexDirection: 'row',
-          justifyContent: 'flex-end'
+          justifyContent: 'flex-end',
+          marginBottom: 20
         }}>
         <Menu
           visible={visible}

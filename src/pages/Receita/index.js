@@ -171,7 +171,6 @@ export default function RecipeScreen() {
 
         const listPreparo = lista.map((prep, index) =>
                 <View key={index} style={styles.row2} >
-                    <Text>{prep}</Text>
                     <Text style={{color:"#626262",fontSize: 20,fontFamily: 'Poppins_700Bold',marginRight:3} }>{cont++}  </Text>
                     <Text style={{color:"#626262",fontSize: 17,flexWrap: 'wrap',flex: 1,marginBottom:10}}>{prep}  </Text>
                 </View>

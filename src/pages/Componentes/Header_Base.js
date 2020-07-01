@@ -16,6 +16,7 @@
 					color: "#fff",
 					paddingLeft: 10,
 					fontSize: 25,
+					marginBottom: 20
 				}}>Guula</Text>
 				</View>
                 <Menu_Pontinho/> 
