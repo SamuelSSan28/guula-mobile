@@ -1,13 +1,15 @@
 import * as React from 'react';
 import {Portal, Dialog, Button, Paragraph} from 'react-native-paper';
-import {View} from 'react-native';
+import {View, Text} from 'react-native';
 
 export default function Alert(props) {
-    const [visible, setVisible] = React.useState(true);
 
     function _hideDialog (){
-        setVisible(false);
-        props.setShowAlert(false);
+        props.setAlert({
+            visible: false,
+            content: '',
+            title: ''
+        })
     }
 
     return (
@@ -16,13 +18,25 @@ export default function Alert(props) {
                 style = {{
                     textAlign: "center"
                 }}
-                visible={visible}
+                visible={props.alert.visible}
                 onDismiss={() => _hideDialog()}>
+                    <View style={{
+                    textAlign: "center",
+                    alignItems:"center"
+
+                }}>
+                            
+                <Dialog.Title>
+                  
+                        <Text>
+                        {props.alert.title}
+                        </Text>
+                </Dialog.Title>
+                </View>
                 <Dialog.Content>
                     <Paragraph style={{
-                        textAlign: "center",
                         color: "#595959"
-                    }}>{props.content}</Paragraph>
+                    }}>{props.alert.content}</Paragraph>
                 </Dialog.Content>
                 <View  style={{
                         alignItems:"center"

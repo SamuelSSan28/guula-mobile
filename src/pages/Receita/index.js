@@ -1,6 +1,6 @@
 import { IconButton, Paragraph,Checkbox,List } from 'react-native-paper';
 import Header_Back from '../Componentes/Header_Back'
-import { Text, View, StyleSheet, Image, Alert } from 'react-native';
+import { Text, View, StyleSheet, Image } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { ScrollView } from 'react-native-gesture-handler';
 import React, { useState,useEffect } from 'react';
@@ -9,6 +9,7 @@ import api_users from '../../services/api_users';
 import FavoriteProvider from '../../../providers/FavoriteProvider';
 import SnackbarComponent from '../Componentes/Snackbar';
 import CheckboxList from "rn-checkbox-list";
+import Alert from '../Componentes/Alert';
 
 const styles = StyleSheet.create({
     row: {
@@ -178,8 +179,6 @@ export default function RecipeScreen() {
         if(indice !== 0 )
             lista.splice(indice,lista.length - indice);
 
-        console.log(lista)
-
         const listPreparo = lista.map((prep, index) =>
                 <View key={index} style={styles.row2} >
                     <Text style={{color:"#626262",fontSize: 20,fontFamily: 'Poppins_700Bold',marginRight:3} }>{cont++}  </Text>
@@ -205,6 +204,11 @@ export default function RecipeScreen() {
     const [showSnackbar, setShowSnackbar] = useState(false);
     const [snackbarContent, setSnackbarContent] = useState('');
     const dificuldade = {"Dificuldade elevada":"Dificil", "Dificuldade média":"Média", "Dificuldade baixa":"Fácil"   }
+    const [alert, setAlert] = useState({
+        visible: false,
+        content: '',
+        title: ''
+    })
     
     return (
         <>
@@ -220,12 +224,12 @@ export default function RecipeScreen() {
                             size={30}
                             animated={true}
                             onPress={() => {
-                                user.loggedIn ? favoritarReceita() : Alert.alert(
-                                    'Atenção',
-                                    'É preciso estar logado para favoritar suas receitas!',
-                                    null,
-                                    { cancelable: false }
-                                );
+                                user.loggedIn ? favoritarReceita() : 
+                                setAlert({
+                                    visible: true,
+                                    content: 'É preciso estar logado para favoritar suas receitas!',
+                                    title: 'Atenção',
+                                })
                             }}
                         />
                     </View>
@@ -283,7 +287,7 @@ export default function RecipeScreen() {
 
             </ScrollView>
          {showSnackbar && <SnackbarComponent visible={showSnackbar} setVisible={setShowSnackbar} content={snackbarContent} />}
-
+         {alert.visible && <Alert alert={alert} setAlert={setAlert}/>}
         </>
     );
 }

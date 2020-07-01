@@ -78,7 +78,7 @@ export default function FavoriteScreen() {
                         </>
                     }
                 </>}
-            {error && <Alert content={error} setShowAlert={setError} />}
+            {/**error && <Alert content={error} setShowAlert={setError} />*/}
         </>
     )
 }

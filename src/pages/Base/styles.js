@@ -15,7 +15,7 @@ export default StyleSheet.create({
         alignItems:'center',
         backgroundColor: '#ff914d',
         fontFamily: 'sans-serif-light',
-        height: 50,
+        height: 60,
         margin:0
     },   
     bottomMenu:{
