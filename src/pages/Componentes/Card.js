@@ -33,7 +33,9 @@ const styles = StyleSheet.create({
 		color: "#545454",
 		fontSize: 19,
 		fontWeight:"300",
-		/*fontFamily:""*/
+		fontFamily: 'Poppins_400Regular',
+		marginTop:5
+		
 	  }
 })
 
@@ -43,7 +45,7 @@ export default function Card_Component(props) {
 	const [refreshing, setRefreshing] = useState(false);
 
 	function navigateToDetail(recipe){
-        navegation.navigate('Recipe',{recipe});
+		navegation.navigate('Recipe',{recipe});
 	}
 
 	const renderFooter = () => {
@@ -68,7 +70,7 @@ export default function Card_Component(props) {
 		  <TouchableOpacity onPress={() => navigateToDetail(recipe)}>
 			<Card.Cover source={{ uri: recipe.imagem}} />
 			<View>  
-			  <Title style={styles.titulo}>{recipe.titulo}</Title>
+			  <Title style={styles.titulo}>{String(recipe.titulo).toUpperCase()}</Title>
 			</View>
 			<View style={styles.recipeInfo}>
 				<View style={styles.recipeIconsAndInfo}>
@@ -81,7 +83,7 @@ export default function Card_Component(props) {
 				</View>
 				<View style={styles.recipeIconsAndInfo}>
 					<IconButton style={styles.recipeIcons}
-						icon="circle-slice-1"
+						icon="silverware"
 						color="#ff914d"
 						size={25}
 					/>
@@ -101,7 +103,7 @@ export default function Card_Component(props) {
 				showsVerticalScrollIndicator = {false}
 				initialNumToRender = {3}
                 data={props.receitas}
-                keyExtractor={receita => String(receita.id)}
+                keyExtractor={receita => String(receita.id)+"RRR"}
 				renderItem={renderItem}
 				ListFooterComponent={renderFooter}
 				onEndReached={!props.func ? () => {} : props.func}

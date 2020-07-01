@@ -1125,6 +1125,11 @@
     prop-types "^15.7.2"
     react-is "^16.8.0"
 
+"@react-native-community/checkbox@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@react-native-community/checkbox/-/checkbox-0.2.2.tgz#40413657b2fd7ec92fbb53bf71a639c7864bc678"
+  integrity sha512-lmnXDrW5cH+LHfOJDkaa+5uutQ7rVsDRo3Ezea4ArHFgSCt/rAIJVmkop/DMhd37F6DH5BfTFTdM4I7GuBrHIQ==
+
 "@react-native-community/cli-debugger-ui@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-debugger-ui/-/cli-debugger-ui-3.0.0.tgz#d01d08d1e5ddc1633d82c7d84d48fff07bd39416"
@@ -2509,6 +2514,11 @@ expo-constants@~9.0.0:
   resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-9.0.0.tgz#35c600079ee91d38fe4f56375caae6e90f122fdd"
   integrity sha512-1kqZMM8Ez5JT3sTEx8I69fP6NYFLOJjeM6Z63dD/m2NiwvzSADiO5+BhghnWNGN1L3bxbgOjXS6EHtS7CdSfxA==
 
+expo-crypto@~8.1.0:
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/expo-crypto/-/expo-crypto-8.1.0.tgz#b5a719bda967ab64f1a5caae180f96d80f94c1c1"
+  integrity sha512-nSmxddpSxYAKBePhX6fAx+CGaO2GRz9Np4XW5HmFxjHekjpao7lpvHiYGWAQAKP602LJ+iA/xLBKuMrHu86SNw==
+
 expo-error-recovery@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/expo-error-recovery/-/expo-error-recovery-1.1.0.tgz#98b9de5400dbfd022d1631739f3bf5e7016565da"
@@ -2554,6 +2564,13 @@ expo-location@~8.1.0:
   integrity sha512-G9JvsK1t9Z5Iybf+FCG81Jgm9Ee9leqpazxOPVabUJEWu/55Iex3yLGX04BuIA4ozAlJKBPzkhPdyqKdC7zrSw==
   dependencies:
     invariant "^2.2.4"
+
+expo-mail-composer@~8.1.0:
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/expo-mail-composer/-/expo-mail-composer-8.1.0.tgz#7de693861e374add34ba4da69df677c2d6ba7104"
+  integrity sha512-CMkDa5YX9YZj/ZLHp0f1WAMBrCZjGqsloOH9JzhnCwMVy0BR+lLYoYWiwx2zk2JTpUgADXjdQKK4edDFclGwtg==
+  dependencies:
+    query-string "^6.2.0"
 
 expo-permissions@~8.1.0:
   version "8.1.0"
@@ -4652,6 +4669,15 @@ query-string@^6.11.1, query-string@^6.12.1:
     split-on-first "^1.0.0"
     strict-uri-encode "^2.0.0"
 
+query-string@^6.2.0:
+  version "6.13.1"
+  resolved "https://registry.yarnpkg.com/query-string/-/query-string-6.13.1.tgz#d913ccfce3b4b3a713989fe6d39466d92e71ccad"
+  integrity sha512-RfoButmcK+yCta1+FuU8REvisx1oEzhMKwhLUNcepQTPGcNMp1sIqjnfCtfnvGSQZQEhaBHvccujtWoUV3TTbA==
+  dependencies:
+    decode-uri-component "^0.2.0"
+    split-on-first "^1.0.0"
+    strict-uri-encode "^2.0.0"
+
 querystringify@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.1.1.tgz#60e5a5fd64a7f8bfa4d2ab2ed6fdf4c85bad154e"
@@ -5037,6 +5063,13 @@ rimraf@~2.2.6:
   version "2.2.8"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.2.8.tgz#e439be2aaee327321952730f99a8929e4fc50582"
   integrity sha1-5Dm+Kq7jJzIZUnMPmaiSnk/FBYI=
+
+rn-checkbox-list@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/rn-checkbox-list/-/rn-checkbox-list-0.2.0.tgz#919687832de8a52168b2c14c77b9493443187b09"
+  integrity sha512-q2+G9cm7ZvRLwF1axKYJKD24ncZAcc5HyFg3BfMuJDpZH7V+Fw0+Wg6nZ/xnjKk0FMgWGQhFGt0g7tgIn7zDCQ==
+  dependencies:
+    "@react-native-community/checkbox" "^0.2.2"
 
 rsvp@^4.8.4:
   version "4.8.5"

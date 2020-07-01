@@ -61,16 +61,16 @@ export default function LoginScreen(props) {
       );
 
       const email_ = await Crypto.digestStringAsync(
-        Crypto.CryptoDigestAlgorithm.SHA256,
-        email,
-      );
-
-      const response = await api_users.get('users/login', { 'headers': { "senha": password, "email": email_ } });
-      const id = response.data;
-      console.log(response.data)
+                              Crypto.CryptoDigestAlgorithm.SHA256,
+                              email,
+                            );
+      
+      const response = await api_users.get('users/login', { 'headers': { "senha":password, "email":email_}});
+      //const id = response.data;
+      console.log(response.data.id)
       props.setIsSignIn({
-        id: id,
-        loggedIn: true
+        id: response.data.id,
+        loggedIn: true 
       });
     } catch (err) {
       console.log(err.response.data)

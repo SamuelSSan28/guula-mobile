@@ -3,6 +3,7 @@ import { BottomNavigation } from 'react-native-paper';
 import HomeScreen from '../Home';
 import SearchScreen from '../Search';
 import FavoriteScreen from '../Favorite';
+import {View} from 'react-native'
 
 const HomeRoute = () => <HomeScreen/>;
 

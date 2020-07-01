@@ -3,7 +3,7 @@ import Routes from './src/Routes.js';
 import { UserProvider } from './providers/UserProvider';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { AppLoading } from 'expo';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, StatusBar } from 'react-native';
 import { Poppins_400Regular, Poppins_700Bold, useFonts } from '@expo-google-fonts/poppins';
 import {FavoriteProvider} from './providers/FavoriteProvider';
 
@@ -61,6 +61,7 @@ export default function App() {
     <UserProvider value={{ user, setUser }}>
       <FavoriteProvider value={{receitas, setReceitas, totalReceitas, setTotalReceitas}}>
         <PaperProvider>
+          <StatusBar barStyle="light-content" backgroundColor="#ff914d"/>
           <Routes />
         </PaperProvider>
       </FavoriteProvider>

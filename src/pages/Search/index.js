@@ -1,96 +1,19 @@
 import React, { useState,useEffect } from 'react';
-import { View, StyleSheet, FlatList,Text,TouchableOpacity, ActivityIndicator,Image,TouchableWithoutFeedback,Alert } from 'react-native';
-import { Chip, List, Searchbar,Appbar,Subheading,Divider,Card, Title, Paragraph,IconButton } from 'react-native-paper';
+import { View, FlatList,Text,TouchableOpacity, ActivityIndicator,Image,TouchableWithoutFeedback,Alert,Keyboard } from 'react-native';
+import { Chip, Searchbar,Appbar,Divider,Card, Title, Paragraph,IconButton } from 'react-native-paper';
 import style from '../Base/styles';
+import styles from './styles';
 import api from '../../services/api.js'
-import Constants from "expo-constants";
 import {useNavigation,useRoute} from '@react-navigation/native'
 
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      marginTop: Constants.statusBarHeight,
-      marginHorizontal: 3
-
-    },
-	ingredientes_box:{
-		margin: 10,
-	},
-	ingredientes_quant_box:{
-		margin: 5,
-		alignItems:'center',
-	},
-	ingredientes_box_text:{
-		marginBottom: 5,
-		color:"#a6a6a6",
-		fontSize:15,
-		fontWeight: "bold",
-	
-	},
-	ingredientes_quant_text:{
-		color:"#a6a6a6",
-		fontSize:16,
-
-	},
-    row: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      paddingHorizontal: 0,
-      marginTop:0
-    },
-    chip: {
-      backgroundColor:"#ff914d",
-      margin: 4,
-
-    },
-    tiny: {
-      color:"#ffff"
-    },
-    text: {
-      textAlign: "center",
-      color: "#595959",
-      fontFamily:'Poppins_400Regular',
-      fontSize: 18,
-      paddingBottom: 30
-    },container: {
-      flex: 1, 
-        justifyContent: "center",
-        backgroundColor:"#fff",
-        alignItems: "center",
-        padding: 10,
-    },
-    image:{
-      margin:10,
-      width: 150,
-      height: 150,
-    },
-    recipeInfo: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-evenly'
-  }, recipeIconsAndInfo: {
-  alignItems: 'center',
-  flexDirection: 'row',
-  },
-  recipeInfoColor: {
-      color: "#545454"
-  },titulo: {
-    textAlign: "center",
-    color: "#545454",
-    fontSize: 19,
-    fontWeight:"300",
-    fontFamily:""
-  }
-  
-  });
-
-
 export default function SearchScreeen(){
+  var  [ingredientesAux, setIngredientesAux] = useState([]);
+  var query = ""
   const flatListRef = React.useRef()
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  var [ingredientes, setIngredientes] = useState([]);
-  const [quantReceitas, setQuantReceitas] = useState(1);
+  const [ingredientes, setIngredientes] = useState([]);
+  const [quantReceitas, setQuantReceitas] = useState(0);
   const [refresh,setRefresh] = useState(false)
   const [recipes, setRecipes] = useState([]);
   const [count_touch, setCount_touch] = useState(0);
@@ -126,13 +49,13 @@ export default function SearchScreeen(){
 
   const navegation = useNavigation();
 
-  function navigateToDetail(receita){
-    navegation.navigate('Recipe',{receita});
+  function navigateToDetail(recipe){
+    navegation.navigate('Recipe',{recipe});
   }
   
   function show_alert(){
     setCount_touch(parseInt(count_touch) + 1);
-    console.log(count_touch)
+  
 
     if (parseInt(count_touch) ==  20){
       var random_id = Math.floor((Math.random() * 16))
@@ -168,13 +91,26 @@ export default function SearchScreeen(){
           <Divider />
 				
           <View style={styles.ingredientes_quant_box}>
-            { (quantReceitas > 0 && ingredientes.length  > 0 ) ? 
+            { (quantReceitas > 0 && ingredientes.length  > 0) ? 
                   <>
                     <Text style={styles.ingredientes_quant_text}>{quantReceitas} receitas encontradas</Text> 
                   </>
                   : 
-                  <View></View>}
+                  !(refresh) ?
+                  <View>
+                    <Text style={{color:"#626262",fontSize: 20,fontFamily: 'Poppins_700Bold',textAlign:"center"} }> :(</Text> 
+                    <Text style={styles.ingredientes_quant_text}> 0 receitas encontradas</Text> 
+                  </View>
+                  :<View></View>  
+                }
+
           </View>
+
+          {(refresh == true) ?
+                <ActivityIndicator animating size='large' color="#ff914d"/> 
+            :  <View></View> } 
+
+          
        </>
       );
       return(
@@ -183,21 +119,6 @@ export default function SearchScreeen(){
         </View>
       );        
   }
-  
-  
-	const renderFooter = () => {
-		if (!loading) return null
-		return (
-		  <View
-			style={{
-			  paddingVertical: 20,
-			  borderTopWidth: 1,
-			  borderColor: '#CED0CE'
-			}}>
-			<ActivityIndicator animating size='large' />
-		  </View>
-		)
-	}
 
 	const renderItem = ({item:recipe}) => (
     <Card style={{padding: 10,margin:5}} elevation={2}>
@@ -217,7 +138,7 @@ export default function SearchScreeen(){
       </View>
       <View style={styles.recipeIconsAndInfo}>
         <IconButton style={styles.recipeIcons}
-          icon="circle-slice-1"
+          icon="silverware"
           color="#ff914d"
           size={25}
         />
@@ -225,47 +146,93 @@ export default function SearchScreeen(){
       </View>
     </View>
     </TouchableOpacity>
-    {setLoading(false)}
   </Card>
  );
-	
+ 
+ const renderItem_Vazio = () => (
+  <View>
+    
+  </View>
+);
+
+useEffect(() => {
+  Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
+
+  // cleanup function
+  return () => {
+    Keyboard.removeListener("keyboardDidHide", _keyboardDidHide);
+  };
+}, [searchQuery]);
+
+const _keyboardDidHide = () => {
+  //console.log("Keboard Abaixou")
+  _onPressSearch()
+};
 
 
-   function _onPressSearch(){
-    if(searchQuery == '' || ingredientes.indexOf(searchQuery) != -1)
-      return false
-    ingredientes.push(searchQuery)   
-    _SearchRecipe()
+async function _onPressSearch(){
+    console.log("onpresss: ")
+    console.log(searchQuery)
+    
+    if(searchQuery == '' || ingredientes.indexOf(searchQuery) != -1 || ingredientesAux.indexOf(searchQuery) != -1)
+      return false 
+    
+    setRefresh(true)
+    setIngredientes([...ingredientes,searchQuery])
     setSearchQuery("")
-    setRefresh(!refresh)
-    toTop()
+    ingredientesAux.push(searchQuery)
+
+    console.log(ingredientes)
+    console.log(ingredientesAux)
+
+     _SearchRecipe()
+    if(ingredientes.length > 1)
+      toTop()
   }
   
-  function _removeIngrediente(ingrediente){
-    var index = ingredientes.indexOf(ingrediente);
-    if (index != -1) ingredientes.splice(index, 1);
-    _SearchRecipe()
-    setQuantReceitas(quantReceitas - 1)
-  }
+  async function _removeIngrediente(ingrediente){
+    console.log("REMOVE: ")
+    
+    const result = ingredientes.filter(item => item !== ingrediente)
 
-  function onChangeText_Search(){}
+    var index = ingredientesAux.indexOf(ingrediente);
+    if (index != -1) ingredientesAux.splice(index, 1);
+    
+    //console.log(ingredientes)
+    console.log(ingredientesAux)
+
+    if(ingredientes.length > 0 &&  ingredientesAux.length > 0 ){
+      _SearchRecipe()
+    }
+    else{
+      setQuantReceitas(0)
+    }
+    setIngredientes(result)
+    
+
+  }
 
   async function _SearchRecipe(){
+    console.log("Search")
     var lista_ingredientes = "";
 
-    if (ingredientes.length== 0)
-      return "Sem receitas pra vc meu consagrado"
-
-    for(var i = 0; i < ingredientes.length; i++){
-      lista_ingredientes += ingredientes[i]+" "
+    setRefresh(true)
+    for(var i = 0; i < ingredientesAux.length; i++){
+      lista_ingredientes += ingredientesAux[i]+" "
     }
+    console.log(ingredientesAux)
     const res = await api.get("recipes/ingredientes",{ 'headers': { 'ingredientes': lista_ingredientes }   });
+
+    if (res.headers.total_receitas_by_ingrediente == 0){
+      setRefresh(false)
+      return "Sem receitas pra vc meu consagrado"
+      
+    }
+    setRefresh(false)
     setRecipes(res.data);
     setQuantReceitas(res.headers.total_receitas_by_ingredientes)
-    setLoading(false)
+    setRefresh(false)
   }
-
-  useEffect( () => {_SearchRecipe()}, []);
 
   return (    
       <>
@@ -274,7 +241,7 @@ export default function SearchScreeen(){
           style={
             { flexDirection: 'row-reverse',}
           }
-          placeholder="Search"
+          placeholder="Pesquise seus ingredientes"
           onChangeText={setSearchQuery}
           onIconPress={_onPressSearch}
           iconColor="#ff914d"
@@ -282,7 +249,7 @@ export default function SearchScreeen(){
             />
         </Appbar.Header>
 
-        {(quantReceitas > 0 && ingredientes.length  > 0 ) ?  
+        {(ingredientes.length  > 0 ) ?  
              <FlatList
                 style={{ marginTop: 8 }}
                 ref={flatListRef}
@@ -290,20 +257,19 @@ export default function SearchScreeen(){
                 showsVerticalScrollIndicator = {false}
                 data={recipes}
                 keyExtractor={receita => String(receita.id)}
-                renderItem={renderItem}
+                renderItem={(quantReceitas  > 0 ) ? renderItem: renderItem_Vazio}
                 initialNumToRender = {5}
-                ListFooterComponent={renderFooter}
                 ListHeaderComponent={renderHeader}
-                   />       
-              : <View style={styles.container}>
-                  <TouchableWithoutFeedback onPress={show_alert}> 
-                    <Image style={styles.image}
-                              source={require('../assets/ingredientes.png')} />
-                  </TouchableWithoutFeedback>
-                  <Text  style={styles.text}>Pesquisa aí pow .</Text>
-
-                </View>}
-
+                   />    
+                      
+              :  <View style={styles.container}>
+                     <TouchableWithoutFeedback onPress={show_alert}> 
+                       <Image style={styles.image}
+                                 source={require('../assets/ingredientes.png')} />
+                     </TouchableWithoutFeedback>
+                     <Text  style={styles.text}>Pesquisa aí pow .</Text>
+   
+                   </View>}
           
       </>
     ); 
