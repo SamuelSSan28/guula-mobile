@@ -15,10 +15,9 @@ export default function FavoriteScreen() {
     const [loading, setLoading] = React.useState(false);//implementar no provider
     const [error, setError] = React.useState(null);
 
-    const [page, setPage] = React.useState(1);
 
     const { user, setUser } = React.useContext(UserContext);
-    const { receitas, setReceitas, totalReceitas, setTotalReceitas } = React.useContext(FavoriteProvider);
+    const { receitas, setReceitas, totalReceitas, setTotalReceitas, page, setPage } = React.useContext(FavoriteProvider);
 
     function onRefresh() {
         loadRecipes();
@@ -33,7 +32,7 @@ export default function FavoriteScreen() {
           .catch(function (error) {
             setError(error)
           });
-        setReceitas([...receitas, ...response.data]);
+        setReceitas([...receitas, ...response.data]); 
         /**(receitas).map(receita => {
             receita['id'] = receita['receita_id'];
             delete receita.receita_id;

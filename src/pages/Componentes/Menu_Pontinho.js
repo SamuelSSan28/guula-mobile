@@ -13,7 +13,7 @@ export default function Menu_Pontinho (props) {
   const navigation = useNavigation();
   const message = "Olá falera do Guula xomo cai cxs";
   const {user, setUser} = React.useContext(UserContext);
-  const {setReceitas, setTotalReceitas } = React.useContext(FavoriteProvider);
+  const {setReceitas, setTotalReceitas, setPage } = React.useContext(FavoriteProvider);
 
 
   function navigateToAbout(){
@@ -27,6 +27,7 @@ export default function Menu_Pontinho (props) {
     })
     setReceitas([]);
     setTotalReceitas(0);
+    setPage(1);
   }
 
   
@@ -60,13 +61,13 @@ export default function Menu_Pontinho (props) {
               <Appbar.Action icon="dots-vertical" onPress={openMenu} />
           }
         >
-          <Menu.Item onPress={navigateToAbout} title="About" icon="information-outline" />
+          <Menu.Item onPress={navigateToAbout} title="Sobre" icon="information-outline" />
           <Divider />
-          <Menu.Item onPress={sendMail} title="Contact us" icon="email"/>
+          <Menu.Item onPress={sendMail} title="Contato" icon="email"/>
           {user.loggedIn &&
           <>
             <Divider />
-            <Menu.Item onPress={logout} title="Logout" icon= "logout-variant"/> 
+            <Menu.Item onPress={logout} title="Sair" icon= "logout-variant"/> 
           </>
           }
         </Menu>
