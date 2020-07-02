@@ -19,7 +19,11 @@ export default function LoginScreen(props) {
   const [pwErr, setPwErr] = useState(false);
 
   const [alertContent, setAlertContent] = useState('');
-  const [showAlert, setShowAlert] = useState(false);
+  const [alert, setAlert] = useState({
+    visible: false,
+    content: '',
+    title: ''
+  });
   
 
   function navigateToSignUp() {
@@ -67,8 +71,11 @@ export default function LoginScreen(props) {
       });
     } catch (err) {
       setLoading(false);
-      setShowAlert(true);
-      setAlertContent(err.response.data.error)
+      setAlert({
+        visible: true,
+        content: err.response.data.error,
+        title: ''
+      })
     }
     
   }
@@ -135,7 +142,7 @@ export default function LoginScreen(props) {
        </Button>}
           <Text style={styles.textBottom}>Não tem uma conta? <Text onPress={() => navigateToSignUp()} style={{ color: "#ff914d", fontSize: 14 }}>Cadastre-se</Text>.</Text>
       </KeyboardAvoidingView>
-    {showAlert && <Alert content={alertContent} setShowAlert={setShowAlert}/>}
+    {alert.visible && <Alert alert={alert} setAlert={setAlert}/>} 
     </>
   )
 }

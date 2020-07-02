@@ -25,21 +25,27 @@ export default function Alert(props) {
                     alignItems:"center"
 
                 }}>
-                            
                 <Dialog.Title>
-                  
-                        <Text>
+
+                        <Text style={{
+                            fontFamily: 'Poppins_400Regular'
+                        }}>
                         {props.alert.title}
                         </Text>
                 </Dialog.Title>
                 </View>
+                
                 <Dialog.Content>
                     <Paragraph style={{
-                        color: "#595959"
+                        color: "#595959",
+                        textAlign: "center",
+                        fontSize: 16,
+                        fontFamily: 'Poppins_400Regular'
                     }}>{props.alert.content}</Paragraph>
                 </Dialog.Content>
                 <View  style={{
-                        alignItems:"center"
+                        //alignItems:"center",
+                        marginTop: 0,
                 }}>
                 <Dialog.Actions>
                  
