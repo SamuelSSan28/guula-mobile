@@ -17,6 +17,7 @@ export default function Menu_Pontinho (props) {
 
 
   function navigateToAbout(){
+    closeMenu();
     navigation.navigate('About');
   }
 
@@ -25,6 +26,7 @@ export default function Menu_Pontinho (props) {
       id: null,
       loggedIn: false
     })
+    closeMenu();
     setReceitas([]);
     setTotalReceitas(0);
     setPage(1);
@@ -58,7 +60,7 @@ export default function Menu_Pontinho (props) {
           visible={visible}
           onDismiss={closeMenu}
           anchor={
-              <Appbar.Action icon="dots-vertical" onPress={openMenu} />
+              <Appbar.Action icon="dots-vertical" onPress={openMenu} color="white" />
           }
         >
           <Menu.Item onPress={navigateToAbout} title="Sobre" icon="information-outline" />

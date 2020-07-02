@@ -108,9 +108,9 @@ export default function Card_Component(props) {
 				ListFooterComponent={renderFooter}
 				onEndReached={!props.func ? () => {} : props.func}
                 onEndReachedThreshold={0.1}
-                refreshControl={
-                  <RefreshControl colors={["#ff914d"]} refreshing={refreshing} onRefresh={onRefresh} />
-                }
+                //refreshControl={
+                //  <RefreshControl colors={["#ff914d"]} refreshing={refreshing} onRefresh={onRefresh} />
+                //}
             />       
       }
       </>

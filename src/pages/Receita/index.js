@@ -121,7 +121,7 @@ export default function RecipeScreen() {
                 });
             if (response.status == 204) {
                 setReceitas(receitas.filter(e => e.id != recipe.id));
-                setTotalReceitas(Number(totalReceitas)-1);
+                setTotalReceitas(String(Number(totalReceitas)-1));
                 setSnackbarContent("Receita removida dos favoritos!")
                 setShowSnackbar(true);
                 setFavoritou(false);

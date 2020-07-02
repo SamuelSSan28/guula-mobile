@@ -12,7 +12,7 @@ import api_users from '../../services/api_users';
 
 export default function FavoriteScreen() {
 
-    const [loading, setLoading] = React.useState(false);//implementar no provider
+    const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
 
 
@@ -39,10 +39,12 @@ export default function FavoriteScreen() {
         })*/
         setTotalReceitas(response.headers.total_receitas_favoritas);
         setPage(page + 1);
+        setLoading(false);
       }
 
       React.useEffect(() => {
           if(user.loggedIn){
+            setLoading(true);
             loadRecipes();
           }
       }, [user])
