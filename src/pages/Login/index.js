@@ -143,7 +143,7 @@ export default function LoginScreen(props) {
        </Button>}
         <Text style={styles.textBottom}>Não tem uma conta? <Text onPress={() => navigateToSignUp()} style={{ color: "#ff914d", fontSize: 14 }}>Cadastre-se</Text>.</Text>
         <Text onPress={() => navigateToForgotAccount()} style={{
-          color: "#ff914d", fontSize: 14, alignSelf: 'center'
+          color: "#ff914d", fontSize: 14, alignSelf: 'center', fontFamily: 'Poppins_400Regular'
         }}>Esqueci Minha Senha</Text>
       </KeyboardAvoidingView>
       {showAlert && <Alert content={alertContent} setShowAlert={setShowAlert} />}

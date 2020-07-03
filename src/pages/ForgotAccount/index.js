@@ -4,6 +4,7 @@ import Header_Back from '../Componentes/Header_Back'
 import api from '../../services/api';
 import api_email from '../../services/api_email';
 import api_users from '../../services/api_users';
+import * as Crypto from 'expo-crypto';
 import { Text, Alert, ActivityIndicator, Platform, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import styles from './styles.js'
@@ -51,7 +52,6 @@ export default function PasswordScreen() {
 
   async function validar_email() {
     let existe_erro = false;
-    console.log(text_email);
     if (loading) {
       return;
     }
@@ -62,8 +62,13 @@ export default function PasswordScreen() {
       setMensagem_email_erro('Email inválido')
     }
     else {
-      const response = await api_users.get('users/' + text_email);
-      if (response.data.message != "OK") {
+      const email_ = await Crypto.digestStringAsync(
+        Crypto.CryptoDigestAlgorithm.SHA256,
+        text_email,
+      );
+      const response = await api_users.get('user', { 'headers': {"email":email_}});
+      
+      if (response.data.exist == false) {
         existe_erro = true;
         setEmail_erro(true);
         setMensagem_email_erro('Email não cadastrado!')
@@ -114,8 +119,8 @@ export default function PasswordScreen() {
     }
 
     const data = {
-      senha_p: text_senha,
-      email_p: text_email
+      senha: text_senha,
+      email: text_email
     };
 
     setLoading(true);
@@ -216,7 +221,7 @@ export default function PasswordScreen() {
 </Button>}
         </View> : <View style={styles.container}>
             <Text style={styles.textTop}>Insira sua nova senha</Text>
-            <TextInput secureTextEntry={true}
+            <TextInput secureTextEntry
               style={styles.input}
               placeholder="Nova Senha"
               value={text_senha}
@@ -236,7 +241,7 @@ export default function PasswordScreen() {
             >
               {mensagem_senha_erro}
             </HelperText>
-            <TextInput secureTextEntry={true}
+            <TextInput secureTextEntry
               style={styles.input}
               placeholder="Confirmar Nova Senha"
               value={text_confirmar_senha}
