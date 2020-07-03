@@ -20,17 +20,12 @@ export default function LoginScreen(props) {
   const [pwErr, setPwErr] = useState(false);
 
   const [alertContent, setAlertContent] = useState('');
-<<<<<<< HEAD
-  const [showAlert, setShowAlert] = useState(false);
-
-=======
   const [alert, setAlert] = useState({
     visible: false,
     content: '',
     title: ''
   });
   
->>>>>>> de5d278b04a435b905458e7e5c72cb37529d6473
 
   function navigateToSignUp() {
     navigation.navigate('Cadastro');
@@ -155,11 +150,7 @@ export default function LoginScreen(props) {
           color: "#ff914d", fontSize: 14, alignSelf: 'center', fontFamily: 'Poppins_400Regular'
         }}>Esqueci Minha Senha</Text>
       </KeyboardAvoidingView>
-<<<<<<< HEAD
-      {showAlert && <Alert content={alertContent} setShowAlert={setShowAlert} />}
-=======
     {alert.visible && <Alert alert={alert} setAlert={setAlert}/>} 
->>>>>>> de5d278b04a435b905458e7e5c72cb37529d6473
     </>
   )
 }
