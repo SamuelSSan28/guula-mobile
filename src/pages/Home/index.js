@@ -40,7 +40,7 @@ export default function HomeScreen(){
     <>
     <Header_Base/>
     <Card_Component receitas={recipes} func={loadRecipes} loading={loading} onRefresh={onRefresh}/>  
-    {showAlert && <Alert content={alertContent} setShowAlert={setShowAlert}/>}
+    {/**showAlert && <Alert content={alertContent} setShowAlert={setShowAlert}/>*/}
     </>
     )
 }

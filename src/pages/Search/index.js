@@ -170,10 +170,7 @@ const _keyboardDidHide = () => {
 };
 
 
-async function _onPressSearch(){
-    console.log("onpresss: ")
-    console.log(searchQuery)
-    
+async function _onPressSearch(){   
     if(searchQuery == '' || ingredientes.indexOf(searchQuery) != -1 || ingredientesAux.indexOf(searchQuery) != -1)
       return false 
     
@@ -182,8 +179,8 @@ async function _onPressSearch(){
     setSearchQuery("")
     ingredientesAux.push(searchQuery)
 
-    console.log(ingredientes)
-    console.log(ingredientesAux)
+    //console.log(ingredientes)
+    //console.log(ingredientesAux)
 
      _SearchRecipe()
     if(ingredientes.length > 1)
@@ -199,7 +196,6 @@ async function _onPressSearch(){
     if (index != -1) ingredientesAux.splice(index, 1);
     
     //console.log(ingredientes)
-    console.log(ingredientesAux)
 
     if(ingredientes.length > 0 &&  ingredientesAux.length > 0 ){
       _SearchRecipe()
@@ -213,14 +209,14 @@ async function _onPressSearch(){
   }
 
   async function _SearchRecipe(){
-    console.log("Search")
+  
     var lista_ingredientes = "";
 
     setRefresh(true)
     for(var i = 0; i < ingredientesAux.length; i++){
       lista_ingredientes += ingredientesAux[i]+" "
     }
-    console.log(ingredientesAux)
+  
     const res = await api.get("recipes/ingredientes",{ 'headers': { 'ingredientes': lista_ingredientes }   });
 
     if (res.headers.total_receitas_by_ingrediente == 0){
@@ -267,7 +263,7 @@ async function _onPressSearch(){
                        <Image style={styles.image}
                                  source={require('../assets/ingredientes.png')} />
                      </TouchableWithoutFeedback>
-                     <Text  style={styles.text}>Pesquisa aí pow .</Text>
+                     <Text  style={styles.text}>Encontre receitas de acordo com o que você tem em casa</Text>
    
                    </View>}
           

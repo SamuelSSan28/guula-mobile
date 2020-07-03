@@ -12,13 +12,12 @@ import api_users from '../../services/api_users';
 
 export default function FavoriteScreen() {
 
-    const [loading, setLoading] = React.useState(false);//implementar no provider
+    const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
 
-    const [page, setPage] = React.useState(1);
 
     const { user, setUser } = React.useContext(UserContext);
-    const { receitas, setReceitas, totalReceitas, setTotalReceitas } = React.useContext(FavoriteProvider);
+    const { receitas, setReceitas, totalReceitas, setTotalReceitas, page, setPage } = React.useContext(FavoriteProvider);
 
     function onRefresh() {
         loadRecipes();
@@ -33,17 +32,19 @@ export default function FavoriteScreen() {
           .catch(function (error) {
             setError(error)
           });
-        setReceitas([...receitas, ...response.data]);
+        setReceitas([...receitas, ...response.data]); 
         /**(receitas).map(receita => {
             receita['id'] = receita['receita_id'];
             delete receita.receita_id;
         })*/
         setTotalReceitas(response.headers.total_receitas_favoritas);
         setPage(page + 1);
+        setLoading(false);
       }
 
       React.useEffect(() => {
           if(user.loggedIn){
+            setLoading(true);
             loadRecipes();
           }
       }, [user])
@@ -78,7 +79,7 @@ export default function FavoriteScreen() {
                         </>
                     }
                 </>}
-            {error && <Alert content={error} setShowAlert={setError} />}
+            {/**error && <Alert content={error} setShowAlert={setError} />*/}
         </>
     )
 }

@@ -19,8 +19,10 @@ export default function App() {
     loggedIn: false
   })
  
+
   const [receitas, setReceitas] = useState([]);
   const [totalReceitas, setTotalReceitas] = useState(0);
+  const [page, setPage] = React.useState(1); 
 
   async function loadUser() {
     try {
@@ -59,9 +61,9 @@ export default function App() {
 
   return (
     <UserProvider value={{ user, setUser }}>
-      <FavoriteProvider value={{receitas, setReceitas, totalReceitas, setTotalReceitas}}>
+      <FavoriteProvider value={{receitas, setReceitas, totalReceitas, setTotalReceitas, page, setPage}}>
         <PaperProvider>
-          <StatusBar barStyle="light-content" backgroundColor="#ff914d"/>
+         
           <Routes />
         </PaperProvider>
       </FavoriteProvider>

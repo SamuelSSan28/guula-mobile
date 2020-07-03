@@ -8,7 +8,6 @@ import { useNavigation } from '@react-navigation/native';
 import styles from './styles';
 import Alert from '../Componentes/Alert';
 import * as Crypto from 'expo-crypto';
-import { string } from 'yup';
 
 export default function LoginScreen(props) {
 
@@ -21,8 +20,17 @@ export default function LoginScreen(props) {
   const [pwErr, setPwErr] = useState(false);
 
   const [alertContent, setAlertContent] = useState('');
+<<<<<<< HEAD
   const [showAlert, setShowAlert] = useState(false);
 
+=======
+  const [alert, setAlert] = useState({
+    visible: false,
+    content: '',
+    title: ''
+  });
+  
+>>>>>>> de5d278b04a435b905458e7e5c72cb37529d6473
 
   function navigateToSignUp() {
     navigation.navigate('Cadastro');
@@ -67,16 +75,17 @@ export default function LoginScreen(props) {
       
       const response = await api_users.get('users/login', { 'headers': { "senha":password, "email":email_}});
       //const id = response.data;
-      console.log(response.data.id)
       props.setIsSignIn({
         id: response.data.id,
         loggedIn: true 
       });
     } catch (err) {
-      console.log(err.response.data)
       setLoading(false);
-      setShowAlert(true);
-      setAlertContent(err.response.data.error)
+      setAlert({
+        visible: true,
+        content: err.response.data.error,
+        title: ''
+      })
     }
 
   }
@@ -146,7 +155,11 @@ export default function LoginScreen(props) {
           color: "#ff914d", fontSize: 14, alignSelf: 'center', fontFamily: 'Poppins_400Regular'
         }}>Esqueci Minha Senha</Text>
       </KeyboardAvoidingView>
+<<<<<<< HEAD
       {showAlert && <Alert content={alertContent} setShowAlert={setShowAlert} />}
+=======
+    {alert.visible && <Alert alert={alert} setAlert={setAlert}/>} 
+>>>>>>> de5d278b04a435b905458e7e5c72cb37529d6473
     </>
   )
 }

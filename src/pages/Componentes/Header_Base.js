@@ -3,7 +3,7 @@
  import Menu_Pontinho from './Menu_Pontinho';
  import styles from '../Base/styles';
  import logoImg from '../assets/logo.png';
- import {Image, Text, View} from 'react-native';
+ import {Image, Text, View } from 'react-native';
  import {IconButton} from 'react-native-paper';
  
  export default class Header_Base extends React.Component {
@@ -17,7 +17,7 @@
 					paddingLeft: 10,
 					fontSize: 25,
 				}}>Guula</Text>
-				</View>
+				</View>				
                 <Menu_Pontinho/> 
 			</Appbar.Header>
 		)
