@@ -221,8 +221,10 @@ export default function PasswordScreen() {
 </Button>}
         </View> : <View style={styles.container}>
             <Text style={styles.textTop}>Insira sua nova senha</Text>
-            <TextInput secureTextEntry
+            <TextInput 
               style={styles.input}
+              keyboardType="default"
+              secureTextEntry
               placeholder="Nova Senha"
               value={text_senha}
               placeholderTextColor="black"
@@ -241,8 +243,10 @@ export default function PasswordScreen() {
             >
               {mensagem_senha_erro}
             </HelperText>
-            <TextInput secureTextEntry
+            <TextInput 
               style={styles.input}
+              keyboardType="default"
+              secureTextEntry
               placeholder="Confirmar Nova Senha"
               value={text_confirmar_senha}
               placeholderTextColor="black"
