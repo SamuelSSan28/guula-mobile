@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { TextInput, Button, HelperText } from 'react-native-paper';
 import Header_Back from '../Componentes/Header_Back'
 import api_users from '../../services/api_users';
-import { Text, Alert, ActivityIndicator, Platform, KeyboardAvoidingView,SafeAreaView } from 'react-native';
+import { Text , ActivityIndicator, Platform, KeyboardAvoidingView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import styles from './styles.js'
+import styles from './styles.js';
+import Alert from '../Componentes/Alert';
 
 export default function SignupScreen() {
 
@@ -20,6 +21,12 @@ export default function SignupScreen() {
   const [email_erro, setEmail_erro] = useState(false);
   const [mensagem_email_erro, setMensagem_email_erro] = useState('');
   const [loading, setLoading] = React.useState(false);
+  const [alert, setAlert] = useState({
+    visible: false,
+    content: '',
+    title: '',
+    onPress: null
+  });
 
   const navigation = useNavigation();
 
@@ -77,14 +84,12 @@ export default function SignupScreen() {
     try {
       const response = await api_users.post('users', data);
       if (response.status == 200) {
-        Alert.alert(
-          'Sucesso',
-          'Usuário cadastrado com sucesso!',
-          [
-            { text: 'OK', onPress: () => navigation.goBack() }
-          ],
-          { cancelable: false }
-        );
+        setAlert({
+          visible: true,
+          content: 'Usuário cadastrado com sucesso!',
+          title: 'Sucesso',
+          onPress: () => navigation.goBack()
+        })
       }
       else {
         Alert.alert(
@@ -96,13 +101,11 @@ export default function SignupScreen() {
       }
 
     } catch (err) {
-      Alert.alert(
-        'Erro',
-        err.response.data.error,
-        null,
-        { cancelable: false }
-      );
-
+      setAlert({
+        visible: true,
+        content: err.response.data.error,
+        title: ''
+      })
     }
     setLoading(false);
   }
@@ -111,7 +114,8 @@ export default function SignupScreen() {
   return (
     <>
       <Header_Back />
-      <SafeAreaView
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
         style={styles.container}
       >
         <Text style={styles.textTop}>Crie sua conta de maneira rápida e fácil!</Text>
@@ -132,12 +136,16 @@ export default function SignupScreen() {
         <HelperText
           type="error"
           visible={nome_erro}
+          style={{
+            fontFamily: 'Poppins_400Regular',
+          }}
         >
           {mensagem_nome_erro}
         </HelperText>
         <TextInput
           style={styles.input}
           placeholder="Email"
+          keyboardType="email-address"
           value={text_email}
           placeholderTextColor="black"
           onChangeText={text_email => { setText_email(text_email); setEmail_erro(false); }}
@@ -152,6 +160,9 @@ export default function SignupScreen() {
         <HelperText
           type="error"
           visible={email_erro}
+          style={{
+            fontFamily: 'Poppins_400Regular',
+          }}
         >
           {mensagem_email_erro}
         </HelperText>
@@ -172,6 +183,9 @@ export default function SignupScreen() {
         <HelperText
           type="error"
           visible={senha_erro}
+          style={{
+            fontFamily: 'Poppins_400Regular',
+          }}
         >
           {mensagem_senha_erro}
         </HelperText>
@@ -192,13 +206,17 @@ export default function SignupScreen() {
         <HelperText
           type="error"
           visible={senha_erro}
+          style={{
+            fontFamily: 'Poppins_400Regular',
+          }}
         >
           {mensagem_senha_erro}
         </HelperText>
         {loading ? <ActivityIndicator size="small" color="#ff914d" /> : <Button mode="contained" onPress={() => { funcao_validar() }} color='#ff914d' dark={true}>
           Cadastrar
        </Button>}
-      </SafeAreaView>
+       </KeyboardAvoidingView>
+       {alert.visible && <Alert alert={alert} setAlert={setAlert}/>} 
     </>
   );
 }

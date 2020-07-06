@@ -51,10 +51,9 @@ export default function Alert(props) {
                  
                     <Button
                     color="#ff914d"
-                    onPress={() => _hideDialog()}>Ok</Button>
+                    onPress={ props.alert.onPress ? props.alert.onPress : () => _hideDialog()}>Ok</Button>
                 </Dialog.Actions>
                 </View>
-
             </Dialog>
         </Portal>
     );
