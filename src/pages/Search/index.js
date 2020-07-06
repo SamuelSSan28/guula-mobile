@@ -9,6 +9,7 @@ import {useNavigation,useRoute} from '@react-navigation/native'
 export default function SearchScreeen(){
   var  [ingredientesAux, setIngredientesAux] = useState([]);
   var query = ""
+  const [errorInternet, setErrorInternet] = useState(false);
   const flatListRef = React.useRef()
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -17,7 +18,9 @@ export default function SearchScreeen(){
   const [refresh,setRefresh] = useState(false)
   const [recipes, setRecipes] = useState([]);
   const [count_touch, setCount_touch] = useState(0);
-
+  const encoding = {"ã":"2", "ç":"3","õ":"4","á":"5","é":"6","í":"7","ó":"8","ú":"9",
+                    "â":"10","ê":"11","î":"12","ô":"13","û":"14",
+                    }
   const frases = ["A vida é como cozinhar: antes de escolher o que gosta, prove um pouco de tudo",
                   "Adorar cozinhar infelizmente não é sinônimo de adorar a obrigação de lavar uma interminável pilha de panelas sujas",
                   "Amadurecimento é quando você perde o medo de fazer feijão.",
@@ -91,7 +94,7 @@ export default function SearchScreeen(){
           <Divider />
 				
           <View style={styles.ingredientes_quant_box}>
-            { (quantReceitas > 0 && ingredientes.length  > 0) ? 
+            { (quantReceitas > 0 && ingredientes.length  > 0 && ! errorInternet) ? 
                   <>
                     <Text style={styles.ingredientes_quant_text}>{quantReceitas} receitas encontradas</Text> 
                   </>
@@ -110,7 +113,14 @@ export default function SearchScreeen(){
                 <ActivityIndicator animating size='large' color="#ff914d"/> 
             :  <View></View> } 
 
-          
+          {(errorInternet == true) ?
+                <View>
+                <Text style={{color:"#626262",fontSize: 20,fontFamily: 'Poppins_700Bold',textAlign:"center"} }> :(  </Text> 
+                <Text style={styles.ingredientes_quant_text}> Sem Inteernet</Text> 
+              </View> 
+            
+            :  <View></View> } 
+
        </>
       );
       return(
@@ -214,20 +224,47 @@ async function _onPressSearch(){
 
     setRefresh(true)
     for(var i = 0; i < ingredientesAux.length; i++){
-      lista_ingredientes += ingredientesAux[i]+" "
+      var ingrid = ""
+      for(var j = 0; j < ingredientesAux[i].length; j++){
+        if(Object.keys(encoding).includes(ingredientesAux[i][j])){
+          ingrid += encoding[ingredientesAux[i][j]]
+        }
+        else{
+          ingrid += ingredientesAux[i][j]
+        }
+      }
+      lista_ingredientes += ingrid+" "
     }
-  
-    const res = await api.get("recipes/ingredientes",{ 'headers': { 'ingredientes': lista_ingredientes }   });
-
-    if (res.headers.total_receitas_by_ingrediente == 0){
+    
+    console.log(lista_ingredientes)
+    const res = await api.get("recipes/ingredientes",{ 
+      'headers': 
+          { 'ingredientes': lista_ingredientes,
+          'Content-Type': 'application/json;charset=UTF-8'
+        }
+        })
+    .then(response => {
+      if (response.headers.total_receitas_by_ingrediente == 0){
+        setRefresh(false)
+        return "Sem receitas pra vc meu consagrado"
+        
+      }
+      console.log(response.headers  )
+      setErrorInternet(false)
       setRefresh(false)
-      return "Sem receitas pra vc meu consagrado"
-      
-    }
-    setRefresh(false)
-    setRecipes(res.data);
-    setQuantReceitas(res.headers.total_receitas_by_ingredientes)
-    setRefresh(false)
+
+      setRecipes(response.data);
+      setQuantReceitas(response.headers.total_receitas_by_ingredientes)
+      setRefresh(false)
+    })
+    .catch(function (err) {
+      if (err.message === "Network Error"){
+        setErrorInternet(true)
+        return "Sem Intrnet";
+      }
+    });;
+
+    
   }
 
   return (    
