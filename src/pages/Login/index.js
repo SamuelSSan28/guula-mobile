@@ -25,8 +25,11 @@ export default function LoginScreen(props) {
     title: ''
   });
   
-
   function navigateToSignUp() {
+    setEmail('');
+    setSenha('');
+    setEmailErr(false);
+    setPwErr(false);
     navigation.navigate('Cadastro');
   }
 
@@ -120,6 +123,7 @@ export default function LoginScreen(props) {
           placeholder="Password"
           placeholderTextColor="black"
           secureTextEntry={true}
+          value={senha}
           onChangeText={text => { setSenha(text); setPwErr(false) }}
           underlineColor="transparent"
           theme={{
