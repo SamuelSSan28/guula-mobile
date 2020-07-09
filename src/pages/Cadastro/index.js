@@ -25,7 +25,6 @@ export default function SignupScreen() {
     visible: false,
     content: '',
     title: '',
-    onPress: null
   });
 
   const navigation = useNavigation();
@@ -87,8 +86,7 @@ export default function SignupScreen() {
         setAlert({
           visible: true,
           content: 'Usuário cadastrado com sucesso!',
-          title: 'Sucesso',
-          onPress: () => navigation.goBack()
+          title: 'Sucesso'
         })
       }
       else {
@@ -216,7 +214,7 @@ export default function SignupScreen() {
           Cadastrar
        </Button>}
        </KeyboardAvoidingView>
-       {alert.visible && <Alert alert={alert} setAlert={setAlert}/>} 
+       {alert.visible && <Alert alert={alert} setAlert={setAlert} onPress={() => navigation.goBack()}/>} 
     </>
   );
 }

@@ -12,6 +12,11 @@ export default function Alert(props) {
         })
     }
 
+    function onPressFunc(){
+        props.onPress();
+        _hideDialog();
+    }
+
     return (
         <Portal>
             <Dialog
@@ -51,7 +56,11 @@ export default function Alert(props) {
                  
                     <Button
                     color="#ff914d"
-                    onPress={ props.alert.onPress ? props.alert.onPress : () => _hideDialog()}>Ok</Button>
+                    onPress={ props.onPress ? onPressFunc : () => _hideDialog()}>Ok</Button>
+                    {props.cancel && 
+                    <Button
+                    color="#ff914d"
+                    onPress={() => _hideDialog()}>Cancelar</Button>}
                 </Dialog.Actions>
                 </View>
             </Dialog>

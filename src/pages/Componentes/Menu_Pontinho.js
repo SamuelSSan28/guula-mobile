@@ -5,7 +5,8 @@ import { Appbar } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import UserContext from '../../../providers/UserProvider';
 import FavoriteProvider from '../../../providers/FavoriteProvider';
-import * as MailComposer from 'expo-mail-composer'
+import * as MailComposer from 'expo-mail-composer';
+import Alert from '../Componentes/Alert';
 
 export default function Menu_Pontinho (props) {
    
@@ -14,6 +15,11 @@ export default function Menu_Pontinho (props) {
   const message = "Olá falera do Guula xomo cai cxs";
   const {user, setUser} = React.useContext(UserContext);
   const {setReceitas, setTotalReceitas, setPage } = React.useContext(FavoriteProvider);
+  const [alert, setAlert] = React.useState({
+    visible: false,
+    content: '',
+    title: ''
+  });
 
 
   function navigateToAbout(){
@@ -69,10 +75,21 @@ export default function Menu_Pontinho (props) {
           {user.loggedIn &&
           <>
             <Divider />
-            <Menu.Item onPress={logout} title="Sair" icon= "logout-variant"/> 
+            <Menu.Item onPress={
+              () => {
+                setAlert({
+                  visible: true,
+                  content: "Deseja realmente sair?",
+                  title: ""
+                })
+                closeMenu();
+              }
+            } title="Sair" icon= "logout-variant"/> 
           </>
           }
         </Menu>
+        {alert.visible && <Alert alert={alert} setAlert={setAlert} onPress={logout} cancel={true}/>} 
+
       </View>
   );
 
