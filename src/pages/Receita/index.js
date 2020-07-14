@@ -192,6 +192,15 @@ export default function RecipeScreen() {
 
     useEffect(() => {
         Image.getSize(recipe.imagem, (width, height) => { setSource({ width: width, height: height }); });
+        if((recipe.imagem).includes("daninoce")){
+            setFonte("Dani Noce");
+        }else if((recipe.imagem).includes("ltmcdn.")){
+            setFonte("Tudo Receitas");
+        }else if((recipe.imagem).includes("anamariabrogui")){
+            setFonte("Ana Maria Brogui");
+        }else if((recipe.imagem).includes("img.itdg")){
+            setFonte("Tudo Gostoso");
+        }
     }, [])
 
     const navegation = useNavigation();
@@ -208,7 +217,8 @@ export default function RecipeScreen() {
         visible: false,
         content: '',
         title: ''
-    })
+    });
+    const [fonte, setFonte] = useState("");
     
     return (
         <>
@@ -282,6 +292,15 @@ export default function RecipeScreen() {
                     <View>
                         {renderPreparo(recipe.modo_preparo)}
 
+                    </View>
+                    <View style={{
+                        marginLeft: 5,
+                    }}>
+                        <Text style={{
+                            color: "#595959",
+                            fontSize: 11,
+                            fontFamily: "Poppins_400Regular",
+                        }}>Fonte: {fonte}</Text>
                     </View>
                 </View>
 
