@@ -12,7 +12,7 @@ export default function Menu_Pontinho (props) {
    
   const [visible, setVisible] = React.useState(false); 
   const navigation = useNavigation();
-  const message = "Olá falera do Guula xomo cai cxs";
+  const message = "Olá, pessoal do Guula! :D";
   const {user, setUser} = React.useContext(UserContext);
   const {setReceitas, setTotalReceitas, setPage } = React.useContext(FavoriteProvider);
   const [alert, setAlert] = React.useState({
