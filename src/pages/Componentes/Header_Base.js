@@ -10,14 +10,8 @@
 	render() {
 		return (
 			<Appbar.Header style={styles.header}>
-            	{/**<Image source={logoImg}/> */}
-				<View>
-				<Text style={{
-					color: "#fff",
-					paddingLeft: 10,
-					fontSize: 25,
-				}}>Guula</Text>
-				</View>				
+            	<Image source={logoImg} /> 
+						
                 <Menu_Pontinho/> 
 			</Appbar.Header>
 		)

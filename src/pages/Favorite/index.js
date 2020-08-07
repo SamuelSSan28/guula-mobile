@@ -7,8 +7,10 @@ import FavoriteProvider from '../../../providers/FavoriteProvider';
 import Alert from '../Componentes/Alert';
 import { View, Text, Image } from 'react-native';
 import Header_Base from '../Componentes/Header_Base';
-import { ActivityIndicator, Divider } from 'react-native-paper';
+import { ActivityIndicator, Divider,Appbar } from 'react-native-paper';
 import api_users from '../../services/api_users';
+import styles_header from '../Base/styles';
+import Menu_Pontinho from '../Componentes/Menu_Pontinho';
 
 export default function FavoriteScreen() {
 
@@ -52,12 +54,23 @@ export default function FavoriteScreen() {
       
     return (
         <>
-            <Header_Base />
             {!user.loggedIn ?
                 <>
+                    <Header_Base />
                     <LoginScreen setIsSignIn={setUser} />
                 </>
                 : <>
+                     <Appbar.Header style={styles_header.header}>
+                        <View>
+                        <Text style={{
+                            color: "#fff",
+                            paddingLeft: 10,
+                            fontSize: 20,
+                        }}>Suas Receitas</Text>
+                        </View>	
+                        <Menu_Pontinho/> 			             
+			        </Appbar.Header>
+                   
                     {/**<Text style={styles.usuario}>{`Usuario: ${userId}`}</Text>*/}
 
                     {loading ? <View style={{ flex: 1, justifyContent: "center" }}><ActivityIndicator size="large" color="#ff914d" /></View> : totalReceitas === '0' ?
@@ -71,7 +84,7 @@ export default function FavoriteScreen() {
                         :
                         <>
                             <View style={styles.totalView}>
-                                <Text style={styles.totalText}>{totalReceitas} {(totalReceitas === '1') ? "receita" : "receitas"}</Text>
+                                <Text style={styles.totalText}>{totalReceitas} {(totalReceitas === '1') ? "receita " : "receitas"}</Text>
                             </View>
                             <Divider />
 
