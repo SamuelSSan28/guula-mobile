@@ -2,6 +2,7 @@
   "expo": {
     "name": "guula",
     "slug": "guula",
+    "sdkVersion": "34.0.0",
     "platforms": [
       "android",
     ],
@@ -23,7 +24,7 @@
       "supportsTablet": true
     },
 	"android": {
-      "package": "com.yourcompany.yourappname"
+      "package": "com.4Devs.Guula"
     }
   }
 }
