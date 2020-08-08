@@ -2,7 +2,7 @@
   "expo": {
     "name": "guula",
     "slug": "guula",
-    "sdkVersion": "34.0.0",
+    "sdkVersion": "37.0.0",
     "platforms": [
       "android",
     ],
